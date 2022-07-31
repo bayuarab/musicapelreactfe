@@ -1,11 +1,13 @@
 import ButtonAppBar from "../component/websiteAppBar";
 import React from "react";
+import HeaderBar from "../component/websiteAppBar";
+import Hero from "../component/hero";
 
 export default function LandingPage(){
     return (
         <div>
-            <ButtonAppBar/>
-            <p> There is nothing here</p>
+            <div><HeaderBar/></div>
+            <div><Hero/></div>
         </div>
         
     )

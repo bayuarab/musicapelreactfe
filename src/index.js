@@ -8,6 +8,8 @@ import Cart from "./routes/cart";
 import App from "./App";
 import Login from "./routes/login";
 import LandingPage from "./routes/landingPage";
+import Hero from "./component/hero";
+import DetailCourse from "./routes/detailCourse";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,10 +17,12 @@ root.render(
   <Routes>
   <Route path="/" element={<App/>}>
   <Route path="cart" element={<Cart />} />
-  
-  <Route path="Login" element={<Login />} />
   <Route path="*" element={ <main style={{ padding: "1rem" }}> <p>There's nothing here!</p> </main>}/>
   </Route>
+  <Route path="Login" element={<Login />} />
+  <Route path="Hero" element={<Hero />} />
+  <Route path="detail" element={<DetailCourse />} />
+  <Route path="land" element={<LandingPage />} />
   </Routes>
   </BrowserRouter>
 );
