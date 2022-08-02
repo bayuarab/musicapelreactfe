@@ -1,23 +1,23 @@
-import { ShoppingCart } from "@mui/icons-material";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Logo from "./Logo";
+
+import { Logout, Menu, Person, ShoppingCart } from "@mui/icons-material";
 import {
   AppBar,
+  Box,
   Button,
-  IconButton,
-  Toolbar,
-  Typography,
   Divider,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  Box,
   styled,
+  Toolbar,
+  Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import Logo from "./Logo";
-import WebAppLogAccMenu from "./WebAppLogAccMenu";
-import { Menu } from "@mui/icons-material";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -30,7 +30,8 @@ const SideIcons = styled(Box)(({ theme }) => ({
   display: "none",
   justifyContent: "space-between",
   alignItems: "center",
-  gap: "40px",
+  gap: "35px",
+  marginRight: "10px",
   [theme.breakpoints.up("md")]: {
     display: "flex",
   },
@@ -44,18 +45,51 @@ const BlackButton = styled(Button)({
   fontWeight: "500",
 });
 
-const drawerWidth = 240;
-const navItems = [
-  { link: "/my-cart", mobile: "Cart" },
-  { link: "/my-classes", mobile: "Kelasku" },
-  { link: "/checkout", mobile: "Pembelian" },
-  { link: "/registration", mobile: "Registrasi" },
-  { link: "/sign-in", mobile: "Masuk" },
-];
+const loggedIn = (
+  <SideIcons sx={{ color: "black" }}>
+    <IconButton>
+      <Person />
+    </IconButton>
+    <IconButton sx={{ color: "black" }}>
+      <Logout />
+    </IconButton>
+  </SideIcons>
+);
+
+const signUp = (
+  <SideIcons>
+    <BlackButton>Daftar Sekarang</BlackButton>
+    <Button
+      variant="contained"
+      sx={{
+        fontFamily: "Poppins",
+        fontSize: "16px",
+        backgroundColor: "#5D5FEF",
+        borderRadius: "8px",
+        textTransform: "Capitalize",
+      }}
+    >
+      Masuk
+    </Button>
+  </SideIcons>
+);
 
 function WebAppBar(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { window, logState } = props;
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const navItems = [
+    { link: "/cart", mobile: "Cart" },
+    { link: "/my-course", mobile: "Kelasku" },
+    { link: "/my-invoice", mobile: "Pembelian" },
+    {
+      link: `${logState ? "/my-account" : "/registration"}`,
+      mobile: `${logState ? "Akun Saya" : "Daftar Sekarang"}`,
+    },
+    {
+      link: `${logState ? "/log-out" : "/sign-in"}`,
+      mobile: `${logState ? "Masuk" : "Log Out"}`,
+    },
+  ];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -69,20 +103,21 @@ function WebAppBar(props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          // <Link
-          //   to={item.link}
-          //   style={{
-          //     textDecoration: "none",
-          //     textAlign: "center",
-          //     color: "black",
-          //   }}
-          // >
-          <ListItem key={item.mobile} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item.mobile} />
-            </ListItemButton>
-          </ListItem>
-          // </Link>
+          <Link
+            key={item.mobile}
+            to={item.link}
+            style={{
+              textDecoration: "none",
+              textAlign: "center",
+              color: "black",
+            }}
+          >
+            <ListItem disablePadding>
+              <ListItemButton key={item.mobile} sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.mobile} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
     </Box>
@@ -93,38 +128,47 @@ function WebAppBar(props) {
 
   return (
     <Box>
-      <AppBar position="sticky">
+      <AppBar position="fixed" sx={{ backgroundColor: "#F2C94C" }}>
         <StyledToolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
+            sx={{ ml: 0.2, mr: 2, display: { md: "none" } }}
           >
             <Menu sx={{ color: "black" }} />
           </IconButton>
-          <Box sx={{ display: { md: "block" } }}>
-            <Logo />
-          </Box>
+          <Link style={{ textDecoration: "none" }} to="/">
+            <Box sx={{ display: { md: "block" } }}>
+              <Logo />
+            </Box>
+          </Link>
+
           <SideIcons>
-            <IconButton sx={{ color: "black" }}>
-              <ShoppingCart />
-            </IconButton>
-            <BlackButton>Kelasku</BlackButton>
-            <BlackButton>Pembelian</BlackButton>
+            <Link to="/cart">
+              <IconButton sx={{ color: "black" }}>
+                <ShoppingCart />
+              </IconButton>
+            </Link>
+            <Link style={{ textDecoration: "none" }} to="/my-course">
+              <BlackButton>Kelasku</BlackButton>
+            </Link>
+            <Link style={{ textDecoration: "none" }} to="/my-invoice">
+              <BlackButton>Pembelian</BlackButton>
+            </Link>
             <Typography
               variant="a"
               sx={{
                 color: "black",
                 fontWeight: "200",
-                fontSize: "26px",
+                fontSize: "24px",
                 textAlign: "center",
               }}
             >
               |
             </Typography>
-            <WebAppLogAccMenu></WebAppLogAccMenu>
+            {logState ? loggedIn : signUp}
           </SideIcons>
         </StyledToolbar>
       </AppBar>
@@ -138,19 +182,17 @@ function WebAppBar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { sm: "block", md: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth,
+              width: "52%",
             },
           }}
         >
           {drawer}
         </Drawer>
       </Box>
-      <Box component="main" sx={{ pt: 0 }}>
-        {/* <Outlet /> */}
-      </Box>
+      <Toolbar sx={{ height: "76px" }} />
     </Box>
   );
 }
