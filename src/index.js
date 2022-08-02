@@ -10,6 +10,7 @@ import Login from "./routes/login";
 import LandingPage from "./routes/landingPage";
 import Hero from "./component/hero";
 import DetailCourse from "./routes/detailCourse";
+import CategoryCourse from "./routes/categoryCourse";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,7 +22,10 @@ root.render(
   </Route>
   <Route path="Login" element={<Login />} />
   <Route path="Hero" element={<Hero />} />
-  <Route path="detail" element={<DetailCourse />} />
+  <Route path="detail" element={<DetailCourse />}/>
+  <Route path="category" element={<CategoryCourse />}/>
+    {/* <Route path=":productId" element={<DetailCourse />} /> */}
+    {/* </Route> */}
   <Route path="land" element={<LandingPage />} />
   </Routes>
   </BrowserRouter>
