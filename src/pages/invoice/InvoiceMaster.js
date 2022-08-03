@@ -52,14 +52,14 @@ const StyledNavLink = styled(Typography)({
   fontSize: "16px",
 });
 
-function createData(noInvoice, date, qty, cost, details) {
-  return { noInvoice, date, qty, cost, details };
+function createData(noInvoice, date, qty, cost) {
+  return { noInvoice, date, qty, cost };
 }
 
 const rows = [
-  createData("APM00003", "12 Juni 2022", 2, "IDR 11.500.000", "Rincian"),
-  createData("APM00003", "05 Februari 2022", 1, "IDR 11.500.000", "Rincian"),
-  createData("APM00003", "30 Agustus 2021", 1, "IDR 11.500.000", "Rincian"),
+  createData("APM00003", "12 Juni 2022", 2, "IDR 11.500.000"),
+  createData("APM00002", "05 Februari 2022", 1, "IDR 4.000.000"),
+  createData("APM00001", "30 Agustus 2021", 1, "IDR 2.400.000"),
 ];
 
 const InvoiceMaster = () => {
@@ -109,20 +109,26 @@ const InvoiceMaster = () => {
                 <StyledTableCell align="center">{row.qty}</StyledTableCell>
                 <StyledTableCell align="center">{row.cost}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <Button
-                    variant="contained"
-                    sx={{
-                      fontFamily: "Poppins",
-                      fontSize: "14px",
-                      backgroundColor: "#5D5FEF",
-                      borderRadius: "8px",
-                      textTransform: "Capitalize",
-                      paddingLeft: "20px",
-                      width: "80%",
-                    }}
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to={`/my-invoice/${row.noInvoice}`}
+                    state={{ date: row.date, cost: row.cost }}
                   >
-                    {row.details}
-                  </Button>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontSize: "14px",
+                        backgroundColor: "#5D5FEF",
+                        borderRadius: "8px",
+                        textTransform: "Capitalize",
+                        paddingLeft: "20px",
+                        width: "80%",
+                      }}
+                    >
+                      Rincian
+                    </Button>
+                  </Link>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

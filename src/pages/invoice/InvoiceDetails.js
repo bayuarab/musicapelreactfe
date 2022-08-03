@@ -1,3 +1,6 @@
+import React from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+
 import {
   Box,
   Paper,
@@ -10,9 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import React from "react";
-import { Link } from "react-router-dom";
 
+//--
 const StyledPaper = styled(Paper)({
   border: 0,
   boxShadow: "none",
@@ -72,6 +74,9 @@ const rows = [
 ];
 
 const InvoiceDetails = () => {
+  const { invoiceID } = useParams();
+  const { date, cost } = useLocation().state;
+
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
       <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
@@ -81,9 +86,7 @@ const InvoiceDetails = () => {
         <Link style={{ textDecoration: "none" }} to="/my-invoice">
           <StyledNavLink color={"#828282"}>Invoice {`>`}</StyledNavLink>
         </Link>
-        <Link style={{ textDecoration: "none" }} to="/details-invoice">
-          <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
-        </Link>
+        <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
       </Box>
       <Typography
         mb={"24px"}
@@ -112,7 +115,7 @@ const InvoiceDetails = () => {
             fontSize: "18px",
           }}
         >
-          No. Invoice:
+          No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
         </Typography>
         <Box
           sx={{
@@ -129,7 +132,7 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Tanggal Beli:
+            Tanggal Beli&nbsp;: {date}
           </Typography>
           <Typography
             sx={{
@@ -139,7 +142,7 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Total Harga
+            Total Harga:&nbsp;&nbsp; {cost}
           </Typography>
         </Box>
       </Box>

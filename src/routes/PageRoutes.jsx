@@ -12,8 +12,10 @@ const PageRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/my-course" element={<MyCourses />} />
-      <Route path="/my-invoice" element={<InvoiceMaster />} />
-      <Route path="/invoice-details" element={<InvoiceDetails />} />
+      <Route path="/my-invoice">
+        <Route index element={<InvoiceMaster />} />
+        <Route path=":invoiceID" element={<InvoiceDetails />} />
+      </Route>
       <Route path="*" element={<p>There's nothing here!</p>} />
     </Routes>
   );
