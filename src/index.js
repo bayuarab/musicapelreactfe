@@ -11,6 +11,10 @@ import LandingPage from "./routes/landingPage";
 import Hero from "./component/hero";
 import DetailCourse from "./routes/detailCourse";
 import CategoryCourse from "./routes/categoryCourse";
+import HeaderbarAdmin from "./component/HeaderBarAdmin";
+import ManageKelas from "./routes/manageKelas";
+import ManageKategori from "./routes/manageKategori";
+import ManageInvoices from "./routes/manageInvoices";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -27,6 +31,12 @@ root.render(
     {/* <Route path=":productId" element={<DetailCourse />} /> */}
     {/* </Route> */}
   <Route path="land" element={<LandingPage />} />
+
+  <Route path="admin"> 
+            <Route path="kelas" element={<ManageKelas />} />
+            <Route path="category" element={<ManageKategori />} />
+            <Route path="invoices" element={<ManageInvoices />} />
+      </Route>
   </Routes>
   </BrowserRouter>
 );
