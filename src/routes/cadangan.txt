@@ -1,0 +1,21 @@
+<Box bottom='0px' style={{
+                backgroundColor: '#F2C94C',
+                height: '275px'
+            }}>
+                <Typography bottom='0px' style={{
+                    margin: 'auto auto',
+                    textAlign: 'right',
+                    width: '50%',
+                }}>
+                    DoraEmon
+
+                </Typography>
+
+
+            </Box>
+            <Typography>
+                <h1>ini untuk judul</h1>
+            </Typography>
+            <Typography>
+                <h4>ini untuk deskripsi</h4>
+            </Typography>
