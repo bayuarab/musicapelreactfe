@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import api from "../../api/invoiceDetails";
 
 import {
   Box,
@@ -58,7 +59,7 @@ function createData(courseName, courseCategory, schedule, price) {
   return { courseName, courseCategory, schedule, price };
 }
 
-const rows = [
+const defaultRows = [
   createData(
     "Kursus Drummer Special Coach (Eno Netral)",
     "Drum",
@@ -76,6 +77,27 @@ const rows = [
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const { date, cost } = useLocation().state;
+  const [invoiceDetailData, setInvoiceDetailData] = useState(defaultRows);
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const response = await api.get(`/${invoiceID}`);
+        console.log(response.data);
+        setInvoiceDetailData(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+
+    fetchApi();
+  }, [invoiceID]);
+
+  const rows = invoiceDetailData;
 
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
@@ -142,7 +164,7 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Total Harga:&nbsp;&nbsp; {cost}
+            Total Harga:&nbsp;&nbsp; IDR {cost.toLocaleString("de-DE")}
           </Typography>
         </Box>
       </Box>
@@ -163,14 +185,14 @@ const InvoiceDetails = () => {
                 <StyledTableCell component="th" scope="row" align="center">
                   {index + 1}
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.courseName}
-                </StyledTableCell>
+                <StyledTableCell align="center">{row.course}</StyledTableCell>
                 <StyledTableCell align="center">
                   {row.courseCategory}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.schedule}</StyledTableCell>
-                <StyledTableCell align="center">{row.price}</StyledTableCell>
+                <StyledTableCell align="center">
+                  IDR {row.price.toLocaleString("de-DE")}
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

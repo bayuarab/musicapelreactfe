@@ -11,8 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../../api/masterInvoice";
+//==================================================
 
 const StyledPaper = styled(Paper)({
   border: 0,
@@ -52,17 +55,39 @@ const StyledNavLink = styled(Typography)({
   fontSize: "16px",
 });
 
-function createData(noInvoice, date, qty, cost) {
-  return { noInvoice, date, qty, cost };
+function createData(noInvoice, purchaseDate, qty, cost) {
+  return { noInvoice, purchaseDate, qty, cost };
 }
 
-const rows = [
+const defaultRows = [
   createData("APM00003", "12 Juni 2022", 2, "IDR 11.500.000"),
   createData("APM00002", "05 Februari 2022", 1, "IDR 4.000.000"),
   createData("APM00001", "30 Agustus 2021", 1, "IDR 2.400.000"),
 ];
 
 const InvoiceMaster = () => {
+  const [masterInvoiceData, setMasterInvoiceData] = useState(defaultRows);
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const response = await api.get("/");
+        console.log(response.data);
+        setMasterInvoiceData(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+
+    fetchApi();
+  }, []);
+
+  const rows = masterInvoiceData;
+
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
       <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
@@ -105,14 +130,18 @@ const InvoiceMaster = () => {
                 <StyledTableCell align="center">
                   {row.noInvoice}
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.date}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.purchaseDate}
+                </StyledTableCell>
                 <StyledTableCell align="center">{row.qty}</StyledTableCell>
-                <StyledTableCell align="center">{row.cost}</StyledTableCell>
+                <StyledTableCell align="center">
+                  IDR {row.cost.toLocaleString("de-DE")}
+                </StyledTableCell>
                 <StyledTableCell align="center">
                   <Link
                     style={{ textDecoration: "none" }}
                     to={`/my-invoice/${row.noInvoice}`}
-                    state={{ date: row.date, cost: row.cost }}
+                    state={{ date: row.purchaseDate, cost: row.cost }}
                   >
                     <Button
                       variant="contained"

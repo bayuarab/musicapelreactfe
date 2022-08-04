@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import HeaderSet from "./components/HeaderSet";
 import WebAppBar from "./components/WebAppBar";
+import ManageInvoices from "./routes/manageInvoices";
+import ManageKategori from "./routes/manageKategori";
+import ManageKelas from "./routes/manageKelas";
 import PageRoutes from "./routes/PageRoutes";
 
 function App() {
-  const [loginState, setLoginState] = useState(false);
   return (
     <div className="base">
       <BrowserRouter>
-        <WebAppBar logState={loginState} />
+        <HeaderSet roles={"user"} />
         <div className="contentWrapper">
           <PageRoutes />
         </div>
