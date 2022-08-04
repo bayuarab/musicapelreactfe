@@ -9,8 +9,8 @@ import MyCourses from "../pages/myCourses/MyCourses";
 import CategoryCourse from "./categoryCourse";
 import DetailCourse from "./detailCourse";
 import LandingPage from "./landingPage";
-import Login from "./Login";
-import Register from "./Register";
+import Loginn from "../pages/Login";
+import Registerr from "../pages/Register";
 import ManageInvoices from "./manageInvoices";
 import ManageKategori from "./manageKategori";
 import ManageKelas from "./manageKelas";
@@ -21,8 +21,8 @@ const PageRoutes = () => {
 			<Route path="/" element={<Home />} />
 			<Route path="/cart" element={<CartPage />} />
 			<Route path="/my-course" element={<MyCourses />} />
-			<Route path="Login" element={<Login />} />
-			<Route path="/register" element={<Register />} />
+			<Route path="/Login" element={<Loginn />} />
+			<Route path="/registrasi" element={<Registerr />} />
 			<Route path="Hero" element={<Hero />} />
 			<Route path="detail" element={<DetailCourse />} />
 			<Route path="category" element={<CategoryCourse />} />

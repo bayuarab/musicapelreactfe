@@ -1,9 +1,9 @@
 import React from "react";
-import Hero from "../LandingPage/Hero";
-import Class from "../LandingPage/Class";
-import ClassCategories from "../LandingPage/ClassCategories";
-import Benefit from "../LandingPage/Benefit";
-import Footer from "../LandingPage/Footer";
+import Hero from "./Hero";
+import Class from "./Class";
+import ClassCategories from "./ClassCategories";
+import Benefit from ".//Benefit";
+import Footer from "./Footer";
 
 const LandingPage = () => {
 	return (

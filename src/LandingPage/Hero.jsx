@@ -3,7 +3,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Typography";
 import Fact from "../component/Fact";
 import herobg from "../assets/herobg.jpg";
-import "../style/style.css";
 
 const LandingPage = () => {
 	return (
