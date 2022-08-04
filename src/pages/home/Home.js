@@ -1,11 +1,12 @@
 import React from "react";
+import LandingPage from "../LandingPage/LandingPage";
 
 const Home = () => {
-  return (
-    <div>
-      <h1>Ini Home</h1>
-    </div>
-  );
+	return (
+		<div>
+			<LandingPage />
+		</div>
+	);
 };
 
 export default Home;
