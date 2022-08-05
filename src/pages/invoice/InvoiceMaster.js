@@ -55,18 +55,8 @@ const StyledNavLink = styled(Typography)({
   fontSize: "16px",
 });
 
-function createData(noInvoice, purchaseDate, qty, cost) {
-  return { noInvoice, purchaseDate, qty, cost };
-}
-
-const defaultRows = [
-  createData("APM00003", "12 Juni 2022", 2, "IDR 11.500.000"),
-  createData("APM00002", "05 Februari 2022", 1, "IDR 4.000.000"),
-  createData("APM00001", "30 Agustus 2021", 1, "IDR 2.400.000"),
-];
-
 const InvoiceMaster = () => {
-  const [masterInvoiceData, setMasterInvoiceData] = useState(defaultRows);
+  const [masterInvoiceData, setMasterInvoiceData] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -85,8 +75,6 @@ const InvoiceMaster = () => {
 
     fetchApi();
   }, []);
-
-  const rows = masterInvoiceData;
 
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
@@ -122,7 +110,7 @@ const InvoiceMaster = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {masterInvoiceData.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
                   {index + 1}
@@ -141,11 +129,6 @@ const InvoiceMaster = () => {
                   <Link
                     style={{ textDecoration: "none" }}
                     to={`/my-invoice/${row.noInvoice}`}
-                    state={{
-                      date: row.purchaseDate,
-                      cost: row.cost,
-                      idMi: row.id,
-                    }}
                   >
                     <Button
                       variant="contained"
