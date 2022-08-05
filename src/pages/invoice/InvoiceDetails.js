@@ -54,30 +54,9 @@ const StyledNavLink = styled(Typography)({
   fontSize: "16px",
 });
 
-//No Nama Course Category Jadwal Harga
-function createData(courseName, courseCategory, schedule, price) {
-  return { courseName, courseCategory, schedule, price };
-}
-
-const defaultRows = [
-  createData(
-    "Kursus Drummer Special Coach (Eno Netral)",
-    "Drum",
-    "Senin, 25 Juni 2022",
-    "IDR 8.500.000"
-  ),
-  createData(
-    "Biola Mid-Level Course",
-    "Biola",
-    "Sabtu, 23 Juli 2022",
-    "IDR 3.000.000"
-  ),
-];
-
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
-  const { date, cost } = useLocation().state;
-  const [invoiceDetailData, setInvoiceDetailData] = useState(defaultRows);
+  const [invoiceDetailData, setInvoiceDetailData] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -96,8 +75,6 @@ const InvoiceDetails = () => {
 
     fetchApi();
   }, [invoiceID]);
-
-  const rows = invoiceDetailData;
 
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
@@ -154,7 +131,8 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Tanggal Beli&nbsp;: {date}
+            Tanggal Beli&nbsp;:{" "}
+            {invoiceDetailData[0] ? invoiceDetailData[0].purchasedTime : "-"}
           </Typography>
           <Typography
             sx={{
@@ -164,7 +142,10 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Total Harga:&nbsp;&nbsp; IDR {cost.toLocaleString("de-DE")}
+            Total Harga:&nbsp;&nbsp; IDR{" "}
+            {invoiceDetailData[0]
+              ? invoiceDetailData[0].cost.toLocaleString("de-DE")
+              : "-"}
           </Typography>
         </Box>
       </Box>
@@ -180,15 +161,13 @@ const InvoiceDetails = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {invoiceDetailData.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row" align="center">
                   {index + 1}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.course}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.courseCategory}
-                </StyledTableCell>
+                <StyledTableCell align="center">{row.category}</StyledTableCell>
                 <StyledTableCell align="center">{row.schedule}</StyledTableCell>
                 <StyledTableCell align="center">
                   IDR {row.price.toLocaleString("de-DE")}

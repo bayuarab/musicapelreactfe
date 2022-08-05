@@ -141,7 +141,11 @@ const InvoiceMaster = () => {
                   <Link
                     style={{ textDecoration: "none" }}
                     to={`/my-invoice/${row.noInvoice}`}
-                    state={{ date: row.purchaseDate, cost: row.cost }}
+                    state={{
+                      date: row.purchaseDate,
+                      cost: row.cost,
+                      idMi: row.id,
+                    }}
                   >
                     <Button
                       variant="contained"
