@@ -57,11 +57,12 @@ const StyledNavLink = styled(Typography)({
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
+  const UserID = 1;
 
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get("/");
+        const response = await api.get(`/GetByUID/${UserID}`);
         console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
@@ -74,7 +75,7 @@ const InvoiceMaster = () => {
     };
 
     fetchApi();
-  }, []);
+  }, [UserID]);
 
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>

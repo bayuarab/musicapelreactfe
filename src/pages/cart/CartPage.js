@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import { DataContext } from "../../context/DataProvider";
+import api from "../../api/userAPI";
 import CartList from "./components/CartList";
 import CheckoutDialogs from "./components/CheckoutDialogs";
 
@@ -54,15 +55,15 @@ const calculateTotalCost = (carts) => {
 
 const findItemsIDInArray = (arr, targetValue) => {
   return arr.some(function (items) {
-    return items.id_product === targetValue;
+    return items.id === targetValue;
   });
 };
 
 const filterCartItems = (arr, filterValue, operator) => {
   return arr.filter((items) => {
     return operator === "equality"
-      ? items.id_product === filterValue
-      : items.id_product !== filterValue;
+      ? items.id === filterValue
+      : items.id !== filterValue;
   });
 };
 
@@ -102,13 +103,32 @@ const listsCart = [
 ];
 
 const CartPage = () => {
-  const [cart, setCart] = useState(listsCart);
+  const [cart, setCart] = useState([]);
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
-  const [selectedCart, setSelectedCart] = useState(cart);
+  const [selectedCart, setSelectedCart] = useState([]);
   const [cost, setCost] = useState(calculateTotalCost(cart));
   const [selectedOp, setSelectedOp] = useState(null);
+  const userID = 8;
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const response = await api.get(`Cart/${userID}`);
+        console.log(response.data);
+        setCart(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+
+    fetchApi();
+  }, [cart.length]);
+
+  useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
   }, [selectedCart]);
 
@@ -132,14 +152,15 @@ const CartPage = () => {
   };
 
   const handleChange = (event) => {
-    const status = findItemsIDInArray(selectedCart, event.target.value);
+    const targetValue = parseInt(event.target.value);
+    const status = findItemsIDInArray(selectedCart, targetValue);
     status
       ? setSelectedCart(
-          filterCartItems(selectedCart, event.target.value, "unEquality")
+          filterCartItems(selectedCart, targetValue, "unEquality")
         )
       : setSelectedCart([
           ...selectedCart,
-          ...filterCartItems(cart, event.target.value, "equality"),
+          ...filterCartItems(cart, targetValue, "equality"),
         ]);
   };
 
@@ -149,6 +170,24 @@ const CartPage = () => {
 
   const handleDelete = (itemID) => {
     setSelectedCart(filterCartItems(selectedCart, itemID, "unEquality"));
+    const fetchDelete = async (id) => {
+      try {
+        const response = await api.delete(`Cart/${id}`);
+        console.log(response.data);
+        setCart(
+          response.data.filter(
+            (item) => item.userId === userID && item.id !== id
+          )
+        );
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+    fetchDelete(itemID);
     setCart(filterCartItems(cart, itemID, "unEquality"));
   };
 

@@ -38,7 +38,7 @@ const CartList = (props) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: "18px" }}>
       {Cart.map((items) => {
         return (
-          <Box key={items.id_product}>
+          <Box key={items.id}>
             <Box
               sx={{
                 display: "flex",
@@ -56,15 +56,15 @@ const CartList = (props) => {
               >
                 <Box>
                   <StyledCheckbox
-                    value={items.id_product}
-                    checked={handleCheck(items.id_product)}
+                    value={items.id}
+                    checked={handleCheck(items.id)}
                     onChange={handleChange}
                   />
                 </Box>
                 <ImgContainer>
                   <img
                     src="https://cdn.pixabay.com/photo/2021/09/02/16/48/cat-6593947_960_720.jpg"
-                    alt={items.course_name}
+                    alt={items.course}
                     loading="lazy"
                     objectfit="true"
                     width={"200px"}
@@ -92,7 +92,7 @@ const CartList = (props) => {
                       color: "#828282",
                     }}
                   >
-                    {items.course_category}
+                    {items.category}
                   </Typography>
                   <Typography
                     sx={{
@@ -103,7 +103,7 @@ const CartList = (props) => {
                       color: "#333333",
                     }}
                   >
-                    {items.course_name}
+                    {items.course}
                   </Typography>
                   <Typography
                     sx={{
@@ -123,7 +123,7 @@ const CartList = (props) => {
                       color: "#5D5FEF",
                     }}
                   >
-                    IDR {items.price.toLocaleString("de-DE")}
+                    IDR {items.price?.toLocaleString("de-DE")}
                   </Typography>
                 </Box>
               </Box>
@@ -131,11 +131,11 @@ const CartList = (props) => {
                 <IconButton
                   aria-label="delete"
                   size="small"
-                  onClick={() => onDelete(items.id_product)}
+                  onClick={() => onDelete(items.id)}
                 >
                   <DeleteForever fontSize="small" sx={{ color: "#EB5757" }} />
                 </IconButton>
-                <DeleteText onClick={() => onDelete(items.id_product)}>
+                <DeleteText onClick={() => onDelete(items.id)}>
                   Delete
                 </DeleteText>
               </Box>
