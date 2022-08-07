@@ -8,9 +8,23 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import api from "../api/userAPI";
+import useAuth from "../hooks/useAuth";
 
+//---------------
 export default function Login() {
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -26,6 +40,31 @@ export default function Login() {
     setData((prevState) => {
       return { ...prevState, password: event.target.value };
     });
+  };
+
+  const goLogin = () => {
+    console.log(data);
+    const fetchApi = async () => {
+      try {
+        const response = await api.post("/Login", { username: data.email });
+        console.log(response.data);
+        const roles = response?.data?.roles;
+        setAuth({ email: data.email, roles });
+        navigate(from, { replace: true });
+        roles === "admin" ? (
+          <Navigate to="/admin/kelas" state={{ from: location }} replace />
+        ) : (
+          navigate(from, { replace: true })
+        );
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+    fetchApi();
   };
 
   return (
@@ -113,7 +152,7 @@ export default function Login() {
                 </Link>
                 <Box mb="2vh" sx={{ textAlign: "left" }}>
                   <Button
-                    onClick={() => console.log(data)}
+                    onClick={() => goLogin()}
                     sx={{
                       borderRadius: "7px",
                       fontSize: {

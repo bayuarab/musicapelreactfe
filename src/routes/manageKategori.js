@@ -33,7 +33,9 @@ import HeaderbarAdmin from "../component/HeaderBarAdmin";
 // // import ManageProductDialogDeleteItem from '../components/ManageProductDialogDeleteItem';
 // import { APIRequest } from '../components/APICalls';
 import StyledEngine from "@mui/styled-engine";
+import HeaderSet from "../components/HeaderSet";
 import numberFormat from "../components/NumbeFormat";
+import useAuth from "../hooks/useAuth";
 import { getKategoriKelas, getMusic } from "../JSON Data/Data";
 
 let kategoris = getKategoriKelas();
@@ -65,6 +67,8 @@ function ManageKategori() {
   const [editItemProduct, setEditItemProduct] = useState();
   const [openEdit, setOpenEdit] = useState(false);
   /* useStates untuk keperluan POST Edit Product */
+
+  const { auth } = useAuth();
 
   const renderList = (item, index) => {
     return (
@@ -184,7 +188,7 @@ function ManageKategori() {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         {/* Header bar */}
-        <HeaderbarAdmin />
+        <HeaderSet roles={`${auth?.roles}`} />
 
         {/* Body Content */}
         <Box

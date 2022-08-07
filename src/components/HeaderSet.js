@@ -5,7 +5,11 @@ import WebAppBar from "./WebAppBar";
 const HeaderSet = (props) => {
   const [loginState, setLoginState] = useState(false);
   const { roles } = props;
-  return roles === "admin" ? <></> : <WebAppBar logState={loginState} />;
+  return roles === "admin" ? (
+    <HeaderbarAdmin />
+  ) : (
+    <WebAppBar logState={loginState} />
+  );
 };
 
 export default HeaderSet;

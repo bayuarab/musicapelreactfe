@@ -3,20 +3,20 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import HeaderSet from "./components/HeaderSet";
 import WebAppBar from "./components/WebAppBar";
+import useAuth from "./hooks/useAuth";
 import ManageInvoices from "./routes/manageInvoices";
 import ManageKategori from "./routes/manageKategori";
 import ManageKelas from "./routes/manageKelas";
 import PageRoutes from "./routes/PageRoutes";
 
 function App() {
+  const { auth } = useAuth();
   return (
     <div className="base">
-      <BrowserRouter>
-        <HeaderSet roles={"user"} />
-        <div className="contentWrapper">
-          <PageRoutes />
-        </div>
-      </BrowserRouter>
+      <HeaderSet roles={`${auth?.roles}`} />
+      <div className="contentWrapper">
+        <PageRoutes />
+      </div>
     </div>
   );
 }

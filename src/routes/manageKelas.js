@@ -18,6 +18,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HeaderbarAdmin from "../component/HeaderBarAdmin";
+import HeaderSet from "../components/HeaderSet";
+import useAuth from "../hooks/useAuth";
 // import ManageBrandDialogAddItem from '../components/ManageBrandDialogAddItem';
 // import ManageBrandDialogEditItem from '../components/ManageBrandDialogEditItem';
 // import { APIRequest } from '../components/APICalls';
@@ -50,12 +52,14 @@ function ManageKelas() {
   const [openEdit, setOpenEdit] = useState(false);
   /* useStates untuk membuka dialog untuk POST edit merk */
 
+  const { auth } = useAuth();
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         {/* Header bar */}
-        <HeaderbarAdmin />
+        <HeaderSet roles={`${auth?.roles}`} />
 
         {/* Body Content */}
         <Box

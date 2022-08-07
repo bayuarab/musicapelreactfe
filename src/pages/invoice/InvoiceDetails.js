@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import api from "../../api/invoiceDetails";
+import api from "../../api/Invoices";
 
 import {
   Box,
@@ -61,7 +61,7 @@ const InvoiceDetails = () => {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/${invoiceID}`);
+        const response = await api.get(`/DetailsByNoInvoice/${invoiceID}`);
         console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {
@@ -132,7 +132,7 @@ const InvoiceDetails = () => {
             }}
           >
             Tanggal Beli&nbsp;:{" "}
-            {invoiceDetailData[0] ? invoiceDetailData[0].purchasedTime : "-"}
+            {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
           </Typography>
           <Typography
             sx={{

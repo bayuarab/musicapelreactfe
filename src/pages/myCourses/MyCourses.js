@@ -1,6 +1,6 @@
 import { Box, Divider, styled, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import api from "../../api/invoiceDetails";
+import api from "../../api/userAPI";
 
 const ImgContainer = styled(Box)(({ theme }) => ({
   display: "none",
@@ -21,7 +21,7 @@ const MyCourses = () => {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`GetByUID/${userID}`);
+        const response = await api.get(`/Courses/${userID}`);
         console.log(response.data);
         setMyCourseData(response.data);
       } catch (err) {

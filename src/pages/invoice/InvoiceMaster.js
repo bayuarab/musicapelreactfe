@@ -14,7 +14,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../../api/masterInvoice";
+import api from "../../api/userAPI";
 //==================================================
 
 const StyledPaper = styled(Paper)({
@@ -62,7 +62,7 @@ const InvoiceMaster = () => {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/GetByUID/${UserID}`);
+        const response = await api.get(`/Invoices/${UserID}`);
         console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
@@ -102,7 +102,7 @@ const InvoiceMaster = () => {
         <Table sx={{}} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>No</StyledTableCell>
+              <StyledTableCell align="center">No</StyledTableCell>
               <StyledTableCell align="center">No. Invoice</StyledTableCell>
               <StyledTableCell align="center">Tanggal Beli</StyledTableCell>
               <StyledTableCell align="center">Jumlah Kursus</StyledTableCell>
