@@ -1,33 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-import ButtonAppBar from './component/websiteAppBar';
-import { AppBar, Box } from '@mui/material';
-import HeaderBar from './component/websiteAppBar';
-import { Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import HeaderSet from "./components/HeaderSet";
+import WebAppBar from "./components/WebAppBar";
+import ManageInvoices from "./routes/manageInvoices";
+import ManageKategori from "./routes/manageKategori";
+import ManageKelas from "./routes/manageKelas";
+import PageRoutes from "./routes/PageRoutes";
 
 function App() {
   return (
     <div className="base">
-      <Box sx={{ flexGrow: 1 }}><HeaderBar/></Box>
-    <div className="contentWrapper">
-    <Outlet />
-    </div>
+      <BrowserRouter>
+        <HeaderSet roles={"user"} />
+        <div className="contentWrapper">
+          <PageRoutes />
+        </div>
+      </BrowserRouter>
     </div>
   );
-
-  // origin
-  // import logo from './logo.svg';
-  // import './App.css';
-  // import ButtonAppBar from './component/websiteAppBar';
-  // import { AppBar, Box } from '@mui/material';
-  // import HeaderBar from './component/websiteAppBar';
-
-  // function App() {
-  //   return (
-  //     <div className="base">
-  //       <Box sx={{ flexGrow: 1 }}><HeaderBar/></Box>
-  //     </div>
-  //   );
 }
 
 export default App;
