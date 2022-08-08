@@ -1,23 +1,38 @@
 import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline } from "@mui/material";
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
-	const [data, setData] = useState({
-		email: "",
-		password: "",
-	});
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [err, setErr] = useState("");
 
 	const addEmail = (event) => {
-		setData((prevState) => {
-			return { ...prevState, email: event.target.value };
-		});
+		setEmail(event.target.value);
 	};
 
 	const addPassword = (event) => {
-		setData((prevState) => {
-			return { ...prevState, password: event.target.value };
-		});
+		setPassword(event.target.value);
+	};
+
+	const handleLogin = (event) => {
+		event.preventDefault();
+
+		if (email === "" || password === "") {
+			return setErr("Field cannot be empty");
+		}
+
+		const dataLogin = {
+			email: email,
+			password: password,
+		};
+		console.log(dataLogin);
+
+		setEmail("");
+		setPassword("");
+
+		axios.post("api/uploadfile", dataLogin);
 	};
 
 	return (
@@ -60,10 +75,8 @@ export default function Login() {
 						<Box mt="4vh">
 							<form>
 								<FormControl sx={{ width: "100%" }}>
-									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus onChange={(event) => addEmail(event)} />
-								</FormControl>
-								<FormControl sx={{ width: "100%" }}>
-									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" onChange={(event) => addPassword(event)} />
+									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
+									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" value={password} onChange={(event) => addPassword(event)} />
 								</FormControl>
 								<Link
 									to="forget"
@@ -79,8 +92,10 @@ export default function Login() {
 									}}>
 									Lupa kata sandi
 								</Link>
+								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
 								<Box mb="2vh" sx={{ textAlign: "left" }}>
-									<Button onclick={()=>console.log(data)}
+									<Button
+										onClick={(event) => handleLogin(event)}
 										sx={{
 											borderRadius: "7px",
 											fontSize: {
