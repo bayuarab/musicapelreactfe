@@ -1,6 +1,6 @@
-import { Box, Button, FormControl, TextField, Typography, Grid, Container, CssBaseline } from "@mui/material";
+import { Box, Button, FormControl, TextField, Typography, Grid, Container, CssBaseline, Link } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import api from "../api/userAPI";
 import axios from "axios";
 
 const EMAIL_REGEX = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -58,14 +58,23 @@ export default function Login() {
 			email: email,
 			password: password,
 		};
-		console.log(dataClient);
 
 		setNama("");
 		setEmail("");
 		setPassword("");
 		setRePassword("");
 
-		axios.post("api/uploadfile", dataClient);
+		const fetchApi = async () => {
+			try {
+				const response = await api.post("/", dataClient);
+				console.log(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
 	};
 
 	return (
@@ -135,7 +144,7 @@ export default function Login() {
 											</Grid>
 											<Grid item>
 												<Link
-													to="login"
+													href="/Login"
 													mt="1vh"
 													sx={{
 														textAlign: "left",

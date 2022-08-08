@@ -1,6 +1,6 @@
-import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline } from "@mui/material";
+import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline, Link } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import api from "../api/userAPI";
 import axios from "axios";
 
 export default function Login() {
@@ -27,12 +27,21 @@ export default function Login() {
 			email: email,
 			password: password,
 		};
-		console.log(dataLogin);
 
 		setEmail("");
 		setPassword("");
 
-		axios.post("api/uploadfile", dataLogin);
+		const fetchApi = async () => {
+			try {
+				const response = await api.post("/Login", dataLogin);
+				console.log(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
 	};
 
 	return (
@@ -79,7 +88,7 @@ export default function Login() {
 									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" value={password} onChange={(event) => addPassword(event)} />
 								</FormControl>
 								<Link
-									to="forget"
+									href="forget"
 									style={{
 										itemAlign: "right",
 										fontSize: {
@@ -113,14 +122,13 @@ export default function Login() {
 								</Box>
 							</form>
 							<Link
-								to="register"
+								href="/registrasi"
 								sx={{
 									textAlign: "left",
 									fontSize: {
 										lg: "16px",
 										md: "15px",
-										sm: "13px",
-										xs: "10px",
+										xs: "13px",
 									},
 								}}>
 								Belum punya akun? Daftar disini

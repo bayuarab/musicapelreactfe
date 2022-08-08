@@ -6,6 +6,8 @@ import mail from "../assets/footer/mail.svg";
 import phone from "../assets/footer/phone.svg";
 import telegram from "../assets/footer/telegram.svg";
 import youtube from "../assets/footer/youtube.svg";
+import React, { useEffect, useState } from "react";
+import api from "../api/courseCatAPI";
 // import ButtonBase from "@mui/material/ButtonBase";
 
 const Img = styled("img")({
@@ -15,9 +17,28 @@ const Img = styled("img")({
 	maxHeight: "100%",
 });
 
-const classCat = ["Drum", "Piano", "Gitar", "Bass", "Biola", "Menyanyi", "Flute", "Sexophone"];
+const classCatDef = ["Drum", "Piano", "Gitar", "Bass", "Biola", "Menyanyi", "Flute", "Sexophone"];
 
 export default function Footer() {
+	const [dataClass, setDataClass] = useState(classCatDef);
+
+	useEffect(() => {
+		const fetchApi = async () => {
+			try {
+				const response = await api.get("/");
+				console.log(response.data);
+				setDataClass(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
+	}, []);
+
+	const classCat = dataClass;
+
 	return (
 		<Box
 			mt="3vh"
@@ -99,7 +120,7 @@ export default function Footer() {
 								<Box sx={{ width: "60%" }}>
 									<Grid container>
 										{classCat.map((item) => (
-											<Grid key={item} item xs={5}>
+											<Grid key={item.id} item xs={5}>
 												<Typography
 													sx={{
 														fontSize: {
@@ -110,7 +131,7 @@ export default function Footer() {
 														},
 														textAlign: "left",
 													}}>
-													<li>{item}</li>
+													<li>{item.title}</li>
 												</Typography>
 											</Grid>
 										))}
