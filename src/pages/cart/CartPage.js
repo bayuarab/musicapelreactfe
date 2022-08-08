@@ -22,6 +22,7 @@ import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const StyledCheckbox = styled(Checkbox)({
   color: "#BDBDBD",
@@ -67,51 +68,67 @@ const filterCartItems = (arr, filterValue, operator) => {
   });
 };
 
-const listsCart = [
-  {
-    id_product: "1",
-    course_category_id: "1",
-    course_category: "Drum",
-    course_name: "Kursus Drummer Special Coach (Eno Netral)",
-    price: 8500000,
-    schedule: "Senin, 25 Juli 2022",
-  },
-  {
-    id_product: "2",
-    course_category_id: "1",
-    course_category: "Drum",
-    course_name: "Intermediate Drum",
-    price: 5500000,
-    schedule: "Sabtu, 23 Juli 2022",
-  },
-  {
-    id_product: "3",
-    course_category_id: "2",
-    course_category: "Guitar",
-    course_name: "Guitar from zero to hero",
-    price: 11000000,
-    schedule: "Rabu, 27 Juli 2022",
-  },
-  {
-    id_product: "4",
-    course_category_id: "2",
-    course_category: "Guitar",
-    course_name: "Guitar from hero to superhero",
-    price: 21000000,
-    schedule: "Minggu, 31 Juli 2022",
-  },
-];
-
 const CartPage = () => {
   const [cart, setCart] = useState([]);
   const [selectedCart, setSelectedCart] = useState([]);
   const [cost, setCost] = useState(calculateTotalCost(cart));
   const [selectedOp, setSelectedOp] = useState(null);
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
+  const [registeredInvoice, setRegisteredInvoice] = useState([]);
+  const navigate = useNavigate();
+  // const [postInvoiceDetail, setPostInvoiceDetail] = useState([])
+
   const userID = 1;
 
+  const generateNewInvoice = () => {
+    let resNum = 0;
+    let invoiceLength = registeredInvoice[0]?.length;
+    let refToken = registeredInvoice[0]?.substring(0, 3);
+    let newInvoiceNum = "";
+    registeredInvoice?.forEach((invoices) => {
+      const refNum = parseInt(invoices.substring(3, invoices.length));
+      resNum = resNum <= refNum ? refNum + 1 : resNum;
+    });
+    let loopState = invoiceLength - refToken.length - resNum.toString().length;
+    for (let i = 0; i < loopState; i++) {
+      newInvoiceNum += "0";
+    }
+    return refToken + newInvoiceNum + resNum;
+  };
+
+  const generateNewMasterInvoice = () => {
+    return {
+      NoInvoice: generateNewInvoice(),
+      PurchaseDate: "17 Agusutus 2022",
+      Qty: selectedCart.length,
+      Cost: calculateTotalCost(selectedCart),
+      UserId: userID,
+    };
+  };
+
   useEffect(() => {
-    const fetchApi = async () => {
+    const fetchApiInvoices = async () => {
+      try {
+        const response = await api.get(`/Invoices/${userID}`);
+        console.log(response?.data);
+        setRegisteredInvoice(
+          response?.data?.map((rawData) => {
+            return rawData.noInvoice;
+          })
+        );
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+    fetchApiInvoices();
+  }, []);
+
+  useEffect(() => {
+    const fetchApiCart = async () => {
       try {
         const response = await api.get(`/Cart/${userID}`);
         console.log(response.data);
@@ -124,12 +141,42 @@ const CartPage = () => {
         console.log(err.response.headers);
       }
     };
-    fetchApi();
+    fetchApiCart();
   }, [cart.length]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
   }, [selectedCart]);
+
+  const fetchApiPostInvoice = async (url, data) => {
+    try {
+      const response = await api.post(`/${url}`, data);
+      console.log(response.data);
+      const masterInvoicess = response?.data.id;
+      let details = [];
+      if (url === "MInvoice") {
+        details = selectedCart.map((items) => {
+          return {
+            NoInvoice: generateNewInvoice(),
+            CourseId: items.courseId,
+            MasterInvoiceId: masterInvoicess,
+          };
+        });
+        console.log(details);
+      }
+      details?.forEach((items) => {
+        fetchApiPostInvoice("InvoiceDetails", items);
+      });
+      // <Navigate to="/payment-status" replace={true} />;
+      navigate("/payment-status", { replace: true });
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
 
   const checkout = () => {
     console.log("Barang yang di checkout:");
@@ -139,9 +186,11 @@ const CartPage = () => {
   };
 
   const handleCheckoutClose = (value) => {
+    const { paymentOption, paymentState } = value;
     setCheckoutDialogState(false);
-    setSelectedOp(value);
-    console.log(value);
+    setSelectedOp(paymentOption);
+    if (!paymentState) return;
+    fetchApiPostInvoice("MInvoice", generateNewMasterInvoice());
   };
 
   const handleChangeAll = () => {
@@ -168,8 +217,8 @@ const CartPage = () => {
   };
 
   const handleDelete = (itemID) => {
-    setSelectedCart(filterCartItems(selectedCart, itemID, "unEquality"));
-    setCart(filterCartItems(cart, itemID, "unEquality"));
+    // setSelectedCart(filterCartItems(selectedCart, itemID, "unEquality"));
+    // setCart(filterCartItems(cart, itemID, "unEquality"));
     const fetchDelete = async (id) => {
       try {
         const response = await api.delete(`/Cart/${id}`);

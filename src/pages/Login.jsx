@@ -50,12 +50,12 @@ export default function Login() {
         console.log(response.data);
         const roles = response?.data?.roles;
         setAuth({ email: data.email, roles });
-        navigate(from, { replace: true });
         roles === "admin" ? (
-          <Navigate to="/admin/kelas" state={{ from: location }} replace />
+          <Navigate to="/admin/kelas" replace={true} />
         ) : (
           navigate(from, { replace: true })
         );
+        navigate(from, { replace: true });
       } catch (err) {
         !err.response
           ? console.log(`Error: ${err.message}`)

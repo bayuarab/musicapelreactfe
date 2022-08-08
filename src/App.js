@@ -10,10 +10,9 @@ import ManageKelas from "./routes/manageKelas";
 import PageRoutes from "./routes/PageRoutes";
 
 function App() {
-  const { auth } = useAuth();
   return (
     <div className="base">
-      <HeaderSet roles={`${auth?.roles}`} />
+      <HeaderSet />
       <div className="contentWrapper">
         <PageRoutes />
       </div>
