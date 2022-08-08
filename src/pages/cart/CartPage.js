@@ -75,6 +75,7 @@ const CartPage = () => {
   const [selectedOp, setSelectedOp] = useState(null);
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
+  const [checkoutState, setCheckoutState] = useState(false);
   const navigate = useNavigate();
   // const [postInvoiceDetail, setPostInvoiceDetail] = useState([])
 
@@ -169,6 +170,7 @@ const CartPage = () => {
       });
       // <Navigate to="/payment-status" replace={true} />;
       navigate("/payment-status", { replace: true });
+      setCheckoutState(true);
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
@@ -239,7 +241,9 @@ const CartPage = () => {
     fetchDelete(itemID);
   };
 
-  return (
+  return checkoutState ? (
+    <Navigate to="/payment-success" replace />
+  ) : (
     <Box
       style={{
         paddingTop: "45px",
