@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, TextField, Typography, Grid, Container, CssBaseline } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const EMAIL_REGEX = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -153,9 +153,6 @@ export default function Login() {
 								</FormControl>
 							</form>
 						</Box>
-					</Box>
-					<Box>
-						<Outlet />
 					</Box>
 				</Box>
 			</center>

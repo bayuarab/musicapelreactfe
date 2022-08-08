@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
@@ -126,9 +126,6 @@ export default function Login() {
 								Belum punya akun? Daftar disini
 							</Link>
 						</Box>
-					</Box>
-					<Box>
-						<Outlet />
 					</Box>
 				</Box>
 			</center>
