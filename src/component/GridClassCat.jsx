@@ -83,7 +83,7 @@ export default function GridClassCat() {
 				{gridClassItems.map((item) => (
 					<Grid key={item.id} item xs={3}>
 						<ButtonBase>
-							<Img alt="complex" src={item.nama} />
+							<Img alt="complex" src={item.image} />
 						</ButtonBase>
 						<Typography
 							style={{
@@ -95,7 +95,7 @@ export default function GridClassCat() {
 									md: "6vh",
 									xs: "4vh",
 								}}>
-								<Typography sx={{ fontSize: { lg: "24px", md: "22px", sm: "16px", xs: "10px" } }}>{item.nama}</Typography>
+								<Typography sx={{ fontSize: { lg: "24px", md: "22px", sm: "16px", xs: "10px" } }}>{item.category}</Typography>
 							</Box>
 						</Typography>
 					</Grid>

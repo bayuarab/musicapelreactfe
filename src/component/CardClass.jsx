@@ -82,7 +82,7 @@ export default function CardClass() {
 				{gridItems.map((item) => (
 					<Grid key={item.id} item lg={4} xs={6}>
 						<ButtonBase>
-							<Img alt="complex" src={item.img} />
+							<Img alt="complex" src={item.courseImage} />
 						</ButtonBase>
 						<Typography sx={{ textAlign: "left" }}>
 							<Box sx={{ paddingTop: "1vh" }}>
@@ -95,7 +95,7 @@ export default function CardClass() {
 											xs: "10px",
 										},
 									}}>
-									{item.nama}
+									{item.category}
 								</Typography>
 							</Box>
 							<Box sx={{ width: "90%", height: "hug" }}>
@@ -109,7 +109,7 @@ export default function CardClass() {
 										},
 										fontWeight: "bold",
 									}}>
-									{item.nama}
+									{item.courseTitle}
 								</Typography>
 							</Box>
 							<Box>

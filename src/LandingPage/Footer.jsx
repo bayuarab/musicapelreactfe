@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Grid, styled } from "@mui/material/";
 import Typography from "@mui/material/Typography";
 import ig from "../assets/footer/ig.svg";
@@ -124,14 +123,14 @@ export default function Footer() {
 												<Typography
 													sx={{
 														fontSize: {
-															lg: "14px",
-															md: "13px",
+															lg: "12px",
+															md: "12px",
 															sm: "11px",
 															xs: "6px",
 														},
 														textAlign: "left",
 													}}>
-													<li>{item.title}</li>
+													<li>{item.category}</li>
 												</Typography>
 											</Grid>
 										))}
