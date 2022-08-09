@@ -34,9 +34,9 @@ const PageRoutes = () => {
         <Route element={<RequiredAuth allowedRoles={["student"]} />}>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/my-course" element={<MyCourses />} />
-          <Route path="detail" element={<DetailCourse />} />
+          {/* <Route path="detail" element={<DetailCourse />} />
           <Route path="category" element={<CategoryCourse />} />
-          <Route path=":productId" element={<DetailCourse />} />
+          <Route path=":productId" element={<DetailCourse />} /> */}
           <Route path="/my-invoice">
             <Route index element={<InvoiceMaster />} />
             <Route path=":invoiceID" element={<InvoiceDetails />} />
@@ -47,7 +47,7 @@ const PageRoutes = () => {
         </Route>
 
         {/* Admin route */}
-        <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
+        {/* <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
           <Route path="/admin">
             <Route index element={<AdminPage />} />
             <Route path=":kelas" element={<ManageKelas />} />
@@ -56,7 +56,7 @@ const PageRoutes = () => {
           </Route>
           <Route path="*" element={<p>There's nothing here!</p>} />
           <Route path="/missing" element={<Missing />}></Route>
-        </Route>
+        </Route> */}
         {/* <Route path="admin">
           <Route path="kelas" element={<ManageKelas />} />
           <Route path="category" element={<ManageKategori />} />

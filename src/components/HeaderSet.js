@@ -4,7 +4,7 @@ import WebAppBar from "./WebAppBar";
 
 const HeaderSet = () => {
   const { auth } = useAuth();
-  return auth?.roles === "admin" ? <></> : <WebAppBar logState={auth?.roles} />;
+  return auth?.roles === "admin" ? <></> : <WebAppBar logState={true} />;
 };
 
 export default HeaderSet;

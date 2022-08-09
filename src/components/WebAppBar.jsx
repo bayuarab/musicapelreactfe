@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 
@@ -7,6 +7,11 @@ import {
   AppBar,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Drawer,
   IconButton,
@@ -14,10 +19,12 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Slide,
   styled,
   Toolbar,
   Typography,
 } from "@mui/material";
+import useAuth from "../hooks/useAuth";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -43,6 +50,10 @@ const BlackButton = styled(Button)({
   fontSize: "16px",
   fontFamily: "Poppins",
   fontWeight: "500",
+});
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const loggedIn = (
@@ -83,22 +94,43 @@ const signUp = (
 function WebAppBar(props) {
   const { window, logState } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openLogout, setOpenLogout] = useState(false);
+  const { auth, setAuth } = useAuth();
+
+  const handleClickOpenLogout = () => {
+    console.log("clicked");
+    setOpenLogout(true);
+  };
+
+  const handleCloseLogout = (state) => {
+    if (state) setAuth({});
+    console.log(state);
+    setOpenLogout(false);
+  };
+
   const navItems = [
     { link: "/cart", mobile: "Cart" },
     { link: "/my-course", mobile: "Kelasku" },
     { link: "/my-invoice", mobile: "Pembelian" },
     {
-      link: `${logState ? "/my-account" : "/registration"}`,
-      mobile: `${logState ? "Akun Saya" : "Daftar Sekarang"}`,
+      link: `${auth?.roles ? "/my-account" : "/registration"}`,
+      mobile: `${auth?.roles ? "Akun Saya" : "Daftar Sekarang"}`,
     },
     {
-      link: `${logState ? "/log-out" : "/login"}`,
-      mobile: `${logState ? "Log Out" : "Masuk"}`,
+      link: `${auth?.roles ? "/log-out" : "/login"}`,
+      mobile: `${auth?.roles ? "Log Out" : "Masuk"}`,
     },
   ];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const drawerNavSet = () => {
+    const set = auth?.roles
+      ? navItems.filter((item) => item.mobile !== "Log Out")
+      : navItems;
+    return set;
   };
 
   const drawer = (
@@ -108,29 +140,65 @@ function WebAppBar(props) {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <Link
-            key={item.mobile}
-            to={item.link}
-            style={{
-              textDecoration: "none",
-              textAlign: "center",
-              color: "black",
-            }}
-          >
-            <ListItem disablePadding>
-              <ListItemButton key={item.mobile} sx={{ textAlign: "center" }}>
-                <ListItemText primary={item.mobile} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
+        {drawerNavSet().map((item) => {
+          return (
+            <Link
+              key={item.mobile}
+              to={item.link}
+              style={{
+                textDecoration: "none",
+                textAlign: "center",
+                color: "black",
+              }}
+            >
+              <ListItem disablePadding>
+                <ListItemButton key={item.mobile} sx={{ textAlign: "center" }}>
+                  <ListItemText primary={item.mobile} />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          );
+        })}
+        {auth?.roles ? (
+          <ListItem disablePadding>
+            <ListItemButton
+              key={"Log Out"}
+              sx={{ textAlign: "center" }}
+              onClick={() => handleClickOpenLogout()}
+            >
+              <ListItemText primary={"Log Out"} />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <></>
+        )}
       </List>
     </Box>
   );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  const Logout = (
+    <Dialog
+      open={openLogout}
+      TransitionComponent={Transition}
+      keepMounted
+      onClose={handleCloseLogout}
+      aria-describedby="alert-dialog-slide-description"
+    >
+      <DialogTitle>{"Are you sure to Log Out?"}</DialogTitle>
+      {/* <DialogContent>
+        <DialogContentText id="alert-dialog-slide-description">
+          You hav.
+        </DialogContentText>
+      </DialogContent> */}
+      <DialogActions>
+        <Button onClick={() => handleCloseLogout(false)}>No</Button>
+        <Button onClick={() => handleCloseLogout(true)}>Yes</Button>
+      </DialogActions>
+    </Dialog>
+  );
 
   return (
     <Box>
@@ -174,7 +242,7 @@ function WebAppBar(props) {
             >
               |
             </Typography>
-            {logState ? loggedIn : signUp}
+            {auth?.roles ? loggedIn : signUp}
           </SideIcons>
         </StyledToolbar>
       </AppBar>
@@ -197,6 +265,7 @@ function WebAppBar(props) {
         >
           {drawer}
         </Drawer>
+        {Logout}
       </Box>
       <Toolbar sx={{ height: "76px" }} />
     </Box>
