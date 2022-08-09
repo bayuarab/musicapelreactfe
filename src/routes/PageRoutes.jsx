@@ -14,6 +14,7 @@ import Registerr from "../pages/Register";
 import ManageInvoices from "./manageInvoices";
 import ManageKategori from "./manageKategori";
 import ManageKelas from "./manageKelas";
+import Base64Image from "./base64";
 
 const PageRoutes = () => {
 	return (
@@ -40,6 +41,7 @@ const PageRoutes = () => {
 				<Route path="category" element={<ManageKategori />} />
 				<Route path="invoices" element={<ManageInvoices />} />
 			</Route>
+			<Route path="/base64" element={<Base64Image/>}/>
 			<Route path="*" element={<p>There's nothing here!</p>} />
 		</Routes>
 	);
