@@ -6,6 +6,7 @@ import phone from "../assets/footer/phone.svg";
 import telegram from "../assets/footer/telegram.svg";
 import youtube from "../assets/footer/youtube.svg";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/courseCatAPI";
 // import ButtonBase from "@mui/material/ButtonBase";
 
@@ -130,7 +131,9 @@ export default function Footer() {
 														},
 														textAlign: "left",
 													}}>
-													<li>{item.category}</li>
+													<Link to="detail" style={{ textDecoration: "none", color: "black" }}>
+														<li>{item.category}</li>
+													</Link>
 												</Typography>
 											</Grid>
 										))}
@@ -197,19 +200,29 @@ export default function Footer() {
 							<Box mb="2vh">
 								<Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 									<Grid item xs={2}>
-										<Img alt="complex" src={phone} />
+										<Link to="kontak">
+											<Img alt="complex" src={phone} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={ig} />
+										<Link to="kontak">
+											<Img alt="complex" src={ig} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={youtube} />
+										<Link to="kontak">
+											<Img alt="complex" src={youtube} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={telegram} />
+										<Link to="kontak">
+											<Img alt="complex" src={telegram} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={mail} />
+										<Link to="kontak">
+											<Img alt="complex" src={mail} />
+										</Link>
 									</Grid>
 								</Grid>
 							</Box>

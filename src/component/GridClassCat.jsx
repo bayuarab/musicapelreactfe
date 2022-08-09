@@ -6,6 +6,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import "../App.css";
 import api from "../api/courseCatAPI";
+import { Link } from "react-router-dom";
 import drum from "../assets/drum.jpg";
 
 const gridClassItemsDef = [
@@ -82,9 +83,11 @@ export default function GridClassCat() {
 			<Grid container spacing={2}>
 				{gridClassItems.map((item) => (
 					<Grid key={item.id} item xs={3}>
-						<ButtonBase>
-							<Img alt="complex" src={item.image} />
-						</ButtonBase>
+						<Link to="detail">
+							<ButtonBase>
+								<Img alt="complex" src={item.image} />
+							</ButtonBase>
+						</Link>
 						<Typography
 							style={{
 								textAlign: "center",

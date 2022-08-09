@@ -5,6 +5,8 @@ import Grid from "@mui/material/Grid";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import "../App.css";
+import { Link } from "react-router-dom";
+import numberFormat from "../components/NumbeFormat";
 import drum from "../assets/drum.jpg";
 import api from "../api/courseAPI";
 
@@ -81,9 +83,11 @@ export default function CardClass() {
 			<Grid container spacing={2}>
 				{gridItems.map((item) => (
 					<Grid key={item.id} item lg={4} xs={6}>
-						<ButtonBase>
-							<Img alt="complex" src={item.courseImage} />
-						</ButtonBase>
+						<Link to="category">
+							<ButtonBase>
+								<Img alt="complex" src={item.courseImage} />
+							</ButtonBase>
+						</Link>
 						<Typography sx={{ textAlign: "left" }}>
 							<Box sx={{ paddingTop: "1vh" }}>
 								<Typography
@@ -125,7 +129,7 @@ export default function CardClass() {
 										fontWeight: "bold",
 										color: "blue",
 									}}>
-									{item.price}
+									IDR {numberFormat(item.price)}
 								</Typography>
 							</Box>
 						</Typography>

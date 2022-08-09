@@ -1,7 +1,6 @@
 import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline, Link } from "@mui/material";
 import React, { useState } from "react";
 import api from "../api/userAPI";
-import axios from "axios";
 
 export default function Login() {
 	const [email, setEmail] = useState("");
@@ -87,6 +86,7 @@ export default function Login() {
 									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
 									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" value={password} onChange={(event) => addPassword(event)} />
 								</FormControl>
+								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
 								<Link
 									href="forget"
 									style={{
@@ -101,7 +101,6 @@ export default function Login() {
 									}}>
 									Lupa kata sandi
 								</Link>
-								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
 								<Box mb="2vh" sx={{ textAlign: "left" }}>
 									<Button
 										onClick={(event) => handleLogin(event)}
