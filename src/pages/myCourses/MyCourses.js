@@ -1,6 +1,7 @@
 import { Box, Divider, styled, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 
 const ImgContainer = styled(Box)(({ theme }) => ({
   display: "none",
@@ -16,12 +17,13 @@ const ImgContainer = styled(Box)(({ theme }) => ({
 
 const MyCourses = () => {
   const [myCourseData, setMyCourseData] = useState([]);
-  const [userID, setUserID] = useState(1);
+  const { auth } = useAuth();
+  const UserId = auth?.userId;
 
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/Courses/${userID}`);
+        const response = await api.get(`/Courses/${UserId}`);
         console.log(response.data);
         setMyCourseData(response.data);
       } catch (err) {
@@ -34,7 +36,7 @@ const MyCourses = () => {
     };
 
     fetchApi();
-  }, [userID]);
+  }, [UserId]);
 
   return (
     <Box

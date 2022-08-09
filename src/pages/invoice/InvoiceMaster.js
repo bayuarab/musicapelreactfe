@@ -15,6 +15,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 //==================================================
 
 const StyledPaper = styled(Paper)({
@@ -57,7 +58,8 @@ const StyledNavLink = styled(Typography)({
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
-  const UserID = 1;
+  const { auth } = useAuth();
+  const UserID = auth?.userId;
 
   useEffect(() => {
     const fetchApi = async () => {

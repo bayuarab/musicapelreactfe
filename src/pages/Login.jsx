@@ -51,7 +51,8 @@ export default function Login() {
         const response = await api.post("/Login", dataLogin);
         console.log(response.data);
         const roles = response?.data?.roles;
-        setAuth({ email: dataLogin.email, roles });
+        const userId = response?.data?.id;
+        setAuth({ email: dataLogin.email, roles, userId });
         roles === "admin" ? (
           <Navigate to="/admin/kelas" replace={true} />
         ) : (

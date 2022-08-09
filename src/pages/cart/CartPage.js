@@ -23,6 +23,7 @@ import {
   ShoppingCartCheckout,
 } from "@mui/icons-material";
 import { Navigate, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const StyledCheckbox = styled(Checkbox)({
   color: "#BDBDBD",
@@ -78,8 +79,8 @@ const CartPage = () => {
   const [checkoutState, setCheckoutState] = useState(false);
   const navigate = useNavigate();
   // const [postInvoiceDetail, setPostInvoiceDetail] = useState([])
-
-  const userID = 1;
+  const { auth } = useAuth();
+  const userID = auth?.userId;
 
   const generateNewInvoice = () => {
     let resNum = 0;
@@ -126,7 +127,7 @@ const CartPage = () => {
       }
     };
     fetchApiInvoices();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     const fetchApiCart = async () => {
@@ -143,7 +144,7 @@ const CartPage = () => {
       }
     };
     fetchApiCart();
-  }, [cart.length]);
+  }, [cart.length, userID]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
