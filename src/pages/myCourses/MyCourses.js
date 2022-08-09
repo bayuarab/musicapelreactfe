@@ -38,7 +38,13 @@ const MyCourses = () => {
     fetchApi();
   }, [UserId]);
 
-  return (
+  return myCourseData?.length <= 0 ? (
+    <Box sx={{ marginTop: "45px" }}>
+      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        Masih kosong dek, belanja dong
+      </Typography>
+    </Box>
+  ) : (
     <Box
       sx={{
         display: "flex",

@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Hero from "../component/hero";
@@ -42,7 +43,19 @@ const PageRoutes = () => {
             <Route path=":invoiceID" element={<InvoiceDetails />} />
           </Route>
           <Route path="/payment-status" element={<SuccessPayment />} />
-          <Route path="*" element={<p>There's nothing here!</p>} />
+          <Route
+            path="*"
+            element={
+              <Box sx={{ marginTop: "45px" }}>
+                <Typography
+                  variant="h2"
+                  sx={{ textAlign: "center", color: "#5D5FEF" }}
+                >
+                  Mo kemana nich??
+                </Typography>
+              </Box>
+            }
+          />
           <Route path="/missing" element={<Missing />} />
         </Route>
 

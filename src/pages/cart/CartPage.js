@@ -77,24 +77,44 @@ const CartPage = () => {
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
   const [checkoutState, setCheckoutState] = useState(false);
+
   const navigate = useNavigate();
-  // const [postInvoiceDetail, setPostInvoiceDetail] = useState([])
   const { auth } = useAuth();
   const userID = auth?.userId;
 
   const generateNewInvoice = () => {
-    let resNum = 0;
-    let invoiceLength = registeredInvoice[0]?.length;
-    let refToken = registeredInvoice[0]?.substring(0, 3);
-    let newInvoiceNum = "";
-    registeredInvoice?.forEach((invoices) => {
-      const refNum = parseInt(invoices.substring(3, invoices.length));
-      resNum = resNum <= refNum ? refNum + 1 : resNum;
-    });
-    let loopState = invoiceLength - refToken.length - resNum.toString().length;
-    for (let i = 0; i < loopState; i++) {
-      newInvoiceNum += "0";
-    }
+    const getResnum = (resNum = 0) => {
+      registeredInvoice?.forEach((invoices) => {
+        const refNum = parseInt(invoices.substring(3, invoices.length));
+        resNum = resNum <= refNum ? refNum + 1 : resNum;
+      });
+      return resNum;
+    };
+
+    const getRef = () => {
+      return registeredInvoice?.length <= 0
+        ? {
+            resNum: 0,
+            refToken: auth?.email.substring(0, 3),
+          }
+        : {
+            resNum: getResnum(),
+            refToken: registeredInvoice[0]?.substring(0, 3),
+          };
+    };
+
+    const getInvoiceSepNum = (i) => {
+      if (i === 0) return "";
+      return "0" + getInvoiceSepNum(i - 1);
+    };
+
+    const invoiceLength = registeredInvoice[0]
+      ? registeredInvoice[0].length
+      : 8;
+    const { resNum, refToken } = getRef();
+    console.log(resNum, refToken, invoiceLength);
+    const loop = invoiceLength - refToken.length - resNum.toString().length;
+    const newInvoiceNum = getInvoiceSepNum(loop);
     return refToken + newInvoiceNum + resNum;
   };
 
@@ -169,7 +189,6 @@ const CartPage = () => {
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
       });
-      // <Navigate to="/payment-status" replace={true} />;
       navigate("/payment-status", { replace: true });
       setCheckoutState(true);
     } catch (err) {
@@ -224,7 +243,7 @@ const CartPage = () => {
     // setCart(filterCartItems(cart, itemID, "unEquality"));
     const fetchDelete = async (id) => {
       try {
-        const response = await api.delete(`/Cart/${id}`);
+        const response = await api.delete(`/Cart/${userID}/${id}`);
         console.log(response.data);
         setCart(
           response.data.filter(
@@ -244,6 +263,12 @@ const CartPage = () => {
 
   return checkoutState ? (
     <Navigate to="/payment-success" replace />
+  ) : cart?.length <= 0 ? (
+    <Box sx={{ marginTop: "45px" }}>
+      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        Masih kosong dek, belanja dong
+      </Typography>
+    </Box>
   ) : (
     <Box
       style={{

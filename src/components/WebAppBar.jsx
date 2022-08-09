@@ -2,7 +2,12 @@ import React, { forwardRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 
-import { Logout, Menu, Person, ShoppingCart } from "@mui/icons-material";
+import {
+  Logout as LogoutIcon,
+  Menu,
+  Person,
+  ShoppingCart,
+} from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -56,56 +61,59 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const loggedIn = (
-  <SideIcons sx={{ color: "black" }}>
-    <Link style={{ textDecoration: "none" }} to="/my-account">
-      <IconButton>
-        <Person />
-      </IconButton>
-    </Link>
-    <IconButton sx={{ color: "black" }}>
-      <Logout />
-    </IconButton>
-  </SideIcons>
-);
-
-const signUp = (
-  <SideIcons>
-    <Link style={{ textDecoration: "none" }} to="/registration">
-      <BlackButton>Daftar Sekarang</BlackButton>
-    </Link>
-    <Link style={{ textDecoration: "none" }} to="/login">
-      <Button
-        variant="contained"
-        sx={{
-          fontFamily: "Poppins",
-          fontSize: "16px",
-          backgroundColor: "#5D5FEF",
-          borderRadius: "8px",
-          textTransform: "Capitalize",
-        }}
-      >
-        Masuk
-      </Button>
-    </Link>
-  </SideIcons>
-);
-
 function WebAppBar(props) {
   const { window, logState } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const { auth, setAuth } = useAuth();
 
-  const handleClickOpenLogout = () => {
-    console.log("clicked");
-    setOpenLogout(true);
-  };
-
   const handleCloseLogout = (state) => {
     if (state) setAuth({});
     console.log(state);
     setOpenLogout(false);
+  };
+
+  const loggedIn = (
+    <SideIcons sx={{ color: "black" }}>
+      <Link style={{ textDecoration: "none" }} to="/my-account">
+        <IconButton>
+          <Person />
+        </IconButton>
+      </Link>
+      <IconButton
+        sx={{ color: "black" }}
+        onClick={() => handleCloseLogout(true)}
+      >
+        <LogoutIcon />
+      </IconButton>
+    </SideIcons>
+  );
+
+  const signUp = (
+    <SideIcons>
+      <Link style={{ textDecoration: "none" }} to="/registration">
+        <BlackButton>Daftar Sekarang</BlackButton>
+      </Link>
+      <Link style={{ textDecoration: "none" }} to="/login">
+        <Button
+          variant="contained"
+          sx={{
+            fontFamily: "Poppins",
+            fontSize: "16px",
+            backgroundColor: "#5D5FEF",
+            borderRadius: "8px",
+            textTransform: "Capitalize",
+          }}
+        >
+          Masuk
+        </Button>
+      </Link>
+    </SideIcons>
+  );
+
+  const handleClickOpenLogout = () => {
+    console.log("clicked");
+    setOpenLogout(true);
   };
 
   const navItems = [

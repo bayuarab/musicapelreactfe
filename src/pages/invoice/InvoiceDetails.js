@@ -76,7 +76,13 @@ const InvoiceDetails = () => {
     fetchApi();
   }, [invoiceID]);
 
-  return (
+  return invoiceDetailData?.length <= 0 ? (
+    <Box sx={{ marginTop: "45px" }}>
+      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        Mo kemana nich??
+      </Typography>
+    </Box>
+  ) : (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
       <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
         <Link style={{ textDecoration: "none" }} to="/">
