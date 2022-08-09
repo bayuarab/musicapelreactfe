@@ -64,7 +64,7 @@ export default function CardClass() {
 	useEffect(() => {
 		const fetchApi = async () => {
 			try {
-				const response = await api.get("/");
+				const response = await api.get("/LandingPage");
 				console.log(response.data);
 				setDataClass(response.data);
 			} catch (err) {
