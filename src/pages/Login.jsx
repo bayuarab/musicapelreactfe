@@ -1,7 +1,6 @@
-import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline } from "@mui/material";
+import { Box, Button, FormControl, TextField, Typography, Container, CssBaseline, Link } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
-import axios from "axios";
+import api from "../api/userAPI";
 
 export default function Login() {
 	const [email, setEmail] = useState("");
@@ -27,12 +26,21 @@ export default function Login() {
 			email: email,
 			password: password,
 		};
-		console.log(dataLogin);
 
 		setEmail("");
 		setPassword("");
 
-		axios.post("api/uploadfile", dataLogin);
+		const fetchApi = async () => {
+			try {
+				const response = await api.post("/Login", dataLogin);
+				console.log(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
 	};
 
 	return (
@@ -78,8 +86,9 @@ export default function Login() {
 									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
 									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" value={password} onChange={(event) => addPassword(event)} />
 								</FormControl>
+								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
 								<Link
-									to="forget"
+									href="forget"
 									style={{
 										itemAlign: "right",
 										fontSize: {
@@ -92,7 +101,6 @@ export default function Login() {
 									}}>
 									Lupa kata sandi
 								</Link>
-								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
 								<Box mb="2vh" sx={{ textAlign: "left" }}>
 									<Button
 										onClick={(event) => handleLogin(event)}
@@ -113,22 +121,18 @@ export default function Login() {
 								</Box>
 							</form>
 							<Link
-								to="register"
+								href="/registrasi"
 								sx={{
 									textAlign: "left",
 									fontSize: {
 										lg: "16px",
 										md: "15px",
-										sm: "13px",
-										xs: "10px",
+										xs: "13px",
 									},
 								}}>
 								Belum punya akun? Daftar disini
 							</Link>
 						</Box>
-					</Box>
-					<Box>
-						<Outlet />
 					</Box>
 				</Box>
 			</center>

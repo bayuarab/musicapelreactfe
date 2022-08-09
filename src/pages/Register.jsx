@@ -1,7 +1,7 @@
-import { Box, Button, FormControl, TextField, Typography, Grid, Container, CssBaseline } from "@mui/material";
+import { Box, Button, FormControl, TextField, Typography, Grid, Container, CssBaseline, Link } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
-import axios from "axios";
+import api from "../api/userAPI";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const EMAIL_REGEX = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -12,6 +12,8 @@ export default function Login() {
 	const [password, setPassword] = useState("");
 	const [rePassword, setRePassword] = useState("");
 	const [err, setErr] = useState("");
+	const [regisState, setRegisState] = useState(false);
+	const navigate = useNavigate();
 
 	const addNama = (event) => {
 		setNama(event.target.value);
@@ -58,17 +60,30 @@ export default function Login() {
 			email: email,
 			password: password,
 		};
-		console.log(dataClient);
 
 		setNama("");
 		setEmail("");
 		setPassword("");
 		setRePassword("");
 
-		axios.post("api/uploadfile", dataClient);
+		const fetchApi = async () => {
+			try {
+				const response = await api.post("/", dataClient);
+				console.log(response.data);
+				navigate("/Login", { replace: true });
+				setRegisState(true);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
 	};
 
-	return (
+	return regisState ? (
+		<Navigate to="/Login" replace />
+	) : (
 		<Container>
 			<CssBaseline />
 			<center>
@@ -135,7 +150,7 @@ export default function Login() {
 											</Grid>
 											<Grid item>
 												<Link
-													to="login"
+													href="/Login"
 													mt="1vh"
 													sx={{
 														textAlign: "left",
@@ -153,9 +168,6 @@ export default function Login() {
 								</FormControl>
 							</form>
 						</Box>
-					</Box>
-					<Box>
-						<Outlet />
 					</Box>
 				</Box>
 			</center>
