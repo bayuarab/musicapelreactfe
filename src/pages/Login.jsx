@@ -46,10 +46,10 @@ export default function Login() {
     console.log(data);
     const fetchApi = async () => {
       try {
-        const response = await api.post("/Login", { username: data.email });
+        const response = await api.post("/Login", { email: data.email });
         console.log(response.data);
-        const roles = response?.data?.roles;
-        setAuth({ email: data.email, roles });
+        const { id, email, roles } = response?.data;
+        setAuth({ id, email, roles });
         roles === "admin" ? (
           <Navigate to="/admin/kelas" replace={true} />
         ) : (

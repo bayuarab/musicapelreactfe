@@ -11,7 +11,7 @@ const RequiredAuth = ({ allowedRoles }) => {
         return roles === auth.roles;
       });
       if (second) return <Outlet />;
-      if (auth?.username) {
+      if (auth?.email) {
         return <Navigate to="/missing" state={{ from: location }} replace />;
       }
     }
