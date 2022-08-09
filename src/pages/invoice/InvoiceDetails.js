@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import api from "../../api/invoiceDetails";
+import { Link, useParams } from "react-router-dom";
+import api from "../../api/Invoices";
 
 import {
   Box,
@@ -54,35 +54,14 @@ const StyledNavLink = styled(Typography)({
   fontSize: "16px",
 });
 
-//No Nama Course Category Jadwal Harga
-function createData(courseName, courseCategory, schedule, price) {
-  return { courseName, courseCategory, schedule, price };
-}
-
-const defaultRows = [
-  createData(
-    "Kursus Drummer Special Coach (Eno Netral)",
-    "Drum",
-    "Senin, 25 Juni 2022",
-    "IDR 8.500.000"
-  ),
-  createData(
-    "Biola Mid-Level Course",
-    "Biola",
-    "Sabtu, 23 Juli 2022",
-    "IDR 3.000.000"
-  ),
-];
-
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
-  const { date, cost } = useLocation().state;
-  const [invoiceDetailData, setInvoiceDetailData] = useState(defaultRows);
+  const [invoiceDetailData, setInvoiceDetailData] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/${invoiceID}`);
+        const response = await api.get(`/DetailsByNoInvoice/${invoiceID}`);
         console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {
@@ -97,9 +76,13 @@ const InvoiceDetails = () => {
     fetchApi();
   }, [invoiceID]);
 
-  const rows = invoiceDetailData;
-
-  return (
+  return invoiceDetailData?.length <= 0 ? (
+    <Box sx={{ marginTop: "45px" }}>
+      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        Mo kemana nich??
+      </Typography>
+    </Box>
+  ) : (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
       <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
         <Link style={{ textDecoration: "none" }} to="/">
@@ -154,7 +137,8 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Tanggal Beli&nbsp;: {date}
+            Tanggal Beli&nbsp;:{" "}
+            {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
           </Typography>
           <Typography
             sx={{
@@ -164,7 +148,10 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Total Harga:&nbsp;&nbsp; IDR {cost.toLocaleString("de-DE")}
+            Total Harga:&nbsp;&nbsp; IDR{" "}
+            {invoiceDetailData[0]
+              ? invoiceDetailData[0].cost.toLocaleString("de-DE")
+              : "-"}
           </Typography>
         </Box>
       </Box>
@@ -180,15 +167,13 @@ const InvoiceDetails = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {invoiceDetailData.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row" align="center">
                   {index + 1}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.course}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.courseCategory}
-                </StyledTableCell>
+                <StyledTableCell align="center">{row.category}</StyledTableCell>
                 <StyledTableCell align="center">{row.schedule}</StyledTableCell>
                 <StyledTableCell align="center">
                   IDR {row.price.toLocaleString("de-DE")}

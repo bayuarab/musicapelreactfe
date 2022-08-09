@@ -1,5 +1,7 @@
 import { Box, Divider, styled, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 
 const ImgContainer = styled(Box)(({ theme }) => ({
   display: "none",
@@ -14,24 +16,35 @@ const ImgContainer = styled(Box)(({ theme }) => ({
 }));
 
 const MyCourses = () => {
-  const myCourse = [
-    {
-      id_product: "1",
-      course_category_id: "1",
-      course_category: "Drum",
-      course_name: "Kursus Drummer Special Coach (Eno Netral)",
-      schedule: "Senin, 25 Juli 2022",
-    },
-    {
-      id_product: "9",
-      course_category_id: "4",
-      course_category: "Biola",
-      course_name: "Biola Mid-Level Course",
-      schedule: "Sabtu, 23 Juli 2022",
-    },
-  ];
+  const [myCourseData, setMyCourseData] = useState([]);
+  const { auth } = useAuth();
+  const UserId = auth?.userId;
 
-  return (
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const response = await api.get(`/Courses/${UserId}`);
+        console.log(response.data);
+        setMyCourseData(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+
+    fetchApi();
+  }, [UserId]);
+
+  return myCourseData?.length <= 0 ? (
+    <Box sx={{ marginTop: "45px" }}>
+      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        Masih kosong dek, belanja dong
+      </Typography>
+    </Box>
+  ) : (
     <Box
       sx={{
         display: "flex",
@@ -43,9 +56,9 @@ const MyCourses = () => {
         paddingBottom: "30px",
       }}
     >
-      {myCourse.map((items) => {
+      {myCourseData.map((items, index) => {
         return (
-          <Box key={items.id_product}>
+          <Box key={index}>
             <Box
               sx={{
                 display: "flex",
@@ -63,8 +76,8 @@ const MyCourses = () => {
               >
                 <ImgContainer>
                   <img
-                    src="https://cdn.pixabay.com/photo/2021/09/02/16/48/cat-6593947_960_720.jpg"
-                    alt={items.course_name}
+                    src={items.courseImage}
+                    alt={items.course}
                     loading="lazy"
                     objectfit="true"
                     width={"200px"}
@@ -92,7 +105,7 @@ const MyCourses = () => {
                       color: "#828282",
                     }}
                   >
-                    {items.course_category}
+                    {items.category}
                   </Typography>
                   <Typography
                     sx={{
@@ -103,7 +116,7 @@ const MyCourses = () => {
                       color: "#333333",
                     }}
                   >
-                    {items.course_name}
+                    {items.course}
                   </Typography>
                   <Typography
                     sx={{

@@ -78,7 +78,7 @@ const CheckoutDialogs = (props) => {
   const [options, setOptions] = useState(null);
 
   const handleClose = () => {
-    onClose(selectedOp);
+    onClose({ paymentOption: selectedOp, paymentState: false });
   };
 
   const handleListItemClick = (indexOP) => {
@@ -91,7 +91,11 @@ const CheckoutDialogs = (props) => {
   };
 
   const handleButtonPilih = () => {
-    options === null ? console.log("Belum pilih pembayaran") : onClose(options);
+    const result = {
+      paymentOption: options,
+      paymentState: true,
+    };
+    options === null ? console.log("Belum pilih pembayaran") : onClose(result);
   };
 
   return (

@@ -14,7 +14,8 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../../api/masterInvoice";
+import api from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 //==================================================
 
 const StyledPaper = styled(Paper)({
@@ -55,23 +56,15 @@ const StyledNavLink = styled(Typography)({
   fontSize: "16px",
 });
 
-function createData(noInvoice, purchaseDate, qty, cost) {
-  return { noInvoice, purchaseDate, qty, cost };
-}
-
-const defaultRows = [
-  createData("APM00003", "12 Juni 2022", 2, "IDR 11.500.000"),
-  createData("APM00002", "05 Februari 2022", 1, "IDR 4.000.000"),
-  createData("APM00001", "30 Agustus 2021", 1, "IDR 2.400.000"),
-];
-
 const InvoiceMaster = () => {
-  const [masterInvoiceData, setMasterInvoiceData] = useState(defaultRows);
+  const [masterInvoiceData, setMasterInvoiceData] = useState([]);
+  const { auth } = useAuth();
+  const UserID = auth?.userId;
 
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get("/");
+        const response = await api.get(`/Invoices/${UserID}`);
         console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
@@ -84,9 +77,7 @@ const InvoiceMaster = () => {
     };
 
     fetchApi();
-  }, []);
-
-  const rows = masterInvoiceData;
+  }, [UserID]);
 
   return (
     <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
@@ -113,7 +104,7 @@ const InvoiceMaster = () => {
         <Table sx={{}} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>No</StyledTableCell>
+              <StyledTableCell align="center">No</StyledTableCell>
               <StyledTableCell align="center">No. Invoice</StyledTableCell>
               <StyledTableCell align="center">Tanggal Beli</StyledTableCell>
               <StyledTableCell align="center">Jumlah Kursus</StyledTableCell>
@@ -122,7 +113,7 @@ const InvoiceMaster = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {masterInvoiceData.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
                   {index + 1}
@@ -141,7 +132,6 @@ const InvoiceMaster = () => {
                   <Link
                     style={{ textDecoration: "none" }}
                     to={`/my-invoice/${row.noInvoice}`}
-                    state={{ date: row.purchaseDate, cost: row.cost }}
                   >
                     <Button
                       variant="contained"

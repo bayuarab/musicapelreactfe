@@ -26,7 +26,9 @@ import TableRow from "@mui/material/TableRow";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HeaderbarAdmin from "../component/HeaderBarAdmin.js";
+import HeaderSet from "../components/HeaderSet.js";
 import numberFormat from "../components/NumbeFormat.js";
+import useAuth from "../hooks/useAuth.js";
 import { getKategoriKelas, getMusic } from "../JSON Data/Data";
 let kategoris = getKategoriKelas();
 let musics = getMusic();
@@ -58,13 +60,15 @@ function ManageInvoices() {
   const [openVerify, setOpenVerify] = useState(false);
   const [openViewItems, setOpenViewItems] = useState(false);
   /* useStates untuk membuka dialog untuk POST edit dan verifikasi invoice */
+  const { auth } = useAuth();
 
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         {/* Header bar */}
-        <HeaderbarAdmin />
+
+        <HeaderSet roles={`${auth?.roles}`} />
 
         {/* Body Content */}
         <Box
