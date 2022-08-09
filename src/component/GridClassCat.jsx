@@ -1,13 +1,15 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import "../App.css";
+import api from "../api/courseCatAPI";
+import { Link } from "react-router-dom";
 import drum from "../assets/drum.jpg";
 
-const gridClassItems = [
+const gridClassItemsDef = [
 	{
 		categories: "Drum",
 		image: drum,
@@ -52,6 +54,25 @@ const Img = styled("img")({
 });
 
 export default function GridClassCat() {
+	const [dataClass, setDataClass] = useState(gridClassItemsDef);
+
+	useEffect(() => {
+		const fetchApi = async () => {
+			try {
+				const response = await api.get("/");
+				console.log(response.data);
+				setDataClass(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
+	}, []);
+
+	const gridClassItems = dataClass;
+
 	return (
 		<Box
 			mt={{
@@ -61,10 +82,12 @@ export default function GridClassCat() {
 			sx={{ flexGrow: 1 }}>
 			<Grid container spacing={2}>
 				{gridClassItems.map((item) => (
-					<Grid key={item.categories} item xs={3}>
-						<ButtonBase>
-							<Img alt="complex" src={item.image} />
-						</ButtonBase>
+					<Grid key={item.id} item xs={3}>
+						<Link to="detail">
+							<ButtonBase>
+								<Img alt="complex" src={item.image} />
+							</ButtonBase>
+						</Link>
 						<Typography
 							style={{
 								textAlign: "center",
@@ -75,7 +98,7 @@ export default function GridClassCat() {
 									md: "6vh",
 									xs: "4vh",
 								}}>
-								<Typography sx={{ fontSize: { lg: "24px", md: "22px", sm: "16px", xs: "10px" } }}>{item.categories}</Typography>
+								<Typography sx={{ fontSize: { lg: "24px", md: "22px", sm: "16px", xs: "10px" } }}>{item.category}</Typography>
 							</Box>
 						</Typography>
 					</Grid>

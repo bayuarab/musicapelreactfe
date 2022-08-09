@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Grid, styled } from "@mui/material/";
 import Typography from "@mui/material/Typography";
 import ig from "../assets/footer/ig.svg";
@@ -6,6 +5,9 @@ import mail from "../assets/footer/mail.svg";
 import phone from "../assets/footer/phone.svg";
 import telegram from "../assets/footer/telegram.svg";
 import youtube from "../assets/footer/youtube.svg";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import api from "../api/courseCatAPI";
 // import ButtonBase from "@mui/material/ButtonBase";
 
 const Img = styled("img")({
@@ -15,9 +17,28 @@ const Img = styled("img")({
 	maxHeight: "100%",
 });
 
-const classCat = ["Drum", "Piano", "Gitar", "Bass", "Biola", "Menyanyi", "Flute", "Sexophone"];
+const classCatDef = ["Drum", "Piano", "Gitar", "Bass", "Biola", "Menyanyi", "Flute", "Sexophone"];
 
 export default function Footer() {
+	const [dataClass, setDataClass] = useState(classCatDef);
+
+	useEffect(() => {
+		const fetchApi = async () => {
+			try {
+				const response = await api.get("/");
+				console.log(response.data);
+				setDataClass(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
+	}, []);
+
+	const classCat = dataClass;
+
 	return (
 		<Box
 			mt="3vh"
@@ -99,18 +120,20 @@ export default function Footer() {
 								<Box sx={{ width: "60%" }}>
 									<Grid container>
 										{classCat.map((item) => (
-											<Grid key={item} item xs={5}>
+											<Grid key={item.id} item xs={5}>
 												<Typography
 													sx={{
 														fontSize: {
-															lg: "14px",
-															md: "13px",
+															lg: "12px",
+															md: "12px",
 															sm: "11px",
 															xs: "6px",
 														},
 														textAlign: "left",
 													}}>
-													<li>{item}</li>
+													<Link to="detail" style={{ textDecoration: "none", color: "black" }}>
+														<li>{item.category}</li>
+													</Link>
 												</Typography>
 											</Grid>
 										))}
@@ -177,19 +200,29 @@ export default function Footer() {
 							<Box mb="2vh">
 								<Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 									<Grid item xs={2}>
-										<Img alt="complex" src={phone} />
+										<Link to="kontak">
+											<Img alt="complex" src={phone} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={ig} />
+										<Link to="kontak">
+											<Img alt="complex" src={ig} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={youtube} />
+										<Link to="kontak">
+											<Img alt="complex" src={youtube} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={telegram} />
+										<Link to="kontak">
+											<Img alt="complex" src={telegram} />
+										</Link>
 									</Grid>
 									<Grid item xs={2}>
-										<Img alt="complex" src={mail} />
+										<Link to="kontak">
+											<Img alt="complex" src={mail} />
+										</Link>
 									</Grid>
 								</Grid>
 							</Box>

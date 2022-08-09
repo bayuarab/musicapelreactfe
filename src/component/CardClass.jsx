@@ -1,13 +1,16 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import "../App.css";
+import { Link } from "react-router-dom";
+import numberFormat from "../components/NumbeFormat";
 import drum from "../assets/drum.jpg";
+import api from "../api/courseAPI";
 
-const gridItems = [
+const gridItemsDef = [
 	{
 		categories: "Drum",
 		class: "Kursus Drummer Special Coach (Eno Netral)",
@@ -56,14 +59,35 @@ const Img = styled("img")({
 });
 
 export default function CardClass() {
+	const [dataClass, setDataClass] = useState(gridItemsDef);
+
+	useEffect(() => {
+		const fetchApi = async () => {
+			try {
+				const response = await api.get("/LandingPage");
+				console.log(response.data);
+				setDataClass(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchApi();
+	}, []);
+
+	const gridItems = dataClass;
+
 	return (
 		<Box sx={{ flexGrow: 1, alignItems: "center", display: "flex", flexDirection: "column" }}>
 			<Grid container spacing={2}>
-				{gridItems.map((item, index) => (
-					<Grid key={index} item lg={4} xs={6}>
-						<ButtonBase>
-							<Img alt="complex" src={item.image} />
-						</ButtonBase>
+				{gridItems.map((item) => (
+					<Grid key={item.id} item lg={4} xs={6}>
+						<Link to="category">
+							<ButtonBase>
+								<Img alt="complex" src={item.courseImage} />
+							</ButtonBase>
+						</Link>
 						<Typography sx={{ textAlign: "left" }}>
 							<Box sx={{ paddingTop: "1vh" }}>
 								<Typography
@@ -75,7 +99,7 @@ export default function CardClass() {
 											xs: "10px",
 										},
 									}}>
-									{item.categories}
+									{item.category}
 								</Typography>
 							</Box>
 							<Box sx={{ width: "90%", height: "hug" }}>
@@ -89,7 +113,7 @@ export default function CardClass() {
 										},
 										fontWeight: "bold",
 									}}>
-									{item.class}
+									{item.courseTitle}
 								</Typography>
 							</Box>
 							<Box>
@@ -105,7 +129,7 @@ export default function CardClass() {
 										fontWeight: "bold",
 										color: "blue",
 									}}>
-									{item.price}
+									IDR {numberFormat(item.price)}
 								</Typography>
 							</Box>
 						</Typography>
