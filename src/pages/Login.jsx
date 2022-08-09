@@ -4,52 +4,54 @@ import {
   Container,
   CssBaseline,
   FormControl,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import {
-  Link,
-  Navigate,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import api from "../api/userAPI";
 import useAuth from "../hooks/useAuth";
 
 //---------------
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
-
   const addEmail = (event) => {
-    setData((prevState) => {
-      return { ...prevState, email: event.target.value };
-    });
+    setEmail(event.target.value);
   };
 
   const addPassword = (event) => {
-    setData((prevState) => {
-      return { ...prevState, password: event.target.value };
-    });
+    setPassword(event.target.value);
   };
 
-  const goLogin = () => {
-    console.log(data);
+  const goLogin = (event) => {
+    event.preventDefault();
+
+    if (email === "" || password === "") {
+      return setErr("Field cannot be empty");
+    }
+
+    const dataLogin = {
+      email: email,
+      password: password,
+    };
+
+    setEmail("");
+    setPassword("");
+
     const fetchApi = async () => {
       try {
-        const response = await api.post("/Login", { email: data.email });
+        const response = await api.post("/Login", dataLogin);
         console.log(response.data);
-        const { id, email, roles } = response?.data;
-        setAuth({ id, email, roles });
+        const roles = response?.data?.roles;
+        setAuth({ email: dataLogin.email, roles });
         roles === "admin" ? (
           <Navigate to="/admin/kelas" replace={true} />
         ) : (
@@ -119,10 +121,9 @@ export default function Login() {
                     name="email"
                     autoComplete="email"
                     autoFocus
+                    value={email}
                     onChange={(event) => addEmail(event)}
                   />
-                </FormControl>
-                <FormControl sx={{ width: "100%" }}>
                   <TextField
                     margin="normal"
                     required
@@ -132,11 +133,12 @@ export default function Login() {
                     type="password"
                     autoComplete="current-password"
                     id="txtPassword"
+                    value={password}
                     onChange={(event) => addPassword(event)}
                   />
                 </FormControl>
                 <Link
-                  to="forget"
+                  href="forget"
                   style={{
                     itemAlign: "right",
                     fontSize: {
@@ -152,7 +154,7 @@ export default function Login() {
                 </Link>
                 <Box mb="2vh" sx={{ textAlign: "left" }}>
                   <Button
-                    onClick={() => goLogin()}
+                    onClick={(event) => goLogin(event)}
                     sx={{
                       borderRadius: "7px",
                       fontSize: {
@@ -171,7 +173,7 @@ export default function Login() {
                 </Box>
               </form>
               <Link
-                to="/registration"
+                href="/registration"
                 sx={{
                   textAlign: "left",
                   fontSize: {
@@ -185,9 +187,6 @@ export default function Login() {
                 Belum punya akun? Daftar disini
               </Link>
             </Box>
-          </Box>
-          <Box>
-            <Outlet />
           </Box>
         </Box>
       </center>
