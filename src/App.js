@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="base">
       <BrowserRouter>
-        <HeaderSet roles={"admin"} />
+        <HeaderSet roles={"user"} />
         <div className="contentWrapper">
           <PageRoutes />
         </div>
