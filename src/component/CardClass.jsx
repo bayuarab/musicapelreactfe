@@ -83,7 +83,7 @@ export default function CardClass() {
 			<Grid container spacing={2}>
 				{gridItems.map((item) => (
 					<Grid key={item.id} item lg={4} xs={6}>
-						<Link to="category">
+						<Link to={`/course/${item.id}`}>
 							<ButtonBase>
 								<Img alt="complex" src={item.courseImage} />
 							</ButtonBase>

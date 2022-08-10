@@ -1,15 +1,30 @@
 import { Box, Typography, Grid, Card, CardMedia, CardContent, CardActions, Button, CardActionArea, FormControl, Select, MenuItem } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import numberFormat from "../components/NumbeFormat";
 import { getKategoriKelas, getMusic } from "../JSON Data/Data";
 import Carousel from 'react-multi-carousel';
+import axios from "axios";
 let kategoris = getKategoriKelas();
 let musics = getMusic();
 
 //#F2C94C
 export default function CategoryCourse() {
     const [age, setAge] = React.useState('');
+
+    let params = useParams();
+
+    /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+    const [detailOfACourse, setDetailOfACourse] = useState([]);
+    const getdetailOfACourse = async () => {
+        await axios.get('https://localhost:7132/api/Course/LandingPage', {
+            params
+        }).then((res) => { if (res.status === 200) { setDetailOfACourse(res.data[parseInt(params.courseid)-1]); } }).catch((err) => { })
+        console.log(params)
+    }
+    useEffect(() => { getdetailOfACourse(); }, [params], console.log(params.courseid))
+
+    /* useStates untuk keperluan GET detail dari sebuah produk */
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -23,8 +38,8 @@ export default function CategoryCourse() {
                     <Box bottom='0px' style={{
                         height: '400px'
                     }}>
-                        <img src={`${musics[0].image}`}
-                            width="75%" alt={musics[0].image}
+                        <img src={`${detailOfACourse.courseImage}`}
+                            width="75%" alt={detailOfACourse.courseImage}
                             style={{
                                 right: '0px',
                                 borderRadius: '20px'
@@ -39,10 +54,10 @@ export default function CategoryCourse() {
                         {musics[0].name}
                     </Typography>
                     <Typography variant="body2" fontWeight='bold'>
-                        <h1>{kategoris[0].name}</h1>
+                        <h1>{detailOfACourse.courseTitle}</h1>
                     </Typography>
                     <Typography color='blue'>
-                        <h1>IDR {numberFormat(kategoris[0].price)}</h1>
+                        <h1>IDR {numberFormat(detailOfACourse.price)}</h1>
                     </Typography>
 
 

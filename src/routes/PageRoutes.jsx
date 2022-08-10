@@ -30,7 +30,8 @@ const PageRoutes = () => {
         <Route path="/login" element={<Loginn />} />
         <Route path="/registration" element={<Registerr />} />
         <Route path="*" element={<p>There's nothing here!</p>} />
-        <Route path="detail" ><Route path=":id" element={<DetailCourse />} /></Route>
+        <Route path="category/:categoryid" element={<DetailCourse />} />
+        <Route path="course" ><Route path=":courseid" element={<CategoryCourse />} /></Route>
         {/* <Route path="Hero" element={<Hero />} /> */}
 
         {/* User and admin route */}
