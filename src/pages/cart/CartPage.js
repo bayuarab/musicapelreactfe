@@ -78,6 +78,9 @@ const CartPage = () => {
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
   const [checkoutState, setCheckoutState] = useState(false);
+  const [apiDataMessage, setApiDataMessage] = useState(
+    "Mengambil data ke server, harap tunggu"
+  );
 
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
@@ -151,6 +154,7 @@ const CartPage = () => {
       Qty: selectedCart.length,
       Cost: calculateTotalCost(selectedCart),
       UserId: userID,
+      Method: selectedOp,
     };
   };
 
@@ -191,6 +195,8 @@ const CartPage = () => {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
+        if (err.response.data == "Not Found")
+          setApiDataMessage("Masih kosong, silahkan belanja");
         console.log(err.response.status);
         console.log(err.response.headers);
       }
@@ -296,9 +302,9 @@ const CartPage = () => {
   return checkoutState ? (
     <Navigate to="/payment-success" replace />
   ) : cart?.length <= 0 ? (
-    <Box sx={{ marginTop: "45px" }}>
-      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Masih kosong, silahkan belanja
+    <Box sx={{ marginTop: "60px" }}>
+      <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        {apiDataMessage}
       </Typography>
     </Box>
   ) : (

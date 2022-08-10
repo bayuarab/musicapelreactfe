@@ -33,10 +33,10 @@ import SearchIcon from "@mui/icons-material/Search";
 // // import ManageProductDialogDeleteItem from '../components/ManageProductDialogDeleteItem';
 // import { APIRequest } from '../components/APICalls';
 import StyledEngine from "@mui/styled-engine";
-import HeaderSet from "../components/HeaderSet";
-import numberFormat from "../components/NumbeFormat";
-import useAuth from "../hooks/useAuth";
-import { getKategoriKelas, getMusic } from "../JSON Data/Data";
+import HeaderSet from "../../components/HeaderSet";
+import numberFormat from "../../components/NumbeFormat";
+import useAuth from "../../hooks/useAuth";
+import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 
 let kategoris = getKategoriKelas();
 let musics = getMusic();
@@ -188,7 +188,7 @@ function ManageKategori() {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         {/* Header bar */}
-        <HeaderSet roles={`${auth?.roles}`} />
+        <HeaderSet roles={`admin`} />
 
         {/* Body Content */}
         <Box

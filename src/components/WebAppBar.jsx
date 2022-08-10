@@ -8,6 +8,7 @@ import {
   Person,
   ShoppingCart,
 } from "@mui/icons-material";
+
 import {
   AppBar,
   Box,
@@ -30,6 +31,7 @@ import {
   Typography,
 } from "@mui/material";
 import useAuth from "../hooks/useAuth";
+//------------------------------------------------------------------------
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -71,10 +73,13 @@ function WebAppBar(props) {
   const handleCloseLogout = (state) => {
     if (state) {
       setAuth({});
-      navigate("/payment-status", { replace: true });
+      navigate("/", { replace: true });
     }
-    console.log(state);
     setOpenLogout(false);
+  };
+
+  const handleClickOpenLogout = () => {
+    setOpenLogout(true);
   };
 
   const loggedIn = (
@@ -86,7 +91,7 @@ function WebAppBar(props) {
       </Link>
       <IconButton
         sx={{ color: "black" }}
-        onClick={() => handleCloseLogout(true)}
+        onClick={() => handleClickOpenLogout()}
       >
         <LogoutIcon />
       </IconButton>
@@ -114,11 +119,6 @@ function WebAppBar(props) {
       </Link>
     </SideIcons>
   );
-
-  const handleClickOpenLogout = () => {
-    console.log("clicked");
-    setOpenLogout(true);
-  };
 
   const navItems = [
     { link: "/cart", mobile: "Cart" },
@@ -196,7 +196,7 @@ function WebAppBar(props) {
       open={openLogout}
       TransitionComponent={Transition}
       keepMounted
-      onClose={handleCloseLogout}
+      onClose={() => handleCloseLogout(false)}
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle>{"Are you sure to Log Out?"}</DialogTitle>
@@ -212,7 +212,7 @@ function WebAppBar(props) {
     </Dialog>
   );
 
-  return auth.paymentPageState === true ? (
+  return auth.paymentPageState === true || auth?.roles === "admin" ? (
     <></>
   ) : (
     <Box>

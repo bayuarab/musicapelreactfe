@@ -61,6 +61,9 @@ const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
   const { auth, setAuth } = useAuth();
+  const [apiDataMessage, setApiDataMessage] = useState(
+    "Mengambil data ke server, harap tunggu"
+  );
 
   useEffect(() => {
     let newState = auth;
@@ -78,6 +81,7 @@ const InvoiceDetails = () => {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
+        setApiDataMessage("Oops, terjadi kesalahan");
         console.log(err.response.status);
         console.log(err.response.headers);
       }
@@ -87,9 +91,9 @@ const InvoiceDetails = () => {
   }, [invoiceID]);
 
   return invoiceDetailData?.length <= 0 ? (
-    <Box sx={{ marginTop: "45px" }}>
-      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Terjadi kesalahan
+    <Box sx={{ marginTop: "60px" }}>
+      <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        {apiDataMessage}
       </Typography>
     </Box>
   ) : (

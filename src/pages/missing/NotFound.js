@@ -1,14 +1,15 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React from "react";
 
-const Missing = () => {
+const NotFound = () => {
   return (
     <Box sx={{ marginTop: "45px" }}>
       <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Oops, Terjadi kesalahan
+        There's nothing here!
       </Typography>
     </Box>
   );
 };
 
-export default Missing;
+export default NotFound;

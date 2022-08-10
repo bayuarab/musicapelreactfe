@@ -62,6 +62,9 @@ const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
   const { auth, setAuth } = useAuth();
   const UserID = auth?.userId;
+  const [apiDataMessage, setApiDataMessage] = useState(
+    "Mengambil data ke server, harap tunggu"
+  );
 
   useEffect(() => {
     let newState = auth;
@@ -79,6 +82,8 @@ const InvoiceMaster = () => {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
+        if (err.response.data === "Not Found")
+          setApiDataMessage("Masih kosong, silahkan belanja");
         console.log(err.response.status);
         console.log(err.response.headers);
       }
@@ -88,9 +93,9 @@ const InvoiceMaster = () => {
   }, [UserID]);
 
   return masterInvoiceData?.length <= 0 ? (
-    <Box sx={{ marginTop: "45px" }}>
-      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Masih kosong, silahkan belanja
+    <Box sx={{ marginTop: "60px" }}>
+      <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        {apiDataMessage}
       </Typography>
     </Box>
   ) : (

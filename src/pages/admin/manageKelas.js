@@ -18,15 +18,15 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import HeaderbarAdmin from "../component/HeaderBarAdmin";
-import HeaderSet from "../components/HeaderSet";
-import useAuth from "../hooks/useAuth";
+import HeaderSet from "../../components/HeaderSet";
+import useAuth from "../../hooks/useAuth";
 // import ManageBrandDialogAddItem from '../components/ManageBrandDialogAddItem';
 // import ManageBrandDialogEditItem from '../components/ManageBrandDialogEditItem';
 // import { APIRequest } from '../components/APICalls';
-import { getKategoriKelas, getMusic } from "../JSON Data/Data";
-import DialogAddKelas from "../components/DialogAddKelas";
-import APIRequest from "../components/APICalls"
 import axios from "axios";
+import APIRequest from "../../components/APICalls";
+import DialogAddKelas from "../../components/DialogAddKelas";
+import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 
 let kategoris = getKategoriKelas();
 let musics = getMusic();
@@ -46,17 +46,24 @@ const theme = createTheme({
 });
 
 function ManageKelas() {
-
-      /* useStates dan metode-metode untuk keperluan GET daftar semua merk */
-      const [refreshPage, setRefreshPage] = useState(false);
-      const [searchQuery, setSearchQuery] = useState();
-      const [listOfBrands, setListOfBrands] = useState([]);
-      const getListOfBrands = async () => {
-          await axios.get('https://localhost:7132/api/CourseCategory'
-          ).then((res) => { if (res.status === 200) { setListOfBrands(res.data); } }).catch((err) => { })
-      }
-      useEffect(() => { getListOfBrands(); }, [searchQuery, refreshPage])
-      /* useStates untuk keperluan GET daftar semua merk */
+  /* useStates dan metode-metode untuk keperluan GET daftar semua merk */
+  const [refreshPage, setRefreshPage] = useState(false);
+  const [searchQuery, setSearchQuery] = useState();
+  const [listOfBrands, setListOfBrands] = useState([]);
+  const getListOfBrands = async () => {
+    await axios
+      .get("https://localhost:7132/api/CourseCategory")
+      .then((res) => {
+        if (res.status === 200) {
+          setListOfBrands(res.data);
+        }
+      })
+      .catch((err) => {});
+  };
+  useEffect(() => {
+    getListOfBrands();
+  }, [searchQuery, refreshPage]);
+  /* useStates untuk keperluan GET daftar semua merk */
 
   /* useStates untuk membuka dialog untuk POST merk baru */
   const [openAdd, setOpenAdd] = useState(false);
@@ -74,7 +81,7 @@ function ManageKelas() {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         {/* Header bar */}
-        <HeaderSet roles={`${auth?.roles}`} />
+        <HeaderSet roles={`admin`} />
 
         {/* Body Content */}
         <Box
@@ -92,7 +99,13 @@ function ManageKelas() {
           <Toolbar />
 
           {/* DIALOG ADD*/}
-          <DialogAddKelas open={openAdd} onClose={() => { setOpenAdd(false); setRefreshPage((status) => !status); }} />
+          <DialogAddKelas
+            open={openAdd}
+            onClose={() => {
+              setOpenAdd(false);
+              setRefreshPage((status) => !status);
+            }}
+          />
 
           {/* DIALOG EDIT */}
           {/* <ManageBrandDialogEditItem open={openEdit} editItemData={editItemData} onClose={() => { setOpenEdit(false); setRefreshPage((status) => !status); }} /> */}
@@ -194,7 +207,7 @@ function ManageKelas() {
                                   fullWidth
                                   variant="outlined"
                                   color="primary"
-                                // onClick={async (e) => { await e.preventDefault(); await setIdToDelete(invoice.id); await deleteBrand(); }}
+                                  // onClick={async (e) => { await e.preventDefault(); await setIdToDelete(invoice.id); await deleteBrand(); }}
                                 >
                                   Hapus Kelas
                                 </Button>

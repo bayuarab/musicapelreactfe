@@ -26,7 +26,7 @@ import TableRow from "@mui/material/TableRow";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import HeaderbarAdmin from "../component/HeaderBarAdmin.js";
-import HeaderSet from "../../components/HeaderSet.js";
+import HeaderSet from "../../components/HeaderSet";
 import numberFormat from "../../components/NumbeFormat.js";
 import useAuth from "../../hooks/useAuth.js";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
@@ -68,7 +68,7 @@ function ManageInvoices() {
         <CssBaseline />
         {/* Header bar */}
 
-        <HeaderSet roles={`${auth?.roles}`} />
+        <HeaderSet roles={`admin`} />
 
         {/* Body Content */}
         <Box

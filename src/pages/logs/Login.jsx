@@ -60,12 +60,11 @@ export default function Login() {
         const userId = response?.data?.id;
         const nama = response?.data?.nama;
         setAuth({ ...auth, nama, roles, userId });
-        roles === "admin" ? (
-          <Navigate to="/admin/kelas" replace={true} />
-        ) : (
-          navigate(from, { replace: true })
-        );
-        navigate(from, { replace: true });
+        roles === "admin"
+          ? // <Navigate to="/admin/kelas" replace={true} />
+            navigate("/admin", { replace: true })
+          : navigate(from, { replace: true });
+        //navigate(from, { replace: true });
       } catch (err) {
         !err.response
           ? console.log(`Error: ${err.message}`)

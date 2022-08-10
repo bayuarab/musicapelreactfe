@@ -1,10 +1,16 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
+import HeaderBarAdmin from "./HeaderBarAdmin";
 import WebAppBar from "./WebAppBar";
 
-const HeaderSet = () => {
+const HeaderSet = (props) => {
+  const { roles } = props;
   const { auth } = useAuth();
-  return auth?.roles === "admin" ? <></> : <WebAppBar logState={true} />;
+  return roles === "admin" ? (
+    <HeaderBarAdmin />
+  ) : (
+    <WebAppBar logState={auth?.roles} />
+  );
 };
 
 export default HeaderSet;
