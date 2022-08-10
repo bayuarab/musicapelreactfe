@@ -1,29 +1,45 @@
 import { Box, Typography, Grid, Card, CardMedia, CardContent, CardActions, Button, CardActionArea } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import numberFormat from "../components/NumbeFormat";
 import { getKategoriKelas, getMusic } from "../JSON Data/Data";
+import { useState, useEffect } from "react";
+import api from "../api/courseCatAPI";
 import Carousel from 'react-multi-carousel';
+import axios from "axios";
 let kategoris = getKategoriKelas();
 let musics = getMusic();
 
 //#F2C94C
 export default function DetailCourse() {
+    const [dataClass, setDataClass] = useState("");
+    let params = useParams();
+
+        /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+        const [detailOfACategory, setDetailOfACategory] = useState([]);
+        const getdetailOfACategory = async () => {
+            await axios.get('https://localhost:7132/api/CourseCategory', {params: { id: params.id },
+        }).then((res) => { if (res.status === 200) { setDetailOfACategory(res.data[0]); } }).catch((err) => { })
+        console.log(params)}
+        useEffect(() => { getdetailOfACategory(); }, [params])
+        /* useStates untuk keperluan GET detail dari sebuah produk */
+
+	const gridClassItems = dataClass;
     return (
         <Grid>
 
             <Box bottom='0px' style={{
                 height: '400px'
             }}>
-                <img src={`${musics[0].image}`}
-                                    width="100%" alt={musics[0].image} height='400px'>
+                <img src={`${detailOfACategory.image}`}
+                                    width="100%" alt={detailOfACategory.image} height='400px'>
                                 </img>
             </Box>
             <Typography>
-                <h4>{musics[0].name}</h4>
+                <h4>{detailOfACategory.category}</h4>
             </Typography>
             <Typography>
-                {musics[0].deskripsi}
+                {detailOfACategory.desc}
             </Typography>
 
 

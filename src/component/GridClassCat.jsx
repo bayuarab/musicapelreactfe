@@ -83,7 +83,7 @@ export default function GridClassCat() {
 			<Grid container spacing={2}>
 				{gridClassItems.map((item) => (
 					<Grid key={item.id} item xs={3}>
-						<Link to="detail">
+						<Link to={`/detail/${item.id}`}>
 							<ButtonBase>
 								<Img alt="complex" src={item.image} />
 							</ButtonBase>

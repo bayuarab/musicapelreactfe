@@ -7,7 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 const ClassCategories = () => {
 	return (
-		<Container maxWidth="100%">
+		<Container maxWidth="100%" >
 			<CssBaseline />
 			<Box
 				sx={{
