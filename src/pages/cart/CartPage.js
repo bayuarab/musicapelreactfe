@@ -83,6 +83,30 @@ const CartPage = () => {
   const { auth } = useAuth();
   const userID = auth?.userId;
 
+  const generateCurrentDate = () => {
+    const months = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+
+    const date = new Date();
+    const d = date.getDate();
+    const m = date.getMonth();
+    const y = date.getFullYear();
+
+    return `${d} ${months[m]} ${y}`;
+  };
+
   const generateNewInvoice = () => {
     const getResnum = (resNum = 0) => {
       registeredInvoice?.forEach((invoices) => {
@@ -123,7 +147,7 @@ const CartPage = () => {
   const generateNewMasterInvoice = () => {
     return {
       NoInvoice: generateNewInvoice(),
-      PurchaseDate: "17 Agusutus 2022",
+      PurchaseDate: generateCurrentDate(),
       Qty: selectedCart.length,
       Cost: calculateTotalCost(selectedCart),
       UserId: userID,
