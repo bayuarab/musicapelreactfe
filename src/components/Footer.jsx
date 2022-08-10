@@ -52,7 +52,7 @@ export default function Footer() {
 
   return (
     <Box
-      mt="3vh"
+      // mt="3vh"
       sx={{
         backgroundColor: "#F2C94C",
         width: "100%",

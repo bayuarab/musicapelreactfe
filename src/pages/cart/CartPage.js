@@ -80,7 +80,7 @@ const CartPage = () => {
   const [checkoutState, setCheckoutState] = useState(false);
 
   const navigate = useNavigate();
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const userID = auth?.userId;
 
   const generateCurrentDate = () => {
@@ -153,6 +153,12 @@ const CartPage = () => {
       UserId: userID,
     };
   };
+
+  useEffect(() => {
+    let newState = auth;
+    newState.paymentPageState = false;
+    setAuth({ ...newState });
+  }, []);
 
   useEffect(() => {
     const fetchApiInvoices = async () => {
@@ -292,7 +298,7 @@ const CartPage = () => {
   ) : cart?.length <= 0 ? (
     <Box sx={{ marginTop: "45px" }}>
       <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Masih kosong dek, belanja dong
+        Masih kosong, silahkan belanja
       </Typography>
     </Box>
   ) : (

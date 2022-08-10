@@ -9,9 +9,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 
 const EMAIL_REGEX =
   /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -25,6 +26,13 @@ export default function Login() {
   const [err, setErr] = useState("");
   const [regisState, setRegisState] = useState(false);
   const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
+
+  useEffect(() => {
+    let newState = auth;
+    newState.paymentPageState = false;
+    setAuth({ ...newState });
+  }, []);
 
   const addNama = (event) => {
     setNama(event.target.value);

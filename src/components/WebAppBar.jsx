@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 
 import {
@@ -62,13 +62,17 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 function WebAppBar(props) {
-  const { window, logState } = props;
+  const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
 
   const handleCloseLogout = (state) => {
-    if (state) setAuth({});
+    if (state) {
+      setAuth({});
+      navigate("/payment-status", { replace: true });
+    }
     console.log(state);
     setOpenLogout(false);
   };
@@ -208,7 +212,9 @@ function WebAppBar(props) {
     </Dialog>
   );
 
-  return (
+  return auth.paymentPageState === true ? (
+    <></>
+  ) : (
     <Box>
       <AppBar position="fixed" sx={{ backgroundColor: "#F2C94C" }}>
         <StyledToolbar>

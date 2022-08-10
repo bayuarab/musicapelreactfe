@@ -60,8 +60,14 @@ const StyledNavLink = styled(Typography)({
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const UserID = auth?.userId;
+
+  useEffect(() => {
+    let newState = auth;
+    newState.paymentPageState = false;
+    setAuth({ ...newState });
+  }, []);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -84,7 +90,7 @@ const InvoiceMaster = () => {
   return masterInvoiceData?.length <= 0 ? (
     <Box sx={{ marginTop: "45px" }}>
       <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Mo kemana nich??
+        Masih kosong, silahkan belanja
       </Typography>
     </Box>
   ) : (

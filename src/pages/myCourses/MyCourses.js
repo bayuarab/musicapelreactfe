@@ -18,8 +18,14 @@ const ImgContainer = styled(Box)(({ theme }) => ({
 
 const MyCourses = () => {
   const [myCourseData, setMyCourseData] = useState([]);
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const UserId = auth?.userId;
+
+  useEffect(() => {
+    let newState = auth;
+    newState.paymentPageState = false;
+    setAuth({ ...newState });
+  }, []);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -42,7 +48,7 @@ const MyCourses = () => {
   return myCourseData?.length <= 0 ? (
     <Box sx={{ marginTop: "45px" }}>
       <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Masih kosong dek, belanja dong
+        Masih kosong, silahkan belanja
       </Typography>
     </Box>
   ) : (

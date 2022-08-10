@@ -26,6 +26,8 @@ const PageRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Loginn />} />
         <Route path="/registration" element={<Registerr />} />
+        {/* <Route path="/payment-status" element={<SuccessPayment />} /> */}
+
         <Route
           path="*"
           element={

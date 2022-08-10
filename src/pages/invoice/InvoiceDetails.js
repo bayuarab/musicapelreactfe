@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import Footer from "../../components/Footer";
+import useAuth from "../../hooks/useAuth";
 
 //--
 const StyledPaper = styled(Paper)({
@@ -59,6 +60,13 @@ const StyledNavLink = styled(Typography)({
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
+  const { auth, setAuth } = useAuth();
+
+  useEffect(() => {
+    let newState = auth;
+    newState.paymentPageState = false;
+    setAuth({ ...newState });
+  }, []);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -81,7 +89,7 @@ const InvoiceDetails = () => {
   return invoiceDetailData?.length <= 0 ? (
     <Box sx={{ marginTop: "45px" }}>
       <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        Mo kemana nich??
+        Terjadi kesalahan
       </Typography>
     </Box>
   ) : (

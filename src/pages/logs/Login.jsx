@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
 import useAuth from "../../hooks/useAuth";
@@ -18,10 +18,16 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    let newState = auth;
+    newState.paymentPageState = false;
+    setAuth({ ...newState });
+  }, []);
 
   const addEmail = (event) => {
     setEmail(event.target.value);
@@ -53,7 +59,7 @@ export default function Login() {
         const roles = response?.data?.roles;
         const userId = response?.data?.id;
         const nama = response?.data?.nama;
-        setAuth({ nama, roles, userId });
+        setAuth({ ...auth, nama, roles, userId });
         roles === "admin" ? (
           <Navigate to="/admin/kelas" replace={true} />
         ) : (
