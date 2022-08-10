@@ -4,7 +4,6 @@ import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
-// import "../App.css";
 import { Link } from "react-router-dom";
 import api from "../../../api/courseCatAPI";
 import drum from "../../../assets/drum.jpg";
@@ -86,7 +85,7 @@ export default function GridClassCat() {
       <Grid container spacing={2}>
         {gridClassItems.map((item) => (
           <Grid key={item.id} item xs={3}>
-            <Link to="detail">
+            <Link to={`/category/${item.id}`}>
               <ButtonBase>
                 <Img alt="complex" src={item.image} />
               </ButtonBase>

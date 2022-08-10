@@ -12,6 +12,8 @@ import Loginn from "../pages/logs/Login";
 import Registerr from "../pages/logs/Register";
 import Missing from "../pages/missing/Missing";
 import MyCourses from "../pages/myCourses/MyCourses";
+import CategoryCourse from "./categoryCourse";
+import DetailCourse from "./detailCourse";
 // import CategoryCourse from "../pages/product/categoryCourse";
 // import DetailCourse from "./detailCourse";
 // import ManageInvoices from "./manageInvoices";
@@ -43,6 +45,10 @@ const PageRoutes = () => {
         />
         {/* <Route path="/payment-status" element={<SuccessPayment />} /> */}
 
+        <Route path="category/:categoryid" element={<DetailCourse />} />
+        <Route path="course">
+          <Route path=":courseid" element={<CategoryCourse />} />
+        </Route>
         {/* <Route path="Hero" element={<Hero />} /> */}
 
         {/* User and admin route */}

@@ -24,6 +24,9 @@ import useAuth from "../hooks/useAuth";
 // import ManageBrandDialogEditItem from '../components/ManageBrandDialogEditItem';
 // import { APIRequest } from '../components/APICalls';
 import { getKategoriKelas, getMusic } from "../JSON Data/Data";
+import DialogAddKelas from "../components/DialogAddKelas";
+import APIRequest from "../components/APICalls"
+import axios from "axios";
 
 let kategoris = getKategoriKelas();
 let musics = getMusic();
@@ -43,6 +46,18 @@ const theme = createTheme({
 });
 
 function ManageKelas() {
+
+      /* useStates dan metode-metode untuk keperluan GET daftar semua merk */
+      const [refreshPage, setRefreshPage] = useState(false);
+      const [searchQuery, setSearchQuery] = useState();
+      const [listOfBrands, setListOfBrands] = useState([]);
+      const getListOfBrands = async () => {
+          await axios.get('https://localhost:7132/api/CourseCategory'
+          ).then((res) => { if (res.status === 200) { setListOfBrands(res.data); } }).catch((err) => { })
+      }
+      useEffect(() => { getListOfBrands(); }, [searchQuery, refreshPage])
+      /* useStates untuk keperluan GET daftar semua merk */
+
   /* useStates untuk membuka dialog untuk POST merk baru */
   const [openAdd, setOpenAdd] = useState(false);
   /* useStates untuk membuka dialog untuk POST merk baru */
@@ -77,7 +92,7 @@ function ManageKelas() {
           <Toolbar />
 
           {/* DIALOG ADD*/}
-          {/* <ManageBrandDialogAddItem open={openAdd} onClose={() => { setOpenAdd(false); setRefreshPage((status) => !status); }} /> */}
+          <DialogAddKelas open={openAdd} onClose={() => { setOpenAdd(false); setRefreshPage((status) => !status); }} />
 
           {/* DIALOG EDIT */}
           {/* <ManageBrandDialogEditItem open={openEdit} editItemData={editItemData} onClose={() => { setOpenEdit(false); setRefreshPage((status) => !status); }} /> */}
@@ -123,7 +138,7 @@ function ManageKelas() {
                     </Button>
                   </div>
 
-                  {musics.map((invoice) => (
+                  {listOfBrands.map((invoice) => (
                     <Card key={invoice.id} style={{ margin: "2% 0" }}>
                       <Grid container spacing={3}>
                         <Grid item xs={12} md={2}>
@@ -131,7 +146,7 @@ function ManageKelas() {
                             component="img"
                             style={{ objectFit: "contain" }}
                             height="100"
-                            image={`${invoice.image}`}
+                            image={`data:image/jpeg;base64,${invoice.image}`}
                             alt="Image"
                           />
                         </Grid>
@@ -142,10 +157,10 @@ function ManageKelas() {
                               variant="h5"
                               component="div"
                             >
-                              {invoice.name}
+                              {invoice.categoryName}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                              {invoice.deskripsi}
+                              {invoice.description}
                             </Typography>
 
                             <Grid container spacing={1}>
@@ -179,7 +194,7 @@ function ManageKelas() {
                                   fullWidth
                                   variant="outlined"
                                   color="primary"
-                                  // onClick={async (e) => { await e.preventDefault(); await setIdToDelete(invoice.id); await deleteBrand(); }}
+                                // onClick={async (e) => { await e.preventDefault(); await setIdToDelete(invoice.id); await deleteBrand(); }}
                                 >
                                   Hapus Kelas
                                 </Button>
