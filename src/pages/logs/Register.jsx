@@ -89,6 +89,7 @@ export default function Login() {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
+        setErr(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
       }

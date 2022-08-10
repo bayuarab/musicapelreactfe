@@ -27,7 +27,7 @@ import HideImageIcon from "@mui/icons-material/HideImage";
 import SearchIcon from "@mui/icons-material/Search";
 
 // import { getNewArrivals } from '../jsonData/Data';
-import HeaderbarAdmin from "../component/HeaderBarAdmin";
+// import HeaderbarAdmin from "../component/HeaderBarAdmin";
 // import ManageProductDialogAddItem from '../components/ManageProductDialogAddItem'
 // import ManageProductDialogEditItem from '../components/ManageProductDialogEditItem'
 // // import ManageProductDialogDeleteItem from '../components/ManageProductDialogDeleteItem';

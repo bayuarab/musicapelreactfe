@@ -52,7 +52,8 @@ export default function Login() {
         console.log(response.data);
         const roles = response?.data?.roles;
         const userId = response?.data?.id;
-        setAuth({ email: dataLogin.email, roles, userId });
+        const nama = response?.data?.nama;
+        setAuth({ nama, roles, userId });
         roles === "admin" ? (
           <Navigate to="/admin/kelas" replace={true} />
         ) : (
@@ -63,6 +64,7 @@ export default function Login() {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
+        setErr(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
       }
@@ -138,6 +140,9 @@ export default function Login() {
                     onChange={(event) => addPassword(event)}
                   />
                 </FormControl>
+                <Typography sx={{ color: "red", fontSize: "12px" }}>
+                  {err}
+                </Typography>
                 <Link
                   href="forget"
                   style={{

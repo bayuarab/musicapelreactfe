@@ -96,7 +96,7 @@ const CartPage = () => {
       return registeredInvoice?.length <= 0
         ? {
             resNum: 0,
-            refToken: auth?.email.substring(0, 3),
+            refToken: auth?.nama.substring(0, 3).toUpperCase(),
           }
         : {
             resNum: getResnum(),
@@ -116,6 +116,7 @@ const CartPage = () => {
     console.log(resNum, refToken, invoiceLength);
     const loop = invoiceLength - refToken.length - resNum.toString().length;
     const newInvoiceNum = getInvoiceSepNum(loop);
+    console.log(refToken + newInvoiceNum + resNum);
     return refToken + newInvoiceNum + resNum;
   };
 
