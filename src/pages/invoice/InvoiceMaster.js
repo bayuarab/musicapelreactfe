@@ -15,6 +15,8 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
+import Footer from "../../components/Footer";
+import numberFormat from "../../components/NumbeFormat";
 import useAuth from "../../hooks/useAuth";
 //==================================================
 
@@ -79,81 +81,91 @@ const InvoiceMaster = () => {
     fetchApi();
   }, [UserID]);
 
-  return (
-    <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
-      <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
-        <Link style={{ textDecoration: "none" }} to="/">
-          <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
-        </Link>
-        <Link style={{ textDecoration: "none" }} to="/my-invoice">
-          <StyledNavLink color={"#5D5FEF"}>Invoice</StyledNavLink>
-        </Link>
-      </Box>
-      <Typography
-        mb={"24px"}
-        sx={{
-          fontFamily: "Poppins",
-          color: "#4F4F4F",
-          fontWeight: "600",
-          fontSize: "20px",
-        }}
-      >
-        Menu Invoice
+  return masterInvoiceData?.length <= 0 ? (
+    <Box sx={{ marginTop: "45px" }}>
+      <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
+        Mo kemana nich??
       </Typography>
-      <TableContainer component={StyledPaper}>
-        <Table sx={{}} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center">No</StyledTableCell>
-              <StyledTableCell align="center">No. Invoice</StyledTableCell>
-              <StyledTableCell align="center">Tanggal Beli</StyledTableCell>
-              <StyledTableCell align="center">Jumlah Kursus</StyledTableCell>
-              <StyledTableCell align="center">Total Harga</StyledTableCell>
-              <StyledTableCell align="center">Action</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {masterInvoiceData.map((row, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell component="th" scope="row">
-                  {index + 1}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.noInvoice}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.purchaseDate}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.qty}</StyledTableCell>
-                <StyledTableCell align="center">
-                  IDR {row.cost.toLocaleString("de-DE")}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Link
-                    style={{ textDecoration: "none" }}
-                    to={`/my-invoice/${row.noInvoice}`}
-                  >
-                    <Button
-                      variant="contained"
-                      sx={{
-                        fontFamily: "Poppins",
-                        fontSize: "14px",
-                        backgroundColor: "#5D5FEF",
-                        borderRadius: "8px",
-                        textTransform: "Capitalize",
-                        paddingLeft: "20px",
-                        width: "80%",
-                      }}
+    </Box>
+  ) : (
+    <Box>
+      <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "60px" }}>
+        <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
+          <Link style={{ textDecoration: "none" }} to="/">
+            <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
+          </Link>
+          <Link style={{ textDecoration: "none" }} to="/my-invoice">
+            <StyledNavLink color={"#5D5FEF"}>Invoice</StyledNavLink>
+          </Link>
+        </Box>
+        <Typography
+          mb={"24px"}
+          sx={{
+            fontFamily: "Poppins",
+            color: "#4F4F4F",
+            fontWeight: "600",
+            fontSize: "20px",
+          }}
+        >
+          Menu Invoice
+        </Typography>
+        <TableContainer component={StyledPaper}>
+          <Table sx={{}} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">No</StyledTableCell>
+                <StyledTableCell align="center">No. Invoice</StyledTableCell>
+                <StyledTableCell align="center">Tanggal Beli</StyledTableCell>
+                <StyledTableCell align="center">Jumlah Kursus</StyledTableCell>
+                <StyledTableCell align="center">Total Harga</StyledTableCell>
+                <StyledTableCell align="center">Action</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {masterInvoiceData.map((row, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row">
+                    {index + 1}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.noInvoice}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.purchaseDate}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.qty}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {/* row.cost.toLocaleString("de-DE") */}
+                    IDR {numberFormat(row.cost)}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <Link
+                      style={{ textDecoration: "none" }}
+                      to={`/my-invoice/${row.noInvoice}`}
                     >
-                      Rincian
-                    </Button>
-                  </Link>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontSize: "14px",
+                          backgroundColor: "#5D5FEF",
+                          borderRadius: "8px",
+                          textTransform: "Capitalize",
+                          paddingLeft: "20px",
+                          width: "80%",
+                        }}
+                      >
+                        Rincian
+                      </Button>
+                    </Link>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+      <Footer />
     </Box>
   );
 };

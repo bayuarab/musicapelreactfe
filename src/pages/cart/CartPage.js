@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 // import { DataContext } from "../../context/DataProvider";
 import api from "../../api/userAPI";
+import numberFormat from "../../components/NumbeFormat";
 import CartList from "./components/CartList";
 import CheckoutDialogs from "./components/CheckoutDialogs";
 
@@ -349,7 +350,8 @@ const CartPage = () => {
                   fontWeight: "500",
                 }}
               >
-                IDR {cost.toLocaleString("de-DE")}
+                {/* cost.toLocaleString("de-DE") */}
+                IDR {numberFormat(cost)}
               </Typography>
             </Box>
             <Box sx={{ paddingRight: "2%" }}>

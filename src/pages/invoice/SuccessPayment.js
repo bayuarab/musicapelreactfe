@@ -2,8 +2,8 @@ import { ArrowForward, Home } from "@mui/icons-material";
 import { Box, Button, styled, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import PaymentSuccess from "../assets/Purchase Success.png";
-import Logo from "../components/Logo";
+import PaymentSuccess from "../../assets/Purchase Success.png";
+import Logo from "../../components/Logo";
 
 const SuccessPayment = () => {
   const DialogButton = styled(Button)(({ theme }) => ({

@@ -1,12 +1,30 @@
 import React from "react";
-import LandingPage from "../../LandingPage/LandingPage";
+import Footer from "../../components/Footer";
+import Benefit from "./components/Benefit";
+import Class from "./components/Class";
+import ClassCategories from "./components/ClassCategories";
+import Hero from "./components/Hero";
 
 const Home = () => {
-	return (
-		<div>
-			<LandingPage />
-		</div>
-	);
+  return (
+    <div margin="0">
+      <div>
+        <Hero />
+      </div>
+      <div>
+        <Class />
+      </div>
+      <div>
+        <ClassCategories />
+      </div>
+      <div>
+        <Benefit />
+      </div>
+      <div>
+        <Footer />
+      </div>
+    </div>
+  );
 };
 
 export default Home;

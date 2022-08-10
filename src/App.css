@@ -8,9 +8,9 @@
 }
 
 .bgimage {
-    width: auto;
-    height: '500';
-    background-image: url("hero.jpg")
+  width: auto;
+  height: "500";
+  /* background-image: url("hero.jpg") */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -43,9 +43,9 @@
   }
 }
 
-.kategoriKelas{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
+.kategoriKelas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }

@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import api from "../api/userAPI";
-import useAuth from "../hooks/useAuth";
+import api from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 
 //---------------
 export default function Login() {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../api/Invoices";
+import numberFormat from "../../components/NumbeFormat";
 
 import {
   Box,
@@ -14,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import Footer from "../../components/Footer";
 
 //--
 const StyledPaper = styled(Paper)({
@@ -83,50 +85,34 @@ const InvoiceDetails = () => {
       </Typography>
     </Box>
   ) : (
-    <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
-      <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
-        <Link style={{ textDecoration: "none" }} to="/">
-          <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
-        </Link>
-        <Link style={{ textDecoration: "none" }} to="/my-invoice">
-          <StyledNavLink color={"#828282"}>Invoice {`>`}</StyledNavLink>
-        </Link>
-        <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
-      </Box>
-      <Typography
-        mb={"24px"}
-        sx={{
-          fontFamily: "Poppins",
-          color: "#4F4F4F",
-          fontWeight: "700",
-          fontSize: "20px",
-        }}
-      >
-        Rincian Invoice
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          marginBottom: "32px",
-        }}
-      >
+    <Box>
+      <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
+        <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
+          <Link style={{ textDecoration: "none" }} to="/">
+            <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
+          </Link>
+          <Link style={{ textDecoration: "none" }} to="/my-invoice">
+            <StyledNavLink color={"#828282"}>Invoice {`>`}</StyledNavLink>
+          </Link>
+          <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
+        </Box>
         <Typography
+          mb={"24px"}
           sx={{
             fontFamily: "Poppins",
             color: "#4F4F4F",
-            fontWeight: "500",
-            fontSize: "18px",
+            fontWeight: "700",
+            fontSize: "20px",
           }}
         >
-          No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
+          Rincian Invoice
         </Typography>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: "column",
+            gap: "8px",
+            marginBottom: "32px",
           }}
         >
           <Typography
@@ -137,52 +123,77 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            Tanggal Beli&nbsp;:{" "}
-            {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
+            No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
           </Typography>
-          <Typography
+          <Box
             sx={{
-              fontFamily: "Poppins",
-              color: "#4F4F4F",
-              fontWeight: "700",
-              fontSize: "18px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            Total Harga:&nbsp;&nbsp; IDR{" "}
-            {invoiceDetailData[0]
-              ? invoiceDetailData[0].cost.toLocaleString("de-DE")
-              : "-"}
-          </Typography>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                color: "#4F4F4F",
+                fontWeight: "500",
+                fontSize: "18px",
+              }}
+            >
+              Tanggal Beli&nbsp;:{" "}
+              {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                color: "#4F4F4F",
+                fontWeight: "700",
+                fontSize: "18px",
+              }}
+            >
+              {/* .toLocaleString("de-DE") */}
+              Total Harga:&nbsp;&nbsp; IDR{" "}
+              {invoiceDetailData[0]
+                ? numberFormat(invoiceDetailData[0].cost)
+                : "-"}
+            </Typography>
+          </Box>
         </Box>
+        <TableContainer component={StyledPaper}>
+          <Table sx={{}} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">No</StyledTableCell>
+                <StyledTableCell align="center">Nama Course</StyledTableCell>
+                <StyledTableCell align="center">Kategori</StyledTableCell>
+                <StyledTableCell align="center">Jadwal</StyledTableCell>
+                <StyledTableCell align="center">Harga</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {invoiceDetailData.map((row, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row" align="center">
+                    {index + 1}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.course}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.category}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.schedule}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {/* row.price.toLocaleString("de-DE") */}
+                    IDR {numberFormat(row.price)}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
-      <TableContainer component={StyledPaper}>
-        <Table sx={{}} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center">No</StyledTableCell>
-              <StyledTableCell align="center">Nama Course</StyledTableCell>
-              <StyledTableCell align="center">Kategori</StyledTableCell>
-              <StyledTableCell align="center">Jadwal</StyledTableCell>
-              <StyledTableCell align="center">Harga</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {invoiceDetailData.map((row, index) => (
-              <StyledTableRow key={index}>
-                <StyledTableCell component="th" scope="row" align="center">
-                  {index + 1}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.course}</StyledTableCell>
-                <StyledTableCell align="center">{row.category}</StyledTableCell>
-                <StyledTableCell align="center">{row.schedule}</StyledTableCell>
-                <StyledTableCell align="center">
-                  IDR {row.price.toLocaleString("de-DE")}
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Footer />
     </Box>
   );
 };

@@ -1,24 +1,22 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Hero from "../component/hero";
 import Layout from "../components/Layout";
 import RequiredAuth from "../components/RequiredAuth";
-import AdminPage from "../pages/admin/AdminPage";
 import CartPage from "../pages/cart/CartPage";
 import Home from "../pages/home/Home";
 import InvoiceDetails from "../pages/invoice/InvoiceDetails";
 import InvoiceMaster from "../pages/invoice/InvoiceMaster";
-import Loginn from "../pages/Login";
+import SuccessPayment from "../pages/invoice/SuccessPayment";
+import Loginn from "../pages/logs/Login";
+import Registerr from "../pages/logs/Register";
 import Missing from "../pages/missing/Missing";
 import MyCourses from "../pages/myCourses/MyCourses";
-import Registerr from "../pages/Register";
-import SuccessPayment from "../pages/SuccessPayment";
-import CategoryCourse from "./categoryCourse";
-import DetailCourse from "./detailCourse";
-import ManageInvoices from "./manageInvoices";
-import ManageKategori from "./manageKategori";
-import ManageKelas from "./manageKelas";
+// import CategoryCourse from "../pages/product/categoryCourse";
+// import DetailCourse from "./detailCourse";
+// import ManageInvoices from "./manageInvoices";
+// import ManageKategori from "./manageKategori";
+// import ManageKelas from "./manageKelas";
 
 const PageRoutes = () => {
   return (
@@ -28,7 +26,21 @@ const PageRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Loginn />} />
         <Route path="/registration" element={<Registerr />} />
-        <Route path="*" element={<p>There's nothing here!</p>} />
+        <Route
+          path="*"
+          element={
+            <Box sx={{ marginTop: "45px" }}>
+              <Typography
+                variant="h2"
+                sx={{ textAlign: "center", color: "#5D5FEF" }}
+              >
+                Mo kemana nich??
+              </Typography>
+            </Box>
+          }
+        />
+        {/* <Route path="/payment-status" element={<SuccessPayment />} /> */}
+
         {/* <Route path="Hero" element={<Hero />} /> */}
 
         {/* User and admin route */}
