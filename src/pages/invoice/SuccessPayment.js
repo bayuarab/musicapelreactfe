@@ -11,9 +11,8 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PaymentSuccess from "../../assets/Purchase Success.png";
 import Logo from "../../components/Logo";
-import useAuth from "../../hooks/useAuth";
-
-const defaultTheme = createTheme();
+import { useComponentBarState } from "../../context/ComponentStateProvider";
+// import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme({
   components: {
@@ -51,7 +50,8 @@ const theme = createTheme({
 });
 
 const SuccessPayment = () => {
-  const { auth, setAuth } = useAuth();
+  // const { auth, setAuth } = useAuth();
+  const { setComponentState } = useComponentBarState();
   const LogoContainer = styled(Box)({
     backgroundColor: "white",
     alignContent: "center",
@@ -71,13 +71,11 @@ const SuccessPayment = () => {
   });
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = true;
-    setAuth({ ...newState });
-  }, []);
+    setComponentState({ paymentPageState: true, footerState: false });
+  }, [setComponentState]);
 
   const changeState = () => {
-    setAuth({ ...auth, paymentPageState: false });
+    setComponentState({ paymentPageState: false, footerState: false });
   };
 
   return (

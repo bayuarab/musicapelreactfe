@@ -24,6 +24,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useComponentBarState } from "../context/ComponentStateProvider";
 import useAuth from "../hooks/useAuth";
 import LogoutDialog from "./LogoutDialog";
 //------------------------------------------------------------------------
@@ -59,6 +60,7 @@ function WebAppBar(props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const { auth, setAuth } = useAuth();
+  const { componentState } = useComponentBarState();
   const navigate = useNavigate();
 
   const handleCloseLogout = (state) => {
@@ -181,7 +183,7 @@ function WebAppBar(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-  return auth.paymentPageState === true || auth?.roles === "admin" ? (
+  return componentState.paymentPageState === true || auth?.roles === "admin" ? (
     <></>
   ) : (
     <Box>

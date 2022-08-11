@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
-import Footer from "../../components/Footer";
-import useAuth from "../../hooks/useAuth";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 import Benefit from "./components/Benefit";
 import Class from "./components/Class";
 import ClassCategories from "./components/ClassCategories";
 import Hero from "./components/Hero";
 
 const Home = () => {
-  const { setAuth } = useAuth();
+  const { setComponentState } = useComponentBarState();
 
   useEffect(() => {
-    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
-  }, [setAuth]);
+    setComponentState({ paymentPageState: false, footerState: true });
+  }, [setComponentState]);
 
   return (
     <div margin="0">
@@ -26,9 +25,6 @@ const Home = () => {
       </div>
       <div style={{ marginBottom: "3vh" }}>
         <Benefit />
-      </div>
-      <div>
-        <Footer />
       </div>
     </div>
   );
