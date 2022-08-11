@@ -7,13 +7,11 @@ import ClassCategories from "./components/ClassCategories";
 import Hero from "./components/Hero";
 
 const Home = () => {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   return (
     <div margin="0">

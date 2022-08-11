@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
 import useAuth from "../../hooks/useAuth";
 
@@ -24,10 +24,8 @@ export default function Login() {
   const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   const addEmail = (event) => {
     setEmail(event.target.value);

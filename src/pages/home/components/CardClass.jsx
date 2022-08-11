@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../api/courseAPI";
 import drum from "../../../assets/drum.jpg";
-import numberFormat from "../../../components/NumbeFormat";
+import numberFormat from "../../../utilities/NumbeFormat";
 
 const gridItemsDef = [
   {

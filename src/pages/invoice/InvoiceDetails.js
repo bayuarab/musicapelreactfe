@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../api/Invoices";
-import numberFormat from "../../components/NumbeFormat";
+import numberFormat from "../../utilities/NumbeFormat";
 
 import {
   Box,
@@ -60,16 +60,14 @@ const StyledNavLink = styled(Typography)({
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   useEffect(() => {
     const fetchApi = async () => {

@@ -25,10 +25,8 @@ const MyCourses = () => {
   );
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   useEffect(() => {
     const fetchApi = async () => {
