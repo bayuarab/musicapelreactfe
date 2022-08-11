@@ -27,7 +27,7 @@ const PageRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Register />} />
-        <Route path="forget" element={<Forget />} />
+        <Route path="/forget" element={<Forget />} />
         <Route path="category/:categoryid" element={<DetailCourse />} />
         <Route path="course">
           <Route path=":courseid" element={<CategoryCourse />} />
