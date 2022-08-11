@@ -1,62 +1,39 @@
-import { Box, Button, Container, CssBaseline, FormControl, Link, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
 import api from "../../api/userAPI";
-import useAuth from "../../hooks/useAuth";
 
 //---------------
 export default function Login() {
 	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [err, setErr] = useState("");
-	const { auth, setAuth } = useAuth();
-	const navigate = useNavigate();
-	const location = useLocation();
-	const from = location.state?.from?.pathname || "/";
-
-	useEffect(() => {
-		setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
-	}, [setAuth]);
+	const [ok, setOk] = useState("");
 
 	const addEmail = (event) => {
 		setEmail(event.target.value);
 	};
 
-	const addPassword = (event) => {
-		setPassword(event.target.value);
-	};
-
 	const goLogin = (event) => {
 		event.preventDefault();
 
-		if (email === "" || password === "") {
+		if (email === "") {
 			return setErr("Input tidak boleh kosong");
 		}
 
 		const dataLogin = {
 			email: email,
-			password: password,
 		};
 
 		setEmail("");
-		setPassword("");
 
 		const fetchApi = async () => {
 			try {
-				const response = await api.post("/Login", dataLogin);
-				console.log(response.data);
-				const roles = response?.data?.roles;
-				const userId = response?.data?.id;
-				const nama = response?.data?.nama;
-				setAuth({ ...auth, nama, roles, userId });
-				roles === "admin"
-					? // <Navigate to="/admin/kelas" replace={true} />
-					  navigate("/admin", { replace: true })
-					: navigate(from, { replace: true });
-				//navigate(from, { replace: true });
+				const response = await api.post("/CheckEmail", dataLogin);
+				setOk(response.data);
+				setErr("");
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
 				setErr(err.response.data);
+				setOk("");
 				console.log(err.response.status);
 				console.log(err.response.headers);
 			}
@@ -88,7 +65,7 @@ export default function Login() {
 										xs: "18px",
 									},
 								}}>
-								Selamat Datang Musikers!
+								Anda lupa password anda?
 							</Typography>
 							<Typography
 								sx={{
@@ -98,30 +75,16 @@ export default function Login() {
 										xs: "13px",
 									},
 								}}>
-								Login dulu yuk
+								Silahkan isi email anda
 							</Typography>
 						</Box>
 						<Box mt="4vh">
 							<form>
 								<FormControl sx={{ width: "100%" }}>
 									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
-									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" value={password} onChange={(event) => addPassword(event)} />
 								</FormControl>
+								<Typography sx={{ color: "green", fontSize: "12px" }}>{ok}</Typography>
 								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
-								<Link
-									href="forget"
-									style={{
-										itemAlign: "right",
-										fontSize: {
-											lg: "16px",
-											md: "15px",
-											xs: "13px",
-										},
-										textDecoration: "None",
-										color: "black",
-									}}>
-									Lupa kata sandi
-								</Link>
 								<Box mb="2vh" sx={{ textAlign: "left" }}>
 									<Button
 										onClick={(event) => goLogin(event)}
@@ -137,23 +100,10 @@ export default function Login() {
 											height: "hug",
 										}}
 										variant="contained">
-										Masuk
+										Kirim
 									</Button>
 								</Box>
 							</form>
-							<Link
-								href="/registration"
-								sx={{
-									textAlign: "left",
-									fontSize: {
-										lg: "16px",
-										md: "15px",
-										sm: "13px",
-										xs: "10px",
-									},
-								}}>
-								Belum punya akun? Daftar disini
-							</Link>
 						</Box>
 					</Box>
 				</Box>
