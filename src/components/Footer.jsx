@@ -1,5 +1,4 @@
-import { Box, Grid, styled } from "@mui/material/";
-import Typography from "@mui/material/Typography";
+import { Box, Grid, styled, Typography } from "@mui/material/";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/courseCatAPI";
@@ -144,7 +143,7 @@ export default function Footer() {
                 <Box sx={{ width: "60%" }}>
                   <Grid container>
                     {classCat.map((item) => (
-                      <Grid key={item.id} item xs={5}>
+                      <Grid key={item.id} item xs={12} md={5}>
                         <Typography
                           sx={{
                             fontSize: {
@@ -157,7 +156,7 @@ export default function Footer() {
                           }}
                         >
                           <Link
-                            to="detail"
+                            to={`/category/${item.id}`}
                             style={{ textDecoration: "none", color: "black" }}
                           >
                             <li>{item.category}</li>

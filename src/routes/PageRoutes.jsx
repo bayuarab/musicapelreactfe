@@ -10,6 +10,7 @@ import Home from "../pages/home/Home";
 import InvoiceDetails from "../pages/invoice/InvoiceDetails";
 import InvoiceMaster from "../pages/invoice/InvoiceMaster";
 import SuccessPayment from "../pages/invoice/SuccessPayment";
+import Forget from "../pages/logs/Forget";
 import Login from "../pages/logs/Login";
 import Register from "../pages/logs/Register";
 import Missing from "../pages/missing/Missing";
@@ -26,6 +27,7 @@ const PageRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Register />} />
+        <Route path="forget" element={<Forget />} />
         <Route path="category/:categoryid" element={<DetailCourse />} />
         <Route path="course">
           <Route path=":courseid" element={<CategoryCourse />} />
