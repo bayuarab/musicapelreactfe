@@ -52,7 +52,8 @@ export default function CardClass() {
 			try {
 				const response = await api.get("/LandingPage");
 				console.log(response.data);
-				setDataClass(response.data);
+				const limit = response.data.filter((data, index) => index < 6);
+				setDataClass(limit);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
 				console.log(err.response.status);

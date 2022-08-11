@@ -65,7 +65,7 @@ export default function Login() {
 										xs: "18px",
 									},
 								}}>
-								Anda lupa password anda?
+								Lupa password kamu?
 							</Typography>
 							<Typography
 								sx={{
@@ -75,7 +75,7 @@ export default function Login() {
 										xs: "13px",
 									},
 								}}>
-								Silahkan isi email anda
+								Silahkan isi email dulu
 							</Typography>
 						</Box>
 						<Box mt="4vh">
