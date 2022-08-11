@@ -6,7 +6,7 @@ const NotFound = () => {
   return (
     <Box sx={{ marginTop: "45px" }}>
       <Typography variant="h2" sx={{ textAlign: "center", color: "#5D5FEF" }}>
-        There's nothing here!
+        Oops, Terjadi kesalahan
       </Typography>
     </Box>
   );

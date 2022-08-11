@@ -12,17 +12,48 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
-import { Link } from "react-router-dom";
-import numberFormat from "../../components/NumbeFormat";
+import { Link, useParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
+import numberFormat from "../../utilities/NumbeFormat";
 let kategoris = getKategoriKelas();
 let musics = getMusic();
 
 //#F2C94C
 export default function CategoryCourse() {
-  const [age, setAge] = useState("");
+  const [age, setAge] = React.useState("");
+  const { auth } = useAuth();
+
+  let params = useParams();
+
+  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+  const [detailOfACourse, setDetailOfACourse] = useState([]);
+  const getdetailOfACourse = async (url) => {
+    await axios
+      .get(`https://localhost:7132/api/Course/${url}`, {
+        url,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setDetailOfACourse(res.data);
+        }
+      })
+      .catch((err) => {});
+    console.log(params);
+  };
+
+  useEffect(
+    () => {
+      getdetailOfACourse(params.courseid);
+    },
+    [params],
+    console.log(params.courseid)
+  );
+
+  /* useStates untuk keperluan GET detail dari sebuah produk */
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -43,9 +74,9 @@ export default function CategoryCourse() {
             }}
           >
             <img
-              src={`${musics[0].image}`}
+              src={`${detailOfACourse.courseImage}`}
               width="75%"
-              alt={musics[0].image}
+              alt={detailOfACourse.courseImage}
               style={{
                 right: "0px",
                 borderRadius: "20px",
@@ -61,10 +92,10 @@ export default function CategoryCourse() {
         >
           <Typography color="text.secondary">{musics[0].name}</Typography>
           <Typography variant="body2" fontWeight="bold">
-            <h1>{kategoris[0].name}</h1>
+            <h1>{detailOfACourse.courseTitle}</h1>
           </Typography>
           <Typography color="blue">
-            <h1>IDR {numberFormat(kategoris[0].price)}</h1>
+            <h1>IDR {numberFormat(detailOfACourse.price)}</h1>
           </Typography>
 
           <Select

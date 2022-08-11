@@ -10,13 +10,13 @@ import Home from "../pages/home/Home";
 import InvoiceDetails from "../pages/invoice/InvoiceDetails";
 import InvoiceMaster from "../pages/invoice/InvoiceMaster";
 import SuccessPayment from "../pages/invoice/SuccessPayment";
-import Loginn from "../pages/logs/Login";
-import Registerr from "../pages/logs/Register";
+import Login from "../pages/logs/Login";
+import Register from "../pages/logs/Register";
 import Missing from "../pages/missing/Missing";
 import NotFound from "../pages/missing/NotFound";
 import MyCourses from "../pages/myCourses/MyCourses";
-import CategoryCourse from "./categoryCourse";
-import DetailCourse from "./detailCourse";
+import CategoryCourse from "../pages/product/categoryCourse";
+import DetailCourse from "../pages/product/detailCourse";
 
 const PageRoutes = () => {
   return (
@@ -24,27 +24,19 @@ const PageRoutes = () => {
       <Route path="/" element={<Layout />}>
         {/* Public Route */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Loginn />} />
-        <Route path="/registration" element={<Registerr />} />
-        <Route path="/missing" element={<Missing />} />
-        {/* <Route path="/payment-status" element={<SuccessPayment />} /> */}
-
-        <Route path="*" element={<NotFound />} />
-        {/* <Route path="/payment-status" element={<SuccessPayment />} /> */}
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Register />} />
         <Route path="category/:categoryid" element={<DetailCourse />} />
         <Route path="course">
           <Route path=":courseid" element={<CategoryCourse />} />
         </Route>
-        {/* <Route path="Hero" element={<Hero />} /> */}
+        <Route path="/missing" element={<Missing />} />
+        <Route path="*" element={<NotFound />} />
 
         {/* User and admin route */}
         <Route element={<RequiredAuth allowedRoles={["student"]} />}>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/my-course" element={<MyCourses />} />
-          {/* <Route path="detail" element={<DetailCourse />} />
-          <Route path="category" element={<CategoryCourse />} />
-          <Route path=":productId" element={<DetailCourse />} /> */}
           <Route path="/my-invoice">
             <Route index element={<InvoiceMaster />} />
             <Route path=":invoiceID" element={<InvoiceDetails />} />
@@ -63,11 +55,6 @@ const PageRoutes = () => {
             <Route path="/admin/invoices" element={<ManageInvoices />} />
           </Route>
         </Route>
-        {/* <Route path="admin">
-          <Route path="kelas" element={<ManageKelas />} />
-          <Route path="category" element={<ManageKategori />} />
-          <Route path="invoices" element={<ManageInvoices />} />
-        </Route> */}
       </Route>
     </Routes>
   );

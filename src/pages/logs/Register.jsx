@@ -15,7 +15,7 @@ import api from "../../api/userAPI";
 import useAuth from "../../hooks/useAuth";
 
 const EMAIL_REGEX =
-  /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+  /^([a-zA-Z0-9_]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
 
 export default function Login() {
@@ -26,13 +26,11 @@ export default function Login() {
   const [err, setErr] = useState("");
   const [regisState, setRegisState] = useState(false);
   const navigate = useNavigate();
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   const addNama = (event) => {
     setNama(event.target.value);

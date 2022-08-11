@@ -1,6 +1,6 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
-import HeaderBarAdmin from "./HeaderBarAdmin";
+import HeaderBarAdmin from "../pages/admin/HeaderBarAdmin";
 import WebAppBar from "./WebAppBar";
 
 const HeaderSet = (props) => {

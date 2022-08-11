@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 
@@ -13,11 +13,6 @@ import {
   AppBar,
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Drawer,
   IconButton,
@@ -25,12 +20,12 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Slide,
   styled,
   Toolbar,
   Typography,
 } from "@mui/material";
 import useAuth from "../hooks/useAuth";
+import LogoutDialog from "./LogoutDialog";
 //------------------------------------------------------------------------
 
 const StyledToolbar = styled(Toolbar)({
@@ -59,10 +54,6 @@ const BlackButton = styled(Button)({
   fontWeight: "500",
 });
 
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 function WebAppBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -71,10 +62,9 @@ function WebAppBar(props) {
   const navigate = useNavigate();
 
   const handleCloseLogout = (state) => {
-    if (state) {
-      setAuth({});
-      navigate("/", { replace: true });
-    }
+    if (!state) return setOpenLogout(false);
+    setAuth({});
+    navigate("/", { replace: true });
     setOpenLogout(false);
   };
 
@@ -191,27 +181,6 @@ function WebAppBar(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-  const Logout = (
-    <Dialog
-      open={openLogout}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={() => handleCloseLogout(false)}
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogTitle>{"Are you sure to Log Out?"}</DialogTitle>
-      {/* <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          You hav.
-        </DialogContentText>
-      </DialogContent> */}
-      <DialogActions>
-        <Button onClick={() => handleCloseLogout(false)}>No</Button>
-        <Button onClick={() => handleCloseLogout(true)}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
-
   return auth.paymentPageState === true || auth?.roles === "admin" ? (
     <></>
   ) : (
@@ -279,7 +248,7 @@ function WebAppBar(props) {
         >
           {drawer}
         </Drawer>
-        {Logout}
+        <LogoutDialog logState={openLogout} onClose={handleCloseLogout} />
       </Box>
       <Toolbar sx={{ height: "76px" }} />
     </Box>

@@ -16,8 +16,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
 import Footer from "../../components/Footer";
-import numberFormat from "../../components/NumbeFormat";
 import useAuth from "../../hooks/useAuth";
+import numberFormat from "../../utilities/NumbeFormat";
 //==================================================
 
 const StyledPaper = styled(Paper)({
@@ -67,10 +67,8 @@ const InvoiceMaster = () => {
   );
 
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   useEffect(() => {
     const fetchApi = async () => {

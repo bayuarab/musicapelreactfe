@@ -4,32 +4,27 @@ import MenuIcon from "@mui/icons-material/Menu";
 import {
   Avatar,
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   Divider,
   IconButton,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Slide,
   Toolbar,
   Typography,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import React, { forwardRef, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from "@mui/icons-material/Category";
-import HomeIcon from "@mui/icons-material/Home";
+// import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import useAuth from "../hooks/useAuth";
-import HeaderSet from "./HeaderSet";
+import LogoutDialog from "../../components/LogoutDialog";
+import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme({
   palette: {
@@ -88,26 +83,16 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 function HeaderBarAdmin() {
   const [open, setOpen] = useState(false);
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
   const [openLogout, setOpenLogout] = useState(false);
 
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
   const handleCloseLogout = (state) => {
-    if (state) {
-      setAuth({});
-      //   <HeaderSet roles={`student`} />
-      navigate("/", { replace: true });
-    }
+    if (!state) return setOpenLogout(false);
+    setAuth({});
+    navigate("/", { replace: true });
     setOpenLogout(false);
   };
 
@@ -115,26 +100,9 @@ function HeaderBarAdmin() {
     setOpenLogout(true);
   };
 
-  const Logout = (
-    <Dialog
-      open={openLogout}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={() => handleCloseLogout(false)}
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogTitle>{"Are you sure to Log Out?"}</DialogTitle>
-      {/* <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          You hav.
-        </DialogContentText>
-      </DialogContent> */}
-      <DialogActions>
-        <Button onClick={() => handleCloseLogout(false)}>No</Button>
-        <Button onClick={() => handleCloseLogout(true)}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -242,7 +210,7 @@ function HeaderBarAdmin() {
             {/* {secondaryListItems} */}
           </List>
         </Drawer>
-        {Logout}
+        <LogoutDialog logState={openLogout} onClose={handleCloseLogout} />
       </div>
     </ThemeProvider>
   );

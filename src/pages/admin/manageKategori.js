@@ -34,9 +34,9 @@ import SearchIcon from "@mui/icons-material/Search";
 // import { APIRequest } from '../components/APICalls';
 import StyledEngine from "@mui/styled-engine";
 import HeaderSet from "../../components/HeaderSet";
-import numberFormat from "../../components/NumbeFormat";
 import useAuth from "../../hooks/useAuth";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
+import numberFormat from "../../utilities/NumbeFormat";
 
 let kategoris = getKategoriKelas();
 let musics = getMusic();

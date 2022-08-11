@@ -1,9 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-// import { DataContext } from "../../context/DataProvider";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
-import numberFormat from "../../components/NumbeFormat";
+import useAuth from "../../hooks/useAuth";
+import numberFormat from "../../utilities/NumbeFormat";
 import CartList from "./components/CartList";
 import CheckoutDialogs from "./components/CheckoutDialogs";
+
+import {
+  generateNewInvoice,
+  generateNewMasterInvoice,
+} from "../invoice/InvoicesGenerator";
 
 import {
   AppBar,
@@ -23,8 +29,6 @@ import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
-import { Navigate, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 
 const StyledCheckbox = styled(Checkbox)({
   color: "#BDBDBD",
@@ -86,83 +90,9 @@ const CartPage = () => {
   const { auth, setAuth } = useAuth();
   const userID = auth?.userId;
 
-  const generateCurrentDate = () => {
-    const months = [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
-    ];
-
-    const date = new Date();
-    const d = date.getDate();
-    const m = date.getMonth();
-    const y = date.getFullYear();
-
-    return `${d} ${months[m]} ${y}`;
-  };
-
-  const generateNewInvoice = () => {
-    const getResnum = (resNum = 0) => {
-      registeredInvoice?.forEach((invoices) => {
-        const refNum = parseInt(invoices.substring(3, invoices.length));
-        resNum = resNum <= refNum ? refNum + 1 : resNum;
-      });
-      return resNum;
-    };
-
-    const getRef = () => {
-      return registeredInvoice?.length <= 0
-        ? {
-            resNum: 0,
-            refToken: auth?.nama.substring(0, 3).toUpperCase(),
-          }
-        : {
-            resNum: getResnum(),
-            refToken: registeredInvoice[0]?.substring(0, 3),
-          };
-    };
-
-    const getInvoiceSepNum = (i) => {
-      if (i === 0) return "";
-      return "0" + getInvoiceSepNum(i - 1);
-    };
-
-    const invoiceLength = registeredInvoice[0]
-      ? registeredInvoice[0].length
-      : 8;
-    const { resNum, refToken } = getRef();
-    console.log(resNum, refToken, invoiceLength);
-    const loop = invoiceLength - refToken.length - resNum.toString().length;
-    const newInvoiceNum = getInvoiceSepNum(loop);
-    console.log(refToken + newInvoiceNum + resNum);
-    return refToken + newInvoiceNum + resNum;
-  };
-
-  const generateNewMasterInvoice = () => {
-    return {
-      NoInvoice: generateNewInvoice(),
-      PurchaseDate: generateCurrentDate(),
-      Qty: selectedCart.length,
-      Cost: calculateTotalCost(selectedCart),
-      UserId: userID,
-      Method: selectedOp,
-    };
-  };
-
   useEffect(() => {
-    let newState = auth;
-    newState.paymentPageState = false;
-    setAuth({ ...newState });
-  }, []);
+    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
+  }, [setAuth]);
 
   useEffect(() => {
     const fetchApiInvoices = async () => {
@@ -195,7 +125,7 @@ const CartPage = () => {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
-        if (err.response.data == "Not Found")
+        if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
         console.log(err.response.status);
         console.log(err.response.headers);
@@ -217,7 +147,7 @@ const CartPage = () => {
       if (url === "MInvoice") {
         details = selectedCart.map((items) => {
           return {
-            NoInvoice: generateNewInvoice(),
+            NoInvoice: generateNewInvoice(registeredInvoice, auth),
             CourseId: items.courseId,
             MasterInvoiceId: masterInvoicess,
           };
@@ -250,7 +180,15 @@ const CartPage = () => {
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
-    fetchApiPostInvoice("MInvoice", generateNewMasterInvoice());
+    const newInvoiceProp = {
+      selectedCart,
+      registeredInvoice,
+      userID,
+      selectedOp,
+      auth,
+      calculateTotalCost,
+    };
+    fetchApiPostInvoice("MInvoice", generateNewMasterInvoice(newInvoiceProp));
   };
 
   const handleChangeAll = () => {
@@ -277,8 +215,6 @@ const CartPage = () => {
   };
 
   const handleDelete = (itemID) => {
-    // setSelectedCart(filterCartItems(selectedCart, itemID, "unEquality"));
-    // setCart(filterCartItems(cart, itemID, "unEquality"));
     const fetchDelete = async (id) => {
       try {
         const response = await api.delete(`/Cart/${userID}/${id}`);
@@ -387,7 +323,6 @@ const CartPage = () => {
                   fontWeight: "500",
                 }}
               >
-                {/* cost.toLocaleString("de-DE") */}
                 IDR {numberFormat(cost)}
               </Typography>
             </Box>

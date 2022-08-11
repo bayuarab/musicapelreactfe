@@ -1,5 +1,5 @@
-import { Card, Container } from '@mui/material';
-import React, { useState } from 'react';
+import { Card, Container } from "@mui/material";
+import React, { useState } from "react";
 
 export default function Base64Image() {
   const [file, setFile] = useState();
@@ -14,68 +14,77 @@ export default function Base64Image() {
     let file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = _handleReaderLoaded
-      reader.readAsBinaryString(file)
+      reader.onload = _handleReaderLoaded;
+      reader.readAsBinaryString(file);
     }
-  }
+  };
 
   const _handleReaderLoaded = (readerEvt) => {
     let binaryString = readerEvt.target.result;
-    setBase64(btoa(binaryString))
-  }
+    setBase64(btoa(binaryString));
+  };
 
   const onFileSubmit = (e) => {
     setIsLoading(true);
-    e.preventDefault()
-    console.log(base64)
+    e.preventDefault();
+    console.log(base64);
 
-      setIsLoading(false)
-
-  }
+    setIsLoading(false);
+  };
 
   const photoUpload = (e) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log("reader", reader)
-    console.log("file", file)
+    console.log("reader", reader);
+    console.log("file", file);
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = () => {
-        setFile(file)
+        setFile(file);
         setSize(file.size);
-        setName(file.name)
-        setImagePreview(reader.result)
-      }
+        setName(file.name);
+        setImagePreview(reader.result);
+      };
       reader.readAsDataURL(file);
     }
-  }
+  };
 
   const remove = () => {
-    setFile("")
-    setImagePreview("")
-    setBase64("")
-    setName("")
-    setSize("")
-  }
+    setFile("");
+    setImagePreview("");
+    setBase64("");
+    setName("");
+    setSize("");
+  };
 
   return (
     <Container>
       <form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
-        <Card 
+        <Card
           width={imagePreview === "" ? 310 : 310}
-          height={imagePreview === "" ? 400 : 480} >
-
-          <Card top={imagePreview === "" ? 0 : -140}
+          height={imagePreview === "" ? 400 : 480}
+        >
+          <Card
+            top={imagePreview === "" ? 0 : -140}
             width={imagePreview === "" ? 120 : 145}
-            height={imagePreview === "" ? 120 : 145} >
-            {imagePreview === "" ?
-              "":
+            height={imagePreview === "" ? 120 : 145}
+          >
+            {imagePreview === "" ? (
+              ""
+            ) : (
               <img src={imagePreview} alt="Icone adicionar" />
-            }
-            <input type="file" name="avatar" id="file" accept=".jpef, .png, .jpg" onChange={photoUpload} src={imagePreview} />
+            )}
+            <input
+              type="file"
+              name="avatar"
+              id="file"
+              accept=".jpef, .png, .jpg"
+              onChange={photoUpload}
+              src={imagePreview}
+            />
           </Card>
 
-          {imagePreview !== "" &&
+          {imagePreview !== "" && (
             <>
               <section>
                 <label>Nome</label>
@@ -85,19 +94,14 @@ export default function Base64Image() {
                 <span>{size}</span>
               </section>
 
-              <button type="submit" >
-                {isLoading ? <></> :
-                  <>
-                    Salvar
-                  </>
-                }
+              <button type="submit">{isLoading ? <></> : <>Salvar</>}</button>
+              <button type="button" onClick={remove}>
+                Remover
               </button>
-              <button type="button" onClick={remove} >Remover</button>
             </>
-            
-          }
+          )}
         </Card>
       </form>
     </Container>
-  )
+  );
 }
