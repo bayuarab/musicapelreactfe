@@ -145,9 +145,9 @@ const CartPage = () => {
       if (url === "MInvoice") {
         details = selectedCart.map((items) => {
           return {
-            NoInvoice: generateNewInvoice(registeredInvoice, auth),
-            CourseId: items.courseId,
-            MasterInvoiceId: masterInvoicess,
+            noInvoice: generateNewInvoice(registeredInvoice, auth),
+            courseId: items.courseId,
+            masterInvoiceId: masterInvoicess,
           };
         });
         console.log(details);

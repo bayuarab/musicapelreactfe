@@ -194,7 +194,6 @@ const InvoiceDetails = () => {
                 <StyledTableCell align="center">{row.category}</StyledTableCell>
                 <StyledTableCell align="center">{row.schedule}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {/* row.price.toLocaleString("de-DE") */}
                   IDR {numberFormat(row.price)}
                 </StyledTableCell>
               </StyledTableRow>
