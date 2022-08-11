@@ -13,8 +13,8 @@ function DialogAddKelas(props =  {
 }) {
 
         /* useStates untuk keperluan POST merk baru */
-        const [cateogryName, setcateogryName] = useState("");
-        const [cateogryDescription, setcateogryDescription] = useState("");
+        const [categoryName, setcategoryName] = useState("");
+        const [categoryDescription, setcategoryDescription] = useState("");
         const [imagePreview, setImagePreview] = useState("");
         const [base64, setBase64] = useState("");
         /* useStates untuk keperluan POST merk baru */
@@ -32,9 +32,12 @@ function DialogAddKelas(props =  {
 
         /* Method to POST new Brand Item */
         const postKelas = () => {
-        //const postDataa = {cateogry_name: cateogryName,description: cateogryDescription,image: base64,saveType: "add"};
-        axios.post('https://localhost:7132/api/CourseCategory/post-kategori').then((res) => {
+        const postDataa = {category: categoryName,image: base64,desc: categoryDescription};
+        console.log(postDataa)
+        axios.post('https://localhost:7132/api/CourseCategory', postDataa).then((res) => {
             if (res.status === 200) {
+                console.log(res.status)
+                console.log(res.data)
                 props.onClose()
             }
         }).catch((err) => {console.log(err.response.data)})
@@ -60,15 +63,15 @@ function DialogAddKelas(props =  {
 
                                     <Box noValidate>
                                     <TextField id="name"
-                                        value={cateogryName}
+                                        value={categoryName}
                                         label="Nama Kategori"
-                                        onChange={(e) => setcateogryName(e.target.value)}
+                                        onChange={(e) => setcategoryName(e.target.value)}
                                         style={{ display: 'flex', flexGrow: 1, marginTop: '20px', marginBottom: '20px' }}
                                     />
                                     <TextField id="description"
-                                        value={cateogryDescription}
+                                        value={categoryDescription}
                                         label="Deskripsi Kategori"
-                                        onChange={(e) => setcateogryDescription(e.target.value)}
+                                        onChange={(e) => setcategoryDescription(e.target.value)}
                                         style={{ display: 'flex', flexGrow: 1, marginTop: '20px', marginBottom: '20px' }}
                                     />
 

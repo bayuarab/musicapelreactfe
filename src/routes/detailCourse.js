@@ -15,32 +15,11 @@ import Carousel from "react-multi-carousel";
 import { Link, useParams } from "react-router-dom";
 import numberFormat from "../components/NumbeFormat";
 import { getKategoriKelas, getMusic } from "../JSON Data/Data";
-let kategoris = getKategoriKelas();
-let musics = getMusic();
+
 
 //#F2C94C
 export default function DetailCourse() {
   const [dataClass, setDataClass] = useState("");
-  //     const { invoiceID } = useParams();
-  //     const [detailData, setDetailData] = useState([]);
-
-  //   useEffect(() => {
-  //     const fetchApi = async () => {
-  //       try {
-  //         const response = await axios.get(`https://localhost:7132/api/CourseCategory/${invoiceID}`);
-  //         console.log(response.data);
-  //         setDetailData(response.data);
-  //       } catch (err) {
-  //         !err.response
-  //           ? console.log(`Error: ${err.message}`)
-  //           : console.log(err.response.data);
-  //         console.log(err.response.status);
-  //         console.log(err.response.headers);
-  //       }
-  //     };
-
-  //     fetchApi();
-  //   }, [invoiceID]);
   let params = useParams();
 
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
@@ -65,6 +44,33 @@ export default function DetailCourse() {
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
+  let paramss = useParams();
+   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+   const [detailOfACourse, setDetailOfACourse] = useState([]);
+   const getdetailOfACourse = async (url) => {
+     console.log("paramss", url);
+     await axios
+       .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+         url,
+       })
+       .then((res) => {
+         if (res.status === 200) {
+           setDetailOfACourse([res.data]);
+           console.log(res.data)
+         }
+       })
+       .catch((err) => {});
+     console.log(paramss);
+     
+   };
+   useEffect(() => {
+     getdetailOfACourse(paramss.categoryid);
+   }, [paramss]);
+ 
+   /* useStates untuk keperluan GET detail dari sebuah produk */
+
+   
+
   // const gridClassItems = dataClass;
   const detailData = detailOfACategory;
   return (
@@ -78,7 +84,7 @@ export default function DetailCourse() {
           key={detailData.id}
         >
           <img
-            src={`${detailData.image}`}
+            src={`data:image/jpeg;base64,${detailData.image}`}
             width="100%"
             alt={detailData.image}
             height="400px"
@@ -99,12 +105,12 @@ export default function DetailCourse() {
             flex: "1",
           }}
         >
-          {kategoris.map((item, i) => (
+          {detailOfACourse.map((item, index) => (
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
                 height="140"
-                image={item.image}
+                image={item.courseImage}
                 alt="kategori kelas"
                 style={{
                   borderRadius: "10px",
@@ -113,10 +119,10 @@ export default function DetailCourse() {
               <CardActionArea component={Link} to={`/detail/${item.id}`}>
                 <CardContent>
                   <Typography color="text.secondary" gutterBottom>
-                    {item.name}
+                    {item.courseTitle}
                   </Typography>
                   <Typography variant="body2" fontWeight="bold">
-                    {item.description}
+                    {item.courseDesc}
                   </Typography>
                 </CardContent>
                 <CardActions>
