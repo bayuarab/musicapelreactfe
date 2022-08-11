@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "./context/AuthProvider";
+import { ComponentStateProvider } from "./context/ComponentStateProvider";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 // import CategoryCourse from "./routes/categoryCourse";
@@ -18,7 +19,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <ComponentStateProvider>
+          <App />
+        </ComponentStateProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

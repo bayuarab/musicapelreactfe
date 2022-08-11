@@ -1,7 +1,7 @@
 import { Box, Divider, styled, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
-import Footer from "../../components/Footer";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
 const ImgContainer = styled(Box)(({ theme }) => ({
@@ -18,15 +18,16 @@ const ImgContainer = styled(Box)(({ theme }) => ({
 
 const MyCourses = () => {
   const [myCourseData, setMyCourseData] = useState([]);
-  const { auth, setAuth } = useAuth();
+  const { setComponentState } = useComponentBarState();
+  const { auth } = useAuth();
   const UserId = auth?.userId;
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
 
   useEffect(() => {
-    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
-  }, [setAuth]);
+    setComponentState({ paymentPageState: false, footerState: true });
+  }, [setComponentState]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -147,7 +148,6 @@ const MyCourses = () => {
           );
         })}
       </Box>
-      <Footer />
     </Box>
   );
 };

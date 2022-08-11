@@ -15,8 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import Footer from "../../components/Footer";
-import useAuth from "../../hooks/useAuth";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 //--
 const StyledPaper = styled(Paper)({
@@ -60,14 +59,14 @@ const StyledNavLink = styled(Typography)({
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
-  const { setAuth } = useAuth();
+  const { setComponentState } = useComponentBarState();
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
 
   useEffect(() => {
-    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
-  }, [setAuth]);
+    setComponentState({ paymentPageState: false, footerState: true });
+  }, [setComponentState]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -95,34 +94,56 @@ const InvoiceDetails = () => {
       </Typography>
     </Box>
   ) : (
-    <Box>
-      <Box sx={{ padding: "5.5%", paddingTop: "50px", paddingBottom: "40px" }}>
-        <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
-          <Link style={{ textDecoration: "none" }} to="/">
-            <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
-          </Link>
-          <Link style={{ textDecoration: "none" }} to="/my-invoice">
-            <StyledNavLink color={"#828282"}>Invoice {`>`}</StyledNavLink>
-          </Link>
-          <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
-        </Box>
+    <Box
+      sx={{
+        padding: "5.5%",
+        paddingTop: "50px",
+        paddingBottom: "90px",
+      }}
+    >
+      <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
+        <Link style={{ textDecoration: "none" }} to="/">
+          <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
+        </Link>
+        <Link style={{ textDecoration: "none" }} to="/my-invoice">
+          <StyledNavLink color={"#828282"}>Invoice {`>`}</StyledNavLink>
+        </Link>
+        <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
+      </Box>
+      <Typography
+        mb={"24px"}
+        sx={{
+          fontFamily: "Poppins",
+          color: "#4F4F4F",
+          fontWeight: "700",
+          fontSize: "20px",
+        }}
+      >
+        Rincian Invoice
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          marginBottom: "32px",
+        }}
+      >
         <Typography
-          mb={"24px"}
           sx={{
             fontFamily: "Poppins",
             color: "#4F4F4F",
-            fontWeight: "700",
-            fontSize: "20px",
+            fontWeight: "500",
+            fontSize: "18px",
           }}
         >
-          Rincian Invoice
+          No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
         </Typography>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-            marginBottom: "32px",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <Typography
@@ -133,77 +154,54 @@ const InvoiceDetails = () => {
               fontSize: "18px",
             }}
           >
-            No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
+            Tanggal Beli&nbsp;:{" "}
+            {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
           </Typography>
-          <Box
+          <Typography
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              fontFamily: "Poppins",
+              color: "#4F4F4F",
+              fontWeight: "700",
+              fontSize: "18px",
             }}
           >
-            <Typography
-              sx={{
-                fontFamily: "Poppins",
-                color: "#4F4F4F",
-                fontWeight: "500",
-                fontSize: "18px",
-              }}
-            >
-              Tanggal Beli&nbsp;:{" "}
-              {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: "Poppins",
-                color: "#4F4F4F",
-                fontWeight: "700",
-                fontSize: "18px",
-              }}
-            >
-              {/* .toLocaleString("de-DE") */}
-              Total Harga:&nbsp;&nbsp; IDR{" "}
-              {invoiceDetailData[0]
-                ? numberFormat(invoiceDetailData[0].cost)
-                : "-"}
-            </Typography>
-          </Box>
+            {/* .toLocaleString("de-DE") */}
+            Total Harga:&nbsp;&nbsp; IDR{" "}
+            {invoiceDetailData[0]
+              ? numberFormat(invoiceDetailData[0].cost)
+              : "-"}
+          </Typography>
         </Box>
-        <TableContainer component={StyledPaper}>
-          <Table sx={{}} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell align="center">No</StyledTableCell>
-                <StyledTableCell align="center">Nama Course</StyledTableCell>
-                <StyledTableCell align="center">Kategori</StyledTableCell>
-                <StyledTableCell align="center">Jadwal</StyledTableCell>
-                <StyledTableCell align="center">Harga</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {invoiceDetailData.map((row, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row" align="center">
-                    {index + 1}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{row.course}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.category}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.schedule}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {/* row.price.toLocaleString("de-DE") */}
-                    IDR {numberFormat(row.price)}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
       </Box>
-      <Footer />
+      <TableContainer component={StyledPaper}>
+        <Table sx={{}} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align="center">No</StyledTableCell>
+              <StyledTableCell align="center">Nama Course</StyledTableCell>
+              <StyledTableCell align="center">Kategori</StyledTableCell>
+              <StyledTableCell align="center">Jadwal</StyledTableCell>
+              <StyledTableCell align="center">Harga</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {invoiceDetailData.map((row, index) => (
+              <StyledTableRow key={index}>
+                <StyledTableCell component="th" scope="row" align="center">
+                  {index + 1}
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.course}</StyledTableCell>
+                <StyledTableCell align="center">{row.category}</StyledTableCell>
+                <StyledTableCell align="center">{row.schedule}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {/* row.price.toLocaleString("de-DE") */}
+                  IDR {numberFormat(row.price)}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

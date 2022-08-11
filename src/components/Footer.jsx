@@ -8,6 +8,8 @@ import mail from "../assets/footer/mail.svg";
 import phone from "../assets/footer/phone.svg";
 import telegram from "../assets/footer/telegram.svg";
 import youtube from "../assets/footer/youtube.svg";
+import { useComponentBarState } from "../context/ComponentStateProvider";
+import useAuth from "../hooks/useAuth";
 // import ButtonBase from "@mui/material/ButtonBase";
 
 const Img = styled("img")({
@@ -30,6 +32,8 @@ const classCatDef = [
 
 export default function Footer() {
   const [dataClass, setDataClass] = useState(classCatDef);
+  const { componentState } = useComponentBarState();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -50,9 +54,8 @@ export default function Footer() {
 
   const classCat = dataClass;
 
-  return (
+  return componentState?.footerState && auth?.roles !== "admin" ? (
     <Box
-      // mt="3vh"
       sx={{
         backgroundColor: "#F2C94C",
         width: "100%",
@@ -64,6 +67,7 @@ export default function Footer() {
         },
         display: "flex",
         flexDirection: "column",
+        clear: "both",
       }}
     >
       <center>
@@ -261,5 +265,7 @@ export default function Footer() {
         </Box>
       </center>
     </Box>
+  ) : (
+    <></>
   );
 }

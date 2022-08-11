@@ -29,6 +29,7 @@ import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 const StyledCheckbox = styled(Checkbox)({
   color: "#BDBDBD",
@@ -61,9 +62,7 @@ const calculateTotalCost = (carts) => {
 };
 
 const findItemsIDInArray = (arr, targetValue) => {
-  return arr.some(function (items) {
-    return items.id === targetValue;
-  });
+  return arr.some((items) => items.id === targetValue);
 };
 
 const filterCartItems = (arr, filterValue, operator) => {
@@ -75,6 +74,7 @@ const filterCartItems = (arr, filterValue, operator) => {
 };
 
 const CartPage = () => {
+  const { setComponentState } = useComponentBarState();
   const [cart, setCart] = useState([]);
   const [selectedCart, setSelectedCart] = useState([]);
   const [cost, setCost] = useState(calculateTotalCost(cart));
@@ -87,12 +87,12 @@ const CartPage = () => {
   );
 
   const navigate = useNavigate();
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
   const userID = auth?.userId;
 
   useEffect(() => {
-    setAuth((prevState) => ({ ...prevState, paymentPageState: false }));
-  }, [setAuth]);
+    setComponentState({ paymentPageState: false, footerState: false });
+  }, [setComponentState]);
 
   useEffect(() => {
     const fetchApiInvoices = async () => {
@@ -100,9 +100,7 @@ const CartPage = () => {
         const response = await api.get(`/Invoices/${userID}`);
         console.log(response?.data);
         setRegisteredInvoice(
-          response?.data?.map((rawData) => {
-            return rawData.noInvoice;
-          })
+          response?.data?.map((rawData) => rawData.noInvoice)
         );
       } catch (err) {
         !err.response
