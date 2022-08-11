@@ -16,7 +16,7 @@ export default function Login() {
 		event.preventDefault();
 
 		if (email === "") {
-			return setErr("Field cannot be empty");
+			return setErr("Input tidak boleh kosong");
 		}
 
 		const dataLogin = {
