@@ -13,7 +13,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import { Link, useParams } from "react-router-dom";
-import numberFormat from "../../utilities/NumbeFormat";
+import numberFormat from "../components/NumbeFormat";
+import { getKategoriKelas, getMusic } from "../JSON Data/Data";
+
 
 //#F2C94C
 export default function DetailCourse() {
@@ -43,28 +45,31 @@ export default function DetailCourse() {
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
   let paramss = useParams();
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACourse, setDetailOfACourse] = useState([]);
-  const getdetailOfACourse = async (url) => {
-    console.log("paramss", url);
-    await axios
-      .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACourse([res.data]);
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {});
-    console.log(paramss);
-  };
-  useEffect(() => {
-    getdetailOfACourse(paramss.categoryid);
-  }, [paramss]);
+   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+   const [detailOfACourse, setDetailOfACourse] = useState([]);
+   const getdetailOfACourse = async (url) => {
+     console.log("paramss", url);
+     await axios
+       .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+         url,
+       })
+       .then((res) => {
+         if (res.status === 200) {
+           setDetailOfACourse([res.data]);
+           console.log(res.data)
+         }
+       })
+       .catch((err) => {});
+     console.log(paramss);
+     
+   };
+   useEffect(() => {
+     getdetailOfACourse(paramss.categoryid);
+   }, [paramss]);
+ 
+   /* useStates untuk keperluan GET detail dari sebuah produk */
 
-  /* useStates untuk keperluan GET detail dari sebuah produk */
+   
 
   // const gridClassItems = dataClass;
   const detailData = detailOfACategory;
@@ -111,7 +116,7 @@ export default function DetailCourse() {
                   borderRadius: "10px",
                 }}
               />
-              <CardActionArea component={Link} to={`/course/${item.id}`}>
+              <CardActionArea component={Link} to={`/detail/${item.id}`}>
                 <CardContent>
                   <Typography color="text.secondary" gutterBottom>
                     {item.courseTitle}
