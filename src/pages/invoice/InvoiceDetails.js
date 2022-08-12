@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import api from "../../api/Invoices";
+import api from "../../api/userAPI";
 import numberFormat from "../../utilities/NumbeFormat";
 
 import {
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
+import useAuth from "../../hooks/useAuth";
 
 //--
 const StyledPaper = styled(Paper)({
@@ -63,6 +64,7 @@ const InvoiceDetails = () => {
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
+  const { auth } = useAuth();
 
   useEffect(() => {
     setComponentState({ paymentPageState: false, footerState: true });
@@ -71,7 +73,9 @@ const InvoiceDetails = () => {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/DetailsByNoInvoice/${invoiceID}`);
+        const response = await api.get(
+          `/InvoicesDetails/${auth.userId}/${invoiceID}`
+        );
         console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {

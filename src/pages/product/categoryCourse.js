@@ -40,13 +40,49 @@ export default function CategoryCourse() {
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
-  const [claimedCourse, setClaimedCourse] = useState([]);
+  const [claimedCourse, setClaimedCourse] = useState(false);
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
 
   const UserID = auth?.userId;
 
   let params = useParams();
+
+  //Get claimed course
+  const fetchApiClaimedCourse = async () => {
+    try {
+      const response = await api.get(`/Courses/${auth?.userId}`);
+      console.log("ClaimedCourse", response.data);
+      const claimedCourseState = response?.data.some(
+        (item) => item.courseId == params.courseid
+      );
+      setClaimedCourse(claimedCourseState);
+      console.log(detailOfACourse.id);
+      console.log("claimedCourseState", claimedCourseState);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  //delete purchased course from cart
+  const fetchDelete = async (courseId) => {
+    try {
+      const response = await api.delete(
+        `/Cart/ByCourseId/${UserID}/${courseId}`
+      );
+      console.log(response.data);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
 
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
   const [detailOfACourse, setDetailOfACourse] = useState([]);
@@ -64,13 +100,11 @@ export default function CategoryCourse() {
     console.log(params);
   };
 
-  useEffect(
-    () => {
-      getdetailOfACourse(params.courseid);
-    },
-    [params],
-    console.log(params.courseid)
-  );
+  useEffect(() => {
+    getdetailOfACourse(params.courseid);
+    fetchApiClaimedCourse();
+    console.log(params.courseid);
+  }, [params]);
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
@@ -104,29 +138,35 @@ export default function CategoryCourse() {
   };
 
   //Get courses
-  useEffect(() => {
-    const fetchApiClaimedCourse = async () => {
-      try {
-        const response = await api.get(`/Courses/${auth?.userId}`);
-        console.log("ClaimedCourse", response.data);
-        setClaimedCourse(response.data);
-      } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        if (err.response.data === "Not Found") console.log(err.response.status);
-        console.log(err.response.headers);
-      }
-    };
-    fetchApiClaimedCourse();
-  }, []);
+  // useEffect(() => {
+  //   const fetchApiClaimedCourse = async () => {
+  //     try {
+  //       const response = await api.get(`/Courses/${auth?.userId}`);
+  //       console.log("ClaimedCourse", response.data);
+  //       setClaimedCourse(response.data);
+  //       const claimedCourseState = response?.data.some(
+  //         (item) => item.courseId == detailOfACourse.id
+  //       );
+  //       console.log(detailOfACourse.id);
+  //       console.log(claimedCourseState);
+  //     } catch (err) {
+  //       !err.response
+  //         ? console.log(`Error: ${err.message}`)
+  //         : console.log(err.response.data);
+  //       if (err.response.data === "Not Found") console.log(err.response.status);
+  //       console.log(err.response.headers);
+  //     }
+  //   };
+  //   fetchApiClaimedCourse();
+  // }, []);
 
   /* Method to POST new Brand Item */
   const postCart = () => {
-    const courseValid = claimedCourse.some(
-      (item) => item.courseId == detailOfACourse.id
-    );
-    if (courseValid) {
+    if (!auth?.roles) navigate("/login", { replace: true });
+    // const courseValid = claimedCourse.some(
+    //   (item) => item.courseId == detailOfACourse.id
+    // );
+    if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;
     }
@@ -139,6 +179,7 @@ export default function CategoryCourse() {
         if (res.status === 200) {
           console.log(res.status);
           console.log(res.data);
+          setErr("Berhasil menambahkan cart");
         }
       })
       .catch((err) => {
@@ -188,6 +229,7 @@ export default function CategoryCourse() {
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
+        fetchDelete(items.courseId);
       });
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
@@ -220,10 +262,11 @@ export default function CategoryCourse() {
   };
 
   const checkout = () => {
-    const courseValid = claimedCourse.some(
-      (item) => item.courseId == detailOfACourse.id
-    );
-    if (courseValid) {
+    if (!auth?.roles) navigate("/login", { replace: true });
+    // const courseValid = claimedCourse.some(
+    //   (item) => item.courseId == detailOfACourse.id
+    // );
+    if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;
     }
@@ -273,43 +316,51 @@ export default function CategoryCourse() {
           <Typography color="blue">
             <h1>IDR {numberFormat(detailOfACourse.price)}</h1>
           </Typography>
-
-          <Select
-            labelId="demo-select-small"
-            id="demo-select-small"
-            defaultValue={0}
-            onChange={handleChange}
-            size="small"
-          >
-            <MenuItem value={0}>pilih jadwal kelas</MenuItem>
-            <MenuItem value="1 july 2022">1 july 2022</MenuItem>
-            <MenuItem value={"30 july 2022"}>30 july 2022</MenuItem>
-            <MenuItem value={"17 agustus 2022"}>17 agustus 2022</MenuItem>
-            <MenuItem value={"9 september 2022"}>9 september 2022</MenuItem>
-          </Select>
-
-          <Box
-            display="flex"
-            sx={{
-              margin: "3% 0 0 0",
-            }}
-          >
-            <Button
-              variant="outlined"
-              sx={{
-                margin: "0 3% 0 0",
-              }}
-              onClick={async (e) => {
-                await e.preventDefault();
-                await postCart();
-              }}
-            >
-              Masukan Keranjang
+          {claimedCourse ? (
+            <Button variant="contained" component={Link} to={`/my-course`}>
+              Ke Kelasku
             </Button>
-            <Button variant="contained" onClick={() => checkout()}>
-              Beli Sekarang
-            </Button>
-          </Box>
+          ) : (
+            <>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                defaultValue={0}
+                onChange={handleChange}
+                size="small"
+              >
+                <MenuItem value={0}>pilih jadwal kelas</MenuItem>
+                <MenuItem value="1 july 2022">1 july 2022</MenuItem>
+                <MenuItem value={"30 july 2022"}>30 july 2022</MenuItem>
+                <MenuItem value={"17 agustus 2022"}>17 agustus 2022</MenuItem>
+                <MenuItem value={"9 september 2022"}>9 september 2022</MenuItem>
+              </Select>
+
+              <Box
+                display="flex"
+                sx={{
+                  margin: "3% 0 0 0",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  sx={{
+                    margin: "0 3% 0 0",
+                  }}
+                  onClick={async (e) => {
+                    await e.preventDefault();
+                    await postCart();
+                  }}
+                >
+                  Masukan Keranjang
+                </Button>
+                <Button variant="contained" onClick={() => checkout()}>
+                  Beli Sekarang
+                </Button>
+              </Box>
+            </>
+          )}
+
           <Typography color="red">{err}</Typography>
         </Grid>
       </Box>
