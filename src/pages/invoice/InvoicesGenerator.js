@@ -48,7 +48,7 @@ export function generateNewMasterInvoice({
     PurchaseDate: generateCurrentDate(),
     Qty: selectedCart.length,
     Cost: calculateTotalCost(selectedCart),
-    UserId: userID,
+    UserId: auth.userId,
     Method: selectedOp,
   };
 }

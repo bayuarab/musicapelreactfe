@@ -90,6 +90,22 @@ const CartPage = () => {
   const { auth } = useAuth();
   const userID = auth?.userId;
 
+  const fetchDelete = async (id) => {
+    try {
+      const response = await api.delete(`/Cart/${userID}/${id}`);
+      console.log(response.data);
+      setCart(
+        response.data.filter((item) => item.userId === userID && item.id !== id)
+      );
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
   useEffect(() => {
     setComponentState({ paymentPageState: false, footerState: false });
   }, [setComponentState]);
@@ -187,6 +203,9 @@ const CartPage = () => {
       calculateTotalCost,
     };
     fetchApiPostInvoice("MInvoice", generateNewMasterInvoice(newInvoiceProp));
+    selectedCart.forEach((items) => {
+      fetchDelete(items.id);
+    });
   };
 
   const handleChangeAll = () => {
@@ -213,23 +232,6 @@ const CartPage = () => {
   };
 
   const handleDelete = (itemID) => {
-    const fetchDelete = async (id) => {
-      try {
-        const response = await api.delete(`/Cart/${userID}/${id}`);
-        console.log(response.data);
-        setCart(
-          response.data.filter(
-            (item) => item.userId === userID && item.id !== id
-          )
-        );
-      } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      }
-    };
     fetchDelete(itemID);
   };
 
