@@ -83,6 +83,7 @@ export default function DetailCourse() {
             width="100%"
             alt={detailData.image}
             height="400px"
+            objectFit="cover"
           ></img>
         </Box>
         <Typography>
