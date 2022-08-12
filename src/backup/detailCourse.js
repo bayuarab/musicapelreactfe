@@ -13,7 +13,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import { Link, useParams } from "react-router-dom";
-import numberFormat from "../../utilities/NumbeFormat";
+import numberFormat from "../components/NumbeFormat";
+import { getKategoriKelas, getMusic } from "../JSON Data/Data";
 
 
 //#F2C94C

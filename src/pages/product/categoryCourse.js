@@ -16,16 +16,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import { Link, useParams } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 import numberFormat from "../../utilities/NumbeFormat";
-let kategoris = getKategoriKelas();
-let musics = getMusic();
+import useAuth from "../../hooks/useAuth";
 
 //#F2C94C
 export default function CategoryCourse() {
   const [age, setAge] = React.useState("");
-  const { auth } = useAuth();
+  const [err, setErr] = useState("");
 
   let params = useParams();
 
@@ -55,9 +52,51 @@ export default function CategoryCourse() {
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
+  let paramss = useParams();
+   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+   const [detailOfACourseCaategory, setDetailOfACourseCategory] = useState([]);
+   const getdetailOfACourseCategory = async (url) => {
+     console.log("paramss", url);
+     await axios
+       .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+         url,
+       })
+       .then((res) => {
+         if (res.status === 200) {
+          setDetailOfACourseCategory([res.data]);
+           console.log(res.data)
+         }
+       })
+       .catch((err) => {});
+     console.log(paramss);
+     
+   };
+   useEffect(() => {
+    getdetailOfACourseCategory(paramss = detailOfACourse.courseCategoryId);
+   }, [paramss]);
+ 
+   //console.log("categoryid",detailOfACourse.categoryId)
+   /* useStates untuk keperluan GET detail dari sebuah produk */
+
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  const { auth, setAuth } = useAuth();
+   const UserID = auth?.userId;
+
+   /* Method to POST new Brand Item */
+   const postCart = () => {
+   const postDataa = {userId: UserID, courseId: detailOfACourse.id};
+    console.log(postDataa)
+    axios.post('https://localhost:7132/api/Cart', postDataa).then((res) => {
+        if (res.status === 200) {
+            console.log(res.status)
+            console.log(res.data)
+        }
+    }).catch((err) => {console.log(err.response.data); setErr(err.response.data);})
+    }
+    /* Method to POST new Brand Item */
   return (
     <Grid>
       <Box display="flex">
@@ -90,7 +129,7 @@ export default function CategoryCourse() {
             margin: "1% 0 0 0",
           }}
         >
-          <Typography color="text.secondary">{musics[0].name}</Typography>
+          <Typography color="text.secondary">{detailOfACourse.name}</Typography>
           <Typography variant="body2" fontWeight="bold">
             <h1>{detailOfACourse.courseTitle}</h1>
           </Typography>
@@ -123,14 +162,19 @@ export default function CategoryCourse() {
               sx={{
                 margin: "0 3% 0 0",
               }}
+              onClick={async (e) => { await e.preventDefault(); await postCart(); }}
             >
               Masukan Keranjang
             </Button>
-            <Button variant="contained">Beli Sekarang</Button>
+            <Button variant="contained" 
+            onClick={async (e) => { await e.preventDefault(); await postCart(); }}
+            >Beli Sekarang</Button>
+            
           </Box>
+          <Typography color="red">{err}</Typography>
         </Grid>
       </Box>
-      <Typography>{kategoris[0].description}</Typography>
+      <Typography>{detailOfACourse.description}</Typography>
 
       <div style={{ height: "0px", border: "1px solid grey" }} />
       <Typography color="blue" sx={{ textAlign: "center" }}>
@@ -142,12 +186,12 @@ export default function CategoryCourse() {
           flex: "1",
         }}
       >
-        {kategoris.map((item, i) => (
+        {detailOfACourseCaategory.filter((items)=>items.id != detailOfACourseCaategory.id ).map((item, i) => (
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia
               component="img"
               height="140"
-              image={item.image}
+              image={item.courseImage}
               alt="kategori kelas"
               style={{
                 borderRadius: "10px",
@@ -156,10 +200,10 @@ export default function CategoryCourse() {
             <CardActionArea component={Link} to={`/detail/${item.id}`}>
               <CardContent>
                 <Typography color="text.secondary" gutterBottom>
-                  {item.name}
+                  {item.courseTitle}
                 </Typography>
                 <Typography variant="body2" fontWeight="bold">
-                  {item.description}
+                  {item.courseDesc}
                 </Typography>
               </CardContent>
               <CardActions>
