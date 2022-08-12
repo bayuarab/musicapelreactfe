@@ -78,7 +78,7 @@ export default function GridClassCat() {
                 style={{
                   objectFit: "contain",
                   maxWidth: "50%",
-                  maxHeight: "50%",
+                  maxHeight: "120px",
                   borderRadius: "20px",
                   border: "solid 1px grey",
                 }}
@@ -107,6 +107,9 @@ export default function GridClassCat() {
                       sm: "16px",
                       xs: "10px",
                     },
+                    fontWeight: "400",
+                    fontFamily: "Poppins",
+                    marginTop: "30px",
                   }}
                 >
                   {item.category}

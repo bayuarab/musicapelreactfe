@@ -90,6 +90,7 @@ export default function Footer() {
                       sm: "13px",
                       xs: "7px",
                     },
+                    fontFamily: "Poppins",
                     fontWeight: "500",
                   }}
                 >
@@ -105,6 +106,7 @@ export default function Footer() {
                       sm: "11px",
                       xs: "6px",
                     },
+                    fontFamily: "Poppins",
                   }}
                 >
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -134,6 +136,7 @@ export default function Footer() {
                       xs: "7px",
                     },
                     fontWeight: "500",
+                    fontFamily: "Poppins",
                   }}
                 >
                   Produk
@@ -147,17 +150,23 @@ export default function Footer() {
                         <Typography
                           sx={{
                             fontSize: {
-                              lg: "12px",
+                              lg: "14px",
                               md: "12px",
                               sm: "11px",
                               xs: "6px",
                             },
+                            fontFamily: "Poppins",
                             textAlign: "left",
                           }}
                         >
                           <Link
                             to={`/category/${item.id}`}
-                            style={{ textDecoration: "none", color: "black" }}
+                            style={{
+                              textDecoration: "none",
+                              color: "black",
+                              fontFamily: "Poppins",
+                              fontWeight: "400",
+                            }}
                           >
                             <li>{item.category}</li>
                           </Link>
@@ -187,6 +196,7 @@ export default function Footer() {
                       xs: "7px",
                     },
                     fontWeight: "500",
+                    fontFamily: "Poppins",
                   }}
                 >
                   Alamat
@@ -201,6 +211,7 @@ export default function Footer() {
                       sm: "11px",
                       xs: "6px",
                     },
+                    fontFamily: "Poppins",
                   }}
                 >
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -214,7 +225,7 @@ export default function Footer() {
                   sm: "1vh",
                   xs: "1vh",
                 }}
-                mb="0.5vh"
+                mb="0.7vh"
               >
                 <Typography
                   sx={{
@@ -224,36 +235,72 @@ export default function Footer() {
                       sm: "13px",
                       xs: "7px",
                     },
+                    fontFamily: "Poppins",
                     fontWeight: "500",
                   }}
                 >
                   Kontak
                 </Typography>
               </Box>
-              <Box mb="2vh">
+              <Box mb="3vh">
                 <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                   <Grid item xs={2}>
-                    <Link to="kontak">
+                    <Link
+                      to="kontak"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        fontFamily: "Poppins",
+                      }}
+                    >
                       <Img alt="complex" src={phone} />
                     </Link>
                   </Grid>
                   <Grid item xs={2}>
-                    <Link to="kontak">
+                    <Link
+                      to="kontak"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        fontFamily: "Poppins",
+                      }}
+                    >
                       <Img alt="complex" src={ig} />
                     </Link>
                   </Grid>
                   <Grid item xs={2}>
-                    <Link to="kontak">
+                    <Link
+                      to="kontak"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        fontFamily: "Poppins",
+                      }}
+                    >
                       <Img alt="complex" src={youtube} />
                     </Link>
                   </Grid>
                   <Grid item xs={2}>
-                    <Link to="kontak">
+                    <Link
+                      to="kontak"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        fontFamily: "Poppins",
+                      }}
+                    >
                       <Img alt="complex" src={telegram} />
                     </Link>
                   </Grid>
                   <Grid item xs={2}>
-                    <Link to="kontak">
+                    <Link
+                      to="kontak"
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        fontFamily: "Poppins",
+                      }}
+                    >
                       <Img alt="complex" src={mail} />
                     </Link>
                   </Grid>

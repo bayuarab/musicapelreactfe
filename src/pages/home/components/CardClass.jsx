@@ -76,7 +76,7 @@ export default function CardClass() {
         flexDirection: "column",
       }}
     >
-      <Grid container spacing={2}>
+      <Grid container spacing={1.5}>
         {gridItems.map((item) => (
           <Grid key={item.id} item lg={4} xs={6}>
             <Box sx={{ maxWidth: "90%", marginBottom: "50px" }}>
@@ -87,22 +87,22 @@ export default function CardClass() {
                     objectFit: "cover",
                     maxWidth: "100%",
                     maxHeight: "280px",
-                    borderRadius: "20px",
-                    // border: "solid 1px grey",
+                    borderRadius: "16px",
                   }}
                   image={item.courseImage}
                 />
               </Link>
               <Typography sx={{ textAlign: "left" }}>
-                <Box sx={{ paddingTop: "1vh" }}>
+                <Box sx={{ paddingTop: "1.5vh", marginBottom: "4px" }}>
                   <Typography
                     sx={{
                       fontSize: {
-                        lg: "16px",
+                        lg: "18px",
                         md: "14px",
                         sm: "12px",
                         xs: "10px",
                       },
+                      fontFamily: "Poppins",
                     }}
                   >
                     {item.category}
@@ -117,7 +117,8 @@ export default function CardClass() {
                         sm: "14px",
                         xs: "12px",
                       },
-                      fontWeight: "bold",
+                      fontWeight: "600",
+                      fontFamily: "Poppins",
                     }}
                   >
                     {item.courseTitle}
@@ -133,8 +134,9 @@ export default function CardClass() {
                         sm: "14px",
                         xs: "12px",
                       },
-                      fontWeight: "bold",
-                      color: "blue",
+                      fontWeight: "600",
+                      color: "#5D5FEF",
+                      fontFamily: "Poppins",
                     }}
                   >
                     IDR {numberFormat(item.price)}

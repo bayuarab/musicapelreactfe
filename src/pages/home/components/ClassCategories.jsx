@@ -9,7 +9,7 @@ import GridClassCat from "./GridClassCat";
 
 const ClassCategories = () => {
   return (
-    <Container maxWidth="100%">
+    <Container maxWidth="100%" style={{ backgroundColor: "#A5A6F618" }}>
       <CssBaseline />
       <Box
         sx={{
@@ -25,7 +25,8 @@ const ClassCategories = () => {
           }}
         >
           <Typography
-            mt="6vh"
+            mt="9vh"
+            mb="3vh"
             sx={{
               fontSize: {
                 lg: "24px",
@@ -33,8 +34,9 @@ const ClassCategories = () => {
                 sm: "18px",
                 xs: "16px",
               },
-              color: "blue",
+              color: "#5D5FEF",
               fontWeight: "600",
+              fontFamily: "Poppins",
             }}
           >
             Pilih kelas impian kamu
