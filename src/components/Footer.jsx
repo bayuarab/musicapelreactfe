@@ -37,7 +37,7 @@ export default function Footer() {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get("/");
+        const response = await api.get("/Footer");
         console.log(response.data);
         setDataClass(response.data);
       } catch (err) {
@@ -49,7 +49,7 @@ export default function Footer() {
       }
     };
     fetchApi();
-  }, []);
+  }, [setDataClass]);
 
   const classCat = dataClass;
 
@@ -142,7 +142,7 @@ export default function Footer() {
               <center>
                 <Box sx={{ width: "60%" }}>
                   <Grid container>
-                    {classCat.map((item) => (
+                    {dataClass.map((item) => (
                       <Grid key={item.id} item xs={12} md={5}>
                         <Typography
                           sx={{

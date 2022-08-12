@@ -63,7 +63,7 @@ export default function CardClass() {
       }
     };
     fetchApi();
-  }, []);
+  }, [setDataClass]);
 
   const gridItems = dataClass;
 
@@ -79,67 +79,69 @@ export default function CardClass() {
       <Grid container spacing={2}>
         {gridItems.map((item) => (
           <Grid key={item.id} item lg={4} xs={6}>
-            <Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
-              <CardMedia
-                component="img"
-                style={{
-                  objectFit: "cover",
-                  maxWidth: "90%",
-                  maxHeight: "60%",
-                  borderRadius: "20px",
-                  // border: "solid 1px grey",
-                }}
-                image={item.courseImage}
-              />
-            </Link>
-            <Typography sx={{ textAlign: "left" }}>
-              <Box sx={{ paddingTop: "1vh" }}>
-                <Typography
-                  sx={{
-                    fontSize: {
-                      lg: "16px",
-                      md: "14px",
-                      sm: "12px",
-                      xs: "10px",
-                    },
+            <Box sx={{ maxWidth: "90%", marginBottom: "50px" }}>
+              <Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
+                <CardMedia
+                  component="img"
+                  style={{
+                    objectFit: "cover",
+                    maxWidth: "100%",
+                    maxHeight: "280px",
+                    borderRadius: "20px",
+                    // border: "solid 1px grey",
                   }}
-                >
-                  {item.category}
-                </Typography>
-              </Box>
-              <Box sx={{ width: "90%", height: "hug" }}>
-                <Typography
-                  sx={{
-                    fontSize: {
-                      lg: "18px",
-                      md: "16px",
-                      sm: "14px",
-                      xs: "12px",
-                    },
-                    fontWeight: "bold",
-                  }}
-                >
-                  {item.courseTitle}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  mt="2vh"
-                  sx={{
-                    fontSize: {
-                      lg: "18px",
-                      md: "16px",
-                      sm: "14px",
-                      xs: "12px",
-                    },
-                    fontWeight: "bold",
-                    color: "blue",
-                  }}
-                >
-                  IDR {numberFormat(item.price)}
-                </Typography>
-              </Box>
-            </Typography>
+                  image={item.courseImage}
+                />
+              </Link>
+              <Typography sx={{ textAlign: "left" }}>
+                <Box sx={{ paddingTop: "1vh" }}>
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        lg: "16px",
+                        md: "14px",
+                        sm: "12px",
+                        xs: "10px",
+                      },
+                    }}
+                  >
+                    {item.category}
+                  </Typography>
+                </Box>
+                <Box sx={{ width: "90%", height: "hug" }}>
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        lg: "18px",
+                        md: "16px",
+                        sm: "14px",
+                        xs: "12px",
+                      },
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.courseTitle}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    mt="2vh"
+                    sx={{
+                      fontSize: {
+                        lg: "18px",
+                        md: "16px",
+                        sm: "14px",
+                        xs: "12px",
+                      },
+                      fontWeight: "bold",
+                      color: "blue",
+                    }}
+                  >
+                    IDR {numberFormat(item.price)}
+                  </Typography>
+                </Box>
+              </Typography>
+            </Box>
           </Grid>
         ))}
       </Grid>
