@@ -1,5 +1,6 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   Avatar,
@@ -16,7 +17,7 @@ import {
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from "@mui/icons-material/Category";
@@ -24,6 +25,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import ListIcon from "@mui/icons-material/List";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LogoutDialog from "../../components/LogoutDialog";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme({
@@ -88,6 +90,11 @@ function HeaderBarAdmin() {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const [openLogout, setOpenLogout] = useState(false);
+  const { setComponentState } = useComponentBarState();
+
+  useEffect(() => {
+    setComponentState({ paymentPageState: true, footerState: false });
+  }, [setComponentState]);
 
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
@@ -175,12 +182,6 @@ function HeaderBarAdmin() {
           {/* LIST ITEM MENU BAR */}
           <List component="nav">
             {/* {mainListItems} */}
-            {/* <ListItemButton component={Link} to={"/"}>
-              <ListItemIcon>
-                <HomeIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="Beranda" />
-            </ListItemButton> */}
             <ListItemButton component={Link} to={"/admin/kelas"}>
               <ListItemIcon>
                 <ListIcon color="primary" />
@@ -198,6 +199,12 @@ function HeaderBarAdmin() {
                 <LocalShippingIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Manage Invoices" />
+            </ListItemButton>
+            <ListItemButton component={Link} to={"/admin/users"}>
+              <ListItemIcon>
+                <ManageAccountsIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Manage User" />
             </ListItemButton>
             <Divider />
             <ListItemButton onClick={() => handleClickOpenLogout()}>
