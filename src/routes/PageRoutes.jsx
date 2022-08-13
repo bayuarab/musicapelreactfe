@@ -56,7 +56,7 @@ const PageRoutes = () => {
 					<Route index element={<ManageKelas />} />
 					<Route path="/admin/kelas" element={<ManageKelas />} />
 					<Route path="/admin/category" element={<ManageKategori />} />
-					<Route path="/admin/invoices" element={<ManageInvoices />} />
+					<Route path="/admin/invoices" element={<UserInvoices />} />
 					<Route path="/admin/users" element={<ManageUser />} />
 				</Route>
 				{/* </Route> */}
