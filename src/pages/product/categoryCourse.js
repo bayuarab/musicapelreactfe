@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -43,6 +44,10 @@ export default function CategoryCourse() {
   const [claimedCourse, setClaimedCourse] = useState(false);
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
+  const [openAlertSucces, setOpenAlertSucces] = useState(false);
+  const [openAlertError, setOpenAlertError] = useState(false);
+  const [openAlertWarning, setOpenAlertWarning] = useState(false)
+  const [scheduleCourse, setScheduleCourse] = useState('pilih jadwal kelas');
 
   const UserID = auth?.userId;
 
@@ -96,7 +101,7 @@ export default function CategoryCourse() {
           setDetailOfACourse(res.data);
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
     console.log(params);
   };
 
@@ -107,6 +112,23 @@ export default function CategoryCourse() {
   }, [params]);
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
+
+  /* useStates untuk keperluan GET detail dari sebuah jadwal */
+  const [cekJadwal, setcekJadwal] = useState([]);
+  const getcekJadwal = async () => {
+    await axios
+      .get(`https://localhost:7132/api/Schedule`)
+      .then((res) => {
+        if (res.status === 200) {
+          setcekJadwal(res.data);
+          console.log("res data", res.data)
+        }
+      })
+      .catch((err) => { });
+  };
+
+  useEffect(() => { getcekJadwal(); }, [])
+  /* useStates untuk keperluan GET detail dari sebuah jadwal */
 
   let paramss = useParams();
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
@@ -123,11 +145,11 @@ export default function CategoryCourse() {
           console.log(res.data);
         }
       })
-      .catch((err) => {});
-    console.log(paramss);
+      .catch((err) => { });
+    console.log("lahhhhh", paramss);
   };
   useEffect(() => {
-    getdetailOfACourseCategory((paramss = detailOfACourse.courseCategoryId));
+    getdetailOfACourseCategory((paramss.courseid));
   }, [paramss]);
 
   //console.log("categoryid",detailOfACourse.categoryId)
@@ -171,20 +193,32 @@ export default function CategoryCourse() {
       return;
     }
 
-    const postDataa = { userId: UserID, courseId: detailOfACourse.id };
+    const postDataa = { userId: UserID, courseId: detailOfACourse.id, scheduleId: scheduleCourse };
     console.log(postDataa);
     axios
       .post("https://localhost:7132/api/Cart", postDataa)
       .then((res) => {
         if (res.status === 200) {
+          setOpenAlertSucces(true);
+          setTimeout(() => setOpenAlertSucces(false), 2000);
           console.log(res.status);
           console.log(res.data);
           setErr("Berhasil menambahkan cart");
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
-        setErr(err.response.data);
+        if (err.status !== 200) {
+          setOpenAlertWarning(true);
+          setTimeout(() => setOpenAlertWarning(false), 2000);
+          console.log("status eror", err.status);
+          setErr(err.response.data);
+        } else if (err.status === "undefined") {
+          setOpenAlertError(true);
+          setTimeout(() => setOpenAlertError(false), 2000);
+          console.log(err.response.data);
+          console.log("status eror", err.status);
+          setErr(err.response.data);
+        }
       });
   };
   /* Method to POST new Brand Item */
@@ -279,6 +313,7 @@ export default function CategoryCourse() {
 
   return (
     <Grid>
+
       <Box display="flex">
         <Grid
           width="45%"
@@ -323,17 +358,19 @@ export default function CategoryCourse() {
           ) : (
             <>
               <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
                 defaultValue={0}
-                onChange={handleChange}
-                size="small"
+                value={scheduleCourse}
+                onChange={(e) => setScheduleCourse(e.target.value)}
+                size="medium"
               >
-                <MenuItem value={0}>pilih jadwal kelas</MenuItem>
-                <MenuItem value="1 july 2022">1 july 2022</MenuItem>
-                <MenuItem value={"30 july 2022"}>30 july 2022</MenuItem>
-                <MenuItem value={"17 agustus 2022"}>17 agustus 2022</MenuItem>
-                <MenuItem value={"9 september 2022"}>9 september 2022</MenuItem>
+                <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
+                {cekJadwal.map((jadwal, i) => (
+
+                  <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+
+
+                ))}
+
               </Select>
 
               <Box
@@ -361,10 +398,37 @@ export default function CategoryCourse() {
             </>
           )}
 
-          <Typography color="red">{err}</Typography>
+
         </Grid>
+
       </Box>
-      <Typography>{detailOfACourse.description}</Typography>
+      <Typography>{detailOfACourse.courseDesc}</Typography>
+
+      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
+      {openAlertSucces === true ?
+        <Alert className="success-alert" variant="filled" severity="success">
+          kelas berhasil ditambahkan ke keranjang!
+        </Alert>
+        :
+        <></>
+      }
+      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
+      {openAlertWarning === true ?
+        <Alert className="success-alert" variant="filled" severity="warning">
+          Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
+        </Alert>
+        :
+        <></>
+      }
+      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
+      {openAlertError === true ?
+        <Alert className="success-alert" variant="filled" severity="error">
+          isilah dulu jadwalnya!
+        </Alert>
+        :
+        <></>
+      }
+
 
       <div style={{ height: "0px", border: "1px solid grey" }} />
       <Typography color="blue" sx={{ textAlign: "center" }}>
