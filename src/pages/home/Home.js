@@ -17,7 +17,7 @@ const Home = () => {
       <div>
         <Hero />
       </div>
-      <div style={{ paddingTop: "30px", paddingBottom: "100px" }}>
+      <div style={{ paddingTop: "30px", paddingBottom: "60px" }}>
         <Class />
       </div>
       <div>

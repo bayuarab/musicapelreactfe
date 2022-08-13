@@ -51,7 +51,7 @@ export default function Footer() {
     fetchApi();
   }, [setDataClass]);
 
-  const classCat = dataClass;
+  // const classCat = dataClass;
 
   return componentState?.footerState && auth?.roles !== "admin" ? (
     <Box
@@ -145,8 +145,8 @@ export default function Footer() {
               <center>
                 <Box sx={{ width: "60%" }}>
                   <Grid container>
-                    {dataClass.map((item) => (
-                      <Grid key={item.id} item xs={12} md={5}>
+                    {dataClass.map((item, index) => (
+                      <Grid key={index} item xs={12} md={5}>
                         <Typography
                           sx={{
                             fontSize: {

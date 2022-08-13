@@ -3,7 +3,7 @@ import {
   default as Typography,
 } from "@mui/material/Typography";
 import React from "react";
-import herobg from "../../../assets/herobg.jpg";
+import herobg from "../../../assets/rm383-14.png";
 import Fact from "./Fact";
 
 const LandingPage = () => {

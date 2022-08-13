@@ -79,7 +79,7 @@ export default function CardClass() {
       <Grid container spacing={1.5}>
         {gridItems.map((item) => (
           <Grid key={item.id} item lg={4} xs={6}>
-            <Box sx={{ maxWidth: "90%", marginBottom: "50px" }}>
+            <Box sx={{ maxWidth: "88%", marginBottom: "35px" }}>
               <Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
                 <CardMedia
                   component="img"
@@ -87,13 +87,18 @@ export default function CardClass() {
                     objectFit: "cover",
                     maxWidth: "100%",
                     maxHeight: "280px",
-                    borderRadius: "16px",
+                    borderRadius: "20px",
                   }}
                   image={item.courseImage}
                 />
               </Link>
-              <Typography sx={{ textAlign: "left" }}>
-                <Box sx={{ paddingTop: "1.5vh", marginBottom: "4px" }}>
+              <Typography
+                sx={{
+                  textAlign: "left",
+                  paddingLeft: "10px",
+                }}
+              >
+                <Box sx={{ paddingTop: "1.2vh", marginBottom: "4px" }}>
                   <Typography
                     sx={{
                       fontSize: {
@@ -112,7 +117,7 @@ export default function CardClass() {
                   <Typography
                     sx={{
                       fontSize: {
-                        lg: "18px",
+                        lg: "20px",
                         md: "16px",
                         sm: "14px",
                         xs: "12px",
@@ -126,10 +131,10 @@ export default function CardClass() {
                 </Box>
                 <Box>
                   <Typography
-                    mt="2vh"
+                    mt="4vh"
                     sx={{
                       fontSize: {
-                        lg: "18px",
+                        lg: "20px",
                         md: "16px",
                         sm: "14px",
                         xs: "12px",
