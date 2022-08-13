@@ -99,13 +99,52 @@ export default function DetailCourse() {
         <Typography color="blue" sx={{ textAlign: "center" }}>
           <h4>Kelas Yang Tersedia</h4>
         </Typography>
-        <Box
-          className="kategoriKelas"
-          style={{
-            flex: "1",
-          }}
-        >
+        {/* <Grid container spacing={2}>
+				{detailOfACourse.map((item) => (
+					<Grid key={item.id} item xs={3}>
+						<Link to={`/category/${item.id}`}>
+							<CardMedia
+								component="img"
+								style={{
+									objectFit: "contain",
+									maxWidth: "50%",
+									maxHeight: "50%",
+									borderRadius: "20px",
+									border: "solid 1px grey",
+								}}
+								alt="complex"
+								image={item.courseImage}
+							/>
+						</Link>
+						<Typography
+							style={{
+								textAlign: "center",
+								fontWeight: "400",
+							}}>
+							<Box
+								mb={{
+									md: "6vh",
+									xs: "4vh",
+								}}>
+								<Typography
+									sx={{
+										fontSize: {
+											lg: "24px",
+											md: "22px",
+											sm: "16px",
+											xs: "10px",
+										},
+									}}>
+									{item.category}
+								</Typography>
+							</Box>
+						</Typography>
+					</Grid>
+				))}
+			</Grid> */}
+        <Grid container spacing={2}>
           {detailOfACourse.map((item, index) => (
+            <Grid key={item.id} item xs={3}>
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
@@ -132,8 +171,9 @@ export default function DetailCourse() {
                 </CardActions>
               </CardActionArea>
             </Card>
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       </React.Fragment>
     </Grid>
   );
