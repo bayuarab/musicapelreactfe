@@ -1,4 +1,4 @@
-import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography, Stack, Snackbar, Alert } from "@mui/material";
 import React, { useState } from "react";
 import api from "../../api/userAPI";
 
@@ -7,6 +7,19 @@ export default function Login() {
 	const [email, setEmail] = useState("");
 	const [err, setErr] = useState("");
 	const [ok, setOk] = useState("");
+	const [open, setOpen] = React.useState(false);
+
+	const Alerts = React.forwardRef(function Alerts(props, ref) {
+		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+	});
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
 
 	const addEmail = (event) => {
 		setEmail(event.target.value);
@@ -14,10 +27,6 @@ export default function Login() {
 
 	const goLogin = (event) => {
 		event.preventDefault();
-
-		if (email === "") {
-			return setErr("Input tidak boleh kosong");
-		}
 
 		const dataLogin = {
 			email: email,
@@ -28,15 +37,17 @@ export default function Login() {
 		const fetchApi = async () => {
 			try {
 				const response = await api.post("/CheckEmail", dataLogin);
-				setOk(response.data);
+				console.log(response.status);
+				setOk("Sukses");
 				setErr("");
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
-				setErr(err.response.data);
+				setErr("Email Invalid");
 				setOk("");
 				console.log(err.response.status);
 				console.log(err.response.headers);
 			}
+			setOpen(true);
 		};
 		fetchApi();
 	};
@@ -55,7 +66,7 @@ export default function Login() {
 								xs: "80vw",
 							},
 						}}>
-						<Box mt="15vh" sx={{ textAlign: "left" }}>
+						<Box mt="10vh" sx={{ textAlign: "left" }}>
 							<Typography
 								mb="2.5vh"
 								sx={{
@@ -83,10 +94,9 @@ export default function Login() {
 								<FormControl sx={{ width: "100%" }}>
 									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
 								</FormControl>
-								<Typography sx={{ color: "green", fontSize: "12px" }}>{ok}</Typography>
-								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
-								<Box mb="2vh" sx={{ textAlign: "left" }}>
+								<Box mt="2vh" sx={{ textAlign: "left" }}>
 									<Button
+										disabled={email === "" ? true : false}
 										onClick={(event) => goLogin(event)}
 										sx={{
 											borderRadius: "7px",
@@ -108,6 +118,19 @@ export default function Login() {
 					</Box>
 				</Box>
 			</center>
+			<Stack spacing={2} sx={{ width: "100%" }}>
+				<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+					{ok === "" ? (
+						<Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+							{err}
+						</Alerts>
+					) : (
+						<Alerts onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+							{ok}
+						</Alerts>
+					)}
+				</Snackbar>
+			</Stack>
 		</Container>
 	);
 }

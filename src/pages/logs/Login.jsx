@@ -1,4 +1,4 @@
-import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography, Grid, Stack, Snackbar, Alert } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
@@ -15,6 +15,19 @@ export default function Login() {
 	const location = useLocation();
 	const from = location.state?.from?.pathname || "/";
 	const { setComponentState } = useComponentBarState();
+	const [open, setOpen] = React.useState(false);
+
+	const Alerts = React.forwardRef(function Alerts(props, ref) {
+		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+	});
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
 
 	useEffect(() => {
 		setComponentState({ paymentPageState: false, footerState: false });
@@ -30,10 +43,6 @@ export default function Login() {
 
 	const goLogin = (event) => {
 		event.preventDefault();
-
-		if (email === "" || password === "") {
-			return setErr("Input tidak boleh kosong");
-		}
 
 		const dataLogin = {
 			email: email,
@@ -62,6 +71,7 @@ export default function Login() {
 				console.log(err.response.status);
 				console.log(err.response.headers);
 			}
+			setOpen(true);
 		};
 		fetchApi();
 	};
@@ -80,7 +90,7 @@ export default function Login() {
 								xs: "80vw",
 							},
 						}}>
-						<Box mt="15vh" sx={{ textAlign: "left" }}>
+						<Box mt="10vh" sx={{ textAlign: "left" }}>
 							<Typography
 								mb="2.5vh"
 								sx={{
@@ -109,57 +119,74 @@ export default function Login() {
 									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
 									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" id="txtPassword" value={password} onChange={(event) => addPassword(event)} />
 								</FormControl>
-								<Typography sx={{ color: "red", fontSize: "12px" }}>{err}</Typography>
-								<Link
-									to="/forget"
-									style={{
-										itemAlign: "right",
-										fontSize: {
-											lg: "16px",
-											md: "15px",
-											xs: "13px",
-										},
-										textDecoration: "None",
-										color: "black",
-									}}>
-									Lupa kata sandi
-								</Link>
-								<Box mb="2vh" sx={{ textAlign: "left" }}>
-									<Button
-										onClick={(event) => goLogin(event)}
-										sx={{
-											borderRadius: "7px",
+								<Box style={{ textAlign: "right" }}>
+									<Link
+										to="/forget"
+										style={{
 											fontSize: {
 												lg: "16px",
 												md: "15px",
 												xs: "13px",
 											},
-											textTransform: "Capitalize",
-											width: "hug",
-											height: "hug",
-										}}
-										variant="contained">
-										Masuk
-									</Button>
+											textDecoration: "None",
+											color: "black",
+										}}>
+										Lupa kata sandi
+									</Link>
+								</Box>
+								<Box mt="2vh" sx={{ textAlign: "left" }}>
+									<Grid container>
+										<Grid item xs={3}>
+											<Button
+												disabled={email === "" || password === "" ? true : false}
+												onClick={(event) => goLogin(event)}
+												sx={{
+													borderRadius: "7px",
+													fontSize: {
+														lg: "16px",
+														md: "15px",
+														xs: "13px",
+													},
+													textTransform: "Capitalize",
+													width: "hug",
+													height: "hug",
+												}}
+												variant="contained">
+												Masuk
+											</Button>
+										</Grid>
+										<Grid>
+											<Typography>
+												Belum punya akun?
+												<Link
+													to="/registration"
+													sx={{
+														textAlign: "left",
+														fontSize: {
+															lg: "16px",
+															md: "15px",
+															sm: "13px",
+															xs: "10px",
+														},
+													}}>
+													Daftar disini
+												</Link>
+											</Typography>
+										</Grid>
+									</Grid>
 								</Box>
 							</form>
-							<Link
-								to="/registration"
-								sx={{
-									textAlign: "left",
-									fontSize: {
-										lg: "16px",
-										md: "15px",
-										sm: "13px",
-										xs: "10px",
-									},
-								}}>
-								Belum punya akun? Daftar disini
-							</Link>
 						</Box>
 					</Box>
 				</Box>
 			</center>
+			<Stack spacing={2} sx={{ width: "100%" }}>
+				<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+					<Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+						{err}
+					</Alerts>
+				</Snackbar>
+			</Stack>
 		</Container>
 	);
 }
