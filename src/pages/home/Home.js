@@ -17,13 +17,13 @@ const Home = () => {
       <div>
         <Hero />
       </div>
-      <div>
+      <div style={{ paddingTop: "30px", paddingBottom: "60px" }}>
         <Class />
       </div>
       <div>
         <ClassCategories />
       </div>
-      <div style={{ marginBottom: "3vh" }}>
+      <div style={{ marginBottom: "3vh", paddingTop: "90px" }}>
         <Benefit />
       </div>
     </div>

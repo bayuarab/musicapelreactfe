@@ -51,7 +51,7 @@ export default function Fact() {
       <Grid
         container
         spacing={{
-          lg: 5,
+          lg: 7,
           md: 5,
           sm: 3,
           xs: 2,
@@ -62,7 +62,7 @@ export default function Fact() {
             <Item
               sx={{
                 height: {
-                  md: "28vh",
+                  md: "26vh",
                   sm: "20vh",
                   xs: "18vh",
                 },
@@ -70,10 +70,12 @@ export default function Fact() {
             >
               <Box>
                 <Typography
-                  mt="1.5vh"
+                  mt="1.8vh"
                   sx={{
-                    color: "blue",
-                    fontWeight: "bold",
+                    color: "#5D5FEF",
+                    textAlign: "center",
+                    fontFamily: "Poppins",
+                    fontWeight: "600",
                     fontSize: {
                       lg: "48px",
                       md: "40px",
@@ -85,11 +87,14 @@ export default function Fact() {
                   {item.title}
                 </Typography>
               </Box>
-              <Box sx={{ height: "hug" }}>
+              <Box
+                sx={{ height: "hug", paddingLeft: "2%", paddingRight: "2%" }}
+              >
                 <Typography
                   mt="3vh"
                   sx={{
                     fontWeight: "600",
+                    fontFamily: "Poppins",
                     fontSize: {
                       lg: "16px",
                       md: "14px",

@@ -41,7 +41,7 @@ export default function CategoryCourse() {
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
-  const [claimedCourse, setClaimedCourse] = useState([]);
+  const [claimedCourse, setClaimedCourse] = useState(false);
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const [openAlertSucces, setOpenAlertSucces] = useState(false);
@@ -52,6 +52,42 @@ export default function CategoryCourse() {
   const UserID = auth?.userId;
 
   let params = useParams();
+
+  //Get claimed course
+  const fetchApiClaimedCourse = async () => {
+    try {
+      const response = await api.get(`/Courses/${auth?.userId}`);
+      console.log("ClaimedCourse", response.data);
+      const claimedCourseState = response?.data.some(
+        (item) => item.courseId == params.courseid
+      );
+      setClaimedCourse(claimedCourseState);
+      console.log(detailOfACourse.id);
+      console.log("claimedCourseState", claimedCourseState);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  //delete purchased course from cart
+  const fetchDelete = async (courseId) => {
+    try {
+      const response = await api.delete(
+        `/Cart/ByCourseId/${UserID}/${courseId}`
+      );
+      console.log(response.data);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
 
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
   const [detailOfACourse, setDetailOfACourse] = useState([]);
@@ -69,13 +105,11 @@ export default function CategoryCourse() {
     console.log(params);
   };
 
-  useEffect(
-    () => {
-      getdetailOfACourse(params.courseid);
-    },
-    [params],
-    console.log(params.courseid)
-  );
+  useEffect(() => {
+    getdetailOfACourse(params.courseid);
+    fetchApiClaimedCourse();
+    console.log(params.courseid);
+  }, [params]);
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
@@ -126,29 +160,35 @@ export default function CategoryCourse() {
   };
 
   //Get courses
-  useEffect(() => {
-    const fetchApiClaimedCourse = async () => {
-      try {
-        const response = await api.get(`/Courses/${auth?.userId}`);
-        console.log("ClaimedCourse", response.data);
-        setClaimedCourse(response.data);
-      } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        if (err.response.data === "Not Found") console.log(err.response.status);
-        console.log(err.response.headers);
-      }
-    };
-    fetchApiClaimedCourse();
-  }, []);
+  // useEffect(() => {
+  //   const fetchApiClaimedCourse = async () => {
+  //     try {
+  //       const response = await api.get(`/Courses/${auth?.userId}`);
+  //       console.log("ClaimedCourse", response.data);
+  //       setClaimedCourse(response.data);
+  //       const claimedCourseState = response?.data.some(
+  //         (item) => item.courseId == detailOfACourse.id
+  //       );
+  //       console.log(detailOfACourse.id);
+  //       console.log(claimedCourseState);
+  //     } catch (err) {
+  //       !err.response
+  //         ? console.log(`Error: ${err.message}`)
+  //         : console.log(err.response.data);
+  //       if (err.response.data === "Not Found") console.log(err.response.status);
+  //       console.log(err.response.headers);
+  //     }
+  //   };
+  //   fetchApiClaimedCourse();
+  // }, []);
 
   /* Method to POST new Brand Item */
   const postCart = () => {
-    const courseValid = claimedCourse.some(
-      (item) => item.courseId == detailOfACourse.id
-    );
-    if (courseValid) {
+    if (!auth?.roles) navigate("/login", { replace: true });
+    // const courseValid = claimedCourse.some(
+    //   (item) => item.courseId == detailOfACourse.id
+    // );
+    if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;
     }
@@ -163,19 +203,20 @@ export default function CategoryCourse() {
           setTimeout(() => setOpenAlertSucces(false), 2000);
           console.log(res.status);
           console.log(res.data);
+          setErr("Berhasil menambahkan cart");
         }
       })
       .catch((err) => {
         if (err.status !== 200) {
           setOpenAlertWarning(true);
           setTimeout(() => setOpenAlertWarning(false), 2000);
-          console.log("status eror",err.status);
+          console.log("status eror", err.status);
           setErr(err.response.data);
-        }else if (err.status === "undefined") {
+        } else if (err.status === "undefined") {
           setOpenAlertError(true);
           setTimeout(() => setOpenAlertError(false), 2000);
           console.log(err.response.data);
-          console.log("status eror",err.status);
+          console.log("status eror", err.status);
           setErr(err.response.data);
         }
       });
@@ -222,6 +263,7 @@ export default function CategoryCourse() {
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
+        fetchDelete(items.courseId);
       });
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
@@ -254,10 +296,11 @@ export default function CategoryCourse() {
   };
 
   const checkout = () => {
-    const courseValid = claimedCourse.some(
-      (item) => item.courseId == detailOfACourse.id
-    );
-    if (courseValid) {
+    if (!auth?.roles) navigate("/login", { replace: true });
+    // const courseValid = claimedCourse.some(
+    //   (item) => item.courseId == detailOfACourse.id
+    // );
+    if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;
     }
@@ -270,7 +313,7 @@ export default function CategoryCourse() {
 
   return (
     <Grid>
-      
+
       <Box display="flex">
         <Grid
           width="45%"
@@ -308,66 +351,74 @@ export default function CategoryCourse() {
           <Typography color="blue">
             <h1>IDR {numberFormat(detailOfACourse.price)}</h1>
           </Typography>
-
-          <Select
-           defaultValue={0}
-            value={scheduleCourse}
-            onChange={(e) => setScheduleCourse(e.target.value)}
-            size="medium"
-          >
-            <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
-            {cekJadwal.map((jadwal, i) => (
-
-              <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-
-
-            ))}
-
-          </Select>
-
-          <Box
-            display="flex"
-            sx={{
-              margin: "3% 0 0 0",
-            }}
-          >
-            <Button
-              variant="outlined"
-              sx={{
-                margin: "0 3% 0 0",
-              }}
-              onClick={async (e) => {
-                await e.preventDefault();
-                await postCart();
-              }}
-            >
-              Masukan Keranjang
+          {claimedCourse ? (
+            <Button variant="contained" component={Link} to={`/my-course`}>
+              Ke Kelasku
             </Button>
-            <Button variant="contained" onClick={() => checkout()}>
-              Beli Sekarang
-            </Button>
-          </Box>
-          
+          ) : (
+            <>
+              <Select
+                defaultValue={0}
+                value={scheduleCourse}
+                onChange={(e) => setScheduleCourse(e.target.value)}
+                size="medium"
+              >
+                <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
+                {cekJadwal.map((jadwal, i) => (
+
+                  <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+
+
+                ))}
+
+              </Select>
+
+              <Box
+                display="flex"
+                sx={{
+                  margin: "3% 0 0 0",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  sx={{
+                    margin: "0 3% 0 0",
+                  }}
+                  onClick={async (e) => {
+                    await e.preventDefault();
+                    await postCart();
+                  }}
+                >
+                  Masukan Keranjang
+                </Button>
+                <Button variant="contained" onClick={() => checkout()}>
+                  Beli Sekarang
+                </Button>
+              </Box>
+            </>
+          )}
+
+
         </Grid>
-     
+
       </Box>
       <Typography>{detailOfACourse.courseDesc}</Typography>
 
-         {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-         {openAlertSucces === true ?
+      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
+      {openAlertSucces === true ?
         <Alert className="success-alert" variant="filled" severity="success">
           kelas berhasil ditambahkan ke keranjang!
         </Alert>
         :
-          <></>
+        <></>
       }
-       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-       {openAlertWarning === true ?
+      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
+      {openAlertWarning === true ?
         <Alert className="success-alert" variant="filled" severity="warning">
           Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
         </Alert>
         :
-          <></>
+        <></>
       }
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
       {openAlertError === true ?
@@ -375,7 +426,7 @@ export default function CategoryCourse() {
           isilah dulu jadwalnya!
         </Alert>
         :
-          <></>
+        <></>
       }
 
 

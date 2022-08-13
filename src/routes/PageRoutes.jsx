@@ -5,6 +5,8 @@ import RequiredAuth from "../components/RequiredAuth";
 import ManageInvoices from "../pages/admin/manageInvoices";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
+import ManageUser from "../pages/admin/ManageUsers";
+import UserInvoices from "../pages/admin/UserInvoices";
 import CartPage from "../pages/cart/CartPage";
 import Home from "../pages/home/Home";
 import InvoiceDetails from "../pages/invoice/InvoiceDetails";
@@ -54,7 +56,8 @@ const PageRoutes = () => {
             <Route index element={<ManageKelas />} />
             <Route path="/admin/kelas" element={<ManageKelas />} />
             <Route path="/admin/category" element={<ManageKategori />} />
-            <Route path="/admin/invoices" element={<ManageInvoices />} />
+            <Route path="/admin/invoices" element={<UserInvoices />} />
+            <Route path="/admin/users" element={<ManageUser />} />
           </Route>
         </Route>
       </Route>

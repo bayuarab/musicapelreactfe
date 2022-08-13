@@ -40,7 +40,7 @@ const Benefit = () => {
                 <Typography
                   sx={{
                     marginTop: {
-                      lg: "10%",
+                      lg: "9%",
                       md: "9%",
                       sm: "4%",
                       xs: "0%",
@@ -51,14 +51,15 @@ const Benefit = () => {
                       sm: "16px",
                       xs: "10px",
                     },
-                    color: "blue",
+                    color: "#5D5FEF",
                     fontWeight: "600",
+                    fontFamily: "Poppins",
                   }}
                 >
                   Benefit ikut Apel Course
                 </Typography>
               </Box>
-              <Box mt="1vh">
+              <Box mt="2vh">
                 <Typography
                   sx={{
                     fontSize: {
