@@ -127,9 +127,7 @@ function UserInvoices() {
       ? invoices?.filter(
           (item) =>
             item.nama.includes(searchState) ||
-            item.noInvoice.includes(searchState) ||
-            item.purchasedDate.includes(searchState) ||
-            item.method.includes(searchState)
+            item.noInvoice.includes(searchState)
         )
       : invoices;
   };

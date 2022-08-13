@@ -104,6 +104,7 @@ export default function GridClassCat() {
                   md: "6vh",
                   xs: "4vh",
                 }}
+                mt={"5%"}
               >
                 <Typography
                   sx={{

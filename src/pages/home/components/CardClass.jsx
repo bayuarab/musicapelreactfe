@@ -83,6 +83,9 @@ export default function CardClass() {
               sx={{
                 minHeight: {
                   lg: "93%",
+                  md: "92%",
+                  sm: "90%",
+                  xs: "88%",
                 },
                 maxWidth: "88%",
                 marginBottom: "35px",
