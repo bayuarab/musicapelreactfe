@@ -120,7 +120,7 @@ function ManageKelas() {
                     color="secondary"
                     style={{ fontWeight: "bold" }}
                   >
-                    Manage Kelas
+                    Manage Kategori Kursus
                   </Typography>
 
                   {/* BOX PENCARIAN DATA */}
@@ -128,7 +128,7 @@ function ManageKelas() {
                     <TextField
                       // value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
                       id="input-with-icon-textfield"
-                      label="Pencarian Berdasarkan Nama Kelas"
+                      label="Pencarian Berdasarkan Nama Kategori"
                       InputProps={{
                         endAdornment: <SearchIcon color="primary" />,
                       }}
@@ -185,7 +185,7 @@ function ManageKelas() {
                                   component={Link}
                                   to={`/category/${invoice.id}`}
                                 >
-                                  Daftar Kelas
+                                  Daftar Kategori
                                 </Button>
                               </Grid>
                               <Grid item xs={12} md={4}>
@@ -199,7 +199,7 @@ function ManageKelas() {
                                     setEditItemData(invoice);
                                   }}
                                 >
-                                  Edit Kelas
+                                  Edit Kategori
                                 </Button>
                               </Grid>
                               <Grid item xs={12} md={4}>
@@ -209,7 +209,7 @@ function ManageKelas() {
                                   color="primary"
                                   // onClick={async (e) => { await e.preventDefault(); await setIdToDelete(invoice.id); await deleteBrand(); }}
                                 >
-                                  Hapus Kelas
+                                  Hapus Kategori
                                 </Button>
                               </Grid>
                             </Grid>

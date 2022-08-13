@@ -27,7 +27,7 @@ const Class = () => {
               sm: "18px",
               xs: "14px",
             },
-            color: "blue",
+            color: "#5D5FEF",
             fontWeight: "600",
           }}
         >
@@ -36,7 +36,7 @@ const Class = () => {
       </Box>
       <center>
         <Box
-          mt="5vh"
+          mt="6vh"
           sx={{
             width: "88%",
           }}

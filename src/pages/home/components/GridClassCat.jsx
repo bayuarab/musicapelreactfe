@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, CardMedia } from "@mui/material/";
+import { Box, CardMedia, Grid, Typography } from "@mui/material/";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../api/courseCatAPI";
@@ -79,8 +79,8 @@ export default function GridClassCat() {
 									borderRadius: "20px",
 									border: "solid 1px grey",
 								}}
-								alt=""
-								image={`data:image/jpeg;base64,${item.image}`}
+								alt="complex"
+								image={item.image}
 							/>
 						</Link>
 						<Typography
