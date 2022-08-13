@@ -127,8 +127,7 @@ function UserInvoices() {
       ? invoices?.filter(
           (item) =>
             item.nama.includes(searchState) ||
-            item.noInvoice.includes(searchState) ||
-            item.purchasedDate.includes(searchState)
+            item.noInvoice.includes(searchState)
         )
       : invoices;
   };
@@ -214,7 +213,7 @@ function UserInvoices() {
                               {row.noInvoice}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {"Ovo"}
+                              {row.method}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               {row.purchasedDate}

@@ -251,7 +251,7 @@ export default function CategoryCourse() {
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
-      selectedOp,
+      paymentOption,
       UserID,
       auth,
       calculateTotalCost,
