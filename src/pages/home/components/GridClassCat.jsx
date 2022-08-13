@@ -5,110 +5,121 @@ import api from "../../../api/courseCatAPI";
 import drum from "../../../assets/drum.jpg";
 
 const gridClassItemsDef = [
-	{
-		categories: "Drum",
-		image: drum,
-	},
-	{
-		categories: "Piano",
-		image: drum,
-	},
-	{
-		categories: "Gitar",
-		image: drum,
-	},
-	{
-		categories: "Bass",
-		image: drum,
-	},
-	{
-		categories: "Biola",
-		image: drum,
-	},
-	{
-		categories: "Menyanyi",
-		image: drum,
-	},
-	{
-		categories: "Flute",
-		image: drum,
-	},
-	{
-		categories: "Sexophone",
-		image: drum,
-	},
+  {
+    categories: "Drum",
+    image: drum,
+  },
+  {
+    categories: "Piano",
+    image: drum,
+  },
+  {
+    categories: "Gitar",
+    image: drum,
+  },
+  {
+    categories: "Bass",
+    image: drum,
+  },
+  {
+    categories: "Biola",
+    image: drum,
+  },
+  {
+    categories: "Menyanyi",
+    image: drum,
+  },
+  {
+    categories: "Flute",
+    image: drum,
+  },
+  {
+    categories: "Sexophone",
+    image: drum,
+  },
 ];
 
 export default function GridClassCat() {
-	const [dataClass, setDataClass] = useState(gridClassItemsDef);
+  const [dataClass, setDataClass] = useState(gridClassItemsDef);
 
-	useEffect(() => {
-		const fetchApi = async () => {
-			try {
-				const response = await api.get("/");
-				console.log(response.data);
-				setDataClass(response.data);
-			} catch (err) {
-				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
-				console.log(err.response.status);
-				console.log(err.response.headers);
-			}
-		};
-		fetchApi();
-	}, []);
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const response = await api.get("/");
+        console.log(response.data);
+        setDataClass(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+    fetchApi();
+  }, []);
 
-	const gridClassItems = dataClass;
+  const gridClassItems = dataClass;
 
-	return (
-		<Box
-			mt={{
-				md: "6vh",
-				xs: "4vh",
-			}}
-			sx={{ flexGrow: 1 }}>
-			<Grid container spacing={2}>
-				{gridClassItems.map((item) => (
-					<Grid key={item.id} item xs={3}>
-						<Link to={`/category/${item.id}`}>
-							<CardMedia
-								component="img"
-								style={{
-									objectFit: "contain",
-									maxWidth: "50%",
-									maxHeight: "50%",
-									borderRadius: "20px",
-									border: "solid 1px grey",
-								}}
-								alt="complex"
-								image={item.image}
-							/>
-						</Link>
-						<Typography
-							style={{
-								textAlign: "center",
-								fontWeight: "400",
-							}}>
-							<Box
-								mb={{
-									md: "6vh",
-									xs: "4vh",
-								}}>
-								<Typography
-									sx={{
-										fontSize: {
-											lg: "24px",
-											md: "22px",
-											sm: "16px",
-											xs: "10px",
-										},
-									}}>
-									{item.category}
-								</Typography>
-							</Box>
-						</Typography>
-					</Grid>
-				))}
-			</Grid>
-		</Box>
-	);
+  return (
+    <Box
+      mt={{
+        md: "6vh",
+        xs: "4vh",
+      }}
+      sx={{ flexGrow: 1 }}
+    >
+      <Grid container spacing={2}>
+        {gridClassItems.map((item) => (
+          <Grid key={item.id} item xs={3}>
+            <Link to={`/category/${item.id}`}>
+              <CardMedia
+                component="img"
+                sx={{
+                  objectFit: "cover",
+                  maxWidth: "50%",
+                  minHeight: {
+                    lg: "120px",
+                  },
+                  maxHeight: "120px",
+                  borderRadius: "20px",
+                  border: "solid 1px grey",
+                }}
+                alt="complex"
+                image={`data:image/jpeg;base64,${item.image}`}
+              />
+            </Link>
+            <Typography
+              style={{
+                textAlign: "center",
+                fontWeight: "400",
+              }}
+            >
+              <Box
+                mb={{
+                  md: "6vh",
+                  xs: "4vh",
+                }}
+              >
+                <Typography
+                  sx={{
+                    paddingTop: "25px",
+                    fontSize: {
+                      lg: "24px",
+                      md: "22px",
+                      sm: "16px",
+                      xs: "10px",
+                    },
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  {item.category}
+                </Typography>
+              </Box>
+            </Typography>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
 }
