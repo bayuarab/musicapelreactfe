@@ -79,26 +79,44 @@ export default function CardClass() {
       <Grid container spacing={1.5}>
         {gridItems.map((item) => (
           <Grid key={item.id} item lg={4} xs={6}>
-            <Box sx={{ maxWidth: "88%", marginBottom: "35px" }}>
-              <Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
-                <CardMedia
-                  component="img"
-                  style={{
-                    objectFit: "cover",
-                    maxWidth: "100%",
-                    maxHeight: "280px",
-                    borderRadius: "20px",
+            <Box
+              sx={{
+                minHeight: {
+                  lg: "93%",
+                },
+                maxWidth: "88%",
+                marginBottom: "35px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box textAlign={"left"}>
+                <Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
+                  <CardMedia
+                    component="img"
+                    style={{
+                      objectFit: "cover",
+                      maxWidth: "100%",
+                      maxHeight: "280px",
+                      borderRadius: "20px",
+                    }}
+                    image={item.courseImage}
+                  />
+                </Link>
+                {/* <Typography
+                  sx={{
+                    textAlign: "left",
+                    paddingLeft: "10px",
                   }}
-                  image={item.courseImage}
-                />
-              </Link>
-              <Typography
-                sx={{
-                  textAlign: "left",
-                  paddingLeft: "10px",
-                }}
-              >
-                <Box sx={{ paddingTop: "1.2vh", marginBottom: "4px" }}>
+                > */}
+                <Box
+                  sx={{
+                    paddingTop: "1.2vh",
+                    marginBottom: "4px",
+                    paddingLeft: "8px",
+                  }}
+                >
                   <Typography
                     sx={{
                       fontSize: {
@@ -113,7 +131,7 @@ export default function CardClass() {
                     {item.category}
                   </Typography>
                 </Box>
-                <Box sx={{ width: "90%", height: "hug" }}>
+                <Box sx={{ width: "90%", height: "hug", paddingLeft: "8px" }}>
                   <Typography
                     sx={{
                       fontSize: {
@@ -129,25 +147,30 @@ export default function CardClass() {
                     {item.courseTitle}
                   </Typography>
                 </Box>
-                <Box>
-                  <Typography
-                    mt="4vh"
-                    sx={{
-                      fontSize: {
-                        lg: "20px",
-                        md: "16px",
-                        sm: "14px",
-                        xs: "12px",
-                      },
-                      fontWeight: "600",
-                      color: "#5D5FEF",
-                      fontFamily: "Poppins",
-                    }}
-                  >
-                    IDR {numberFormat(item.price)}
-                  </Typography>
-                </Box>
-              </Typography>
+              </Box>
+              <Box
+                textAlign={"left"}
+                paddingLeft={"8px"}
+                paddingBottom={"15px"}
+              >
+                <Typography
+                  mt="4vh"
+                  sx={{
+                    fontSize: {
+                      lg: "20px",
+                      md: "16px",
+                      sm: "14px",
+                      xs: "12px",
+                    },
+                    fontWeight: "600",
+                    color: "#5D5FEF",
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  IDR {numberFormat(item.price)}
+                </Typography>
+              </Box>
+              {/* </Typography> */}
             </Box>
           </Grid>
         ))}

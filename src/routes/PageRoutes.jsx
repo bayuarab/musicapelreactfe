@@ -6,6 +6,7 @@ import ManageInvoices from "../pages/admin/manageInvoices";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
 import ManageUser from "../pages/admin/ManageUsers";
+import UserInvoices from "../pages/admin/UserInvoices";
 import CartPage from "../pages/cart/CartPage";
 import Home from "../pages/home/Home";
 import InvoiceDetails from "../pages/invoice/InvoiceDetails";
