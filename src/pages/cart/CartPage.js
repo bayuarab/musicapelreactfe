@@ -191,14 +191,14 @@ const CartPage = () => {
 
   const handleCheckoutClose = (value) => {
     const { paymentOption, paymentState } = value;
+    console.log("paymentOption", paymentOption);
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
-      userID,
-      selectedOp,
+      paymentOption,
       auth,
       calculateTotalCost,
     };
@@ -327,12 +327,17 @@ const CartPage = () => {
               </Typography>
             </Box>
             <Box sx={{ paddingRight: "2%" }}>
-              <CheckoutButton variant="contained" onClick={() => checkout()}>
+              <CheckoutButton
+                variant="contained"
+                disabled={selectedCart.length <= 0}
+                onClick={() => checkout()}
+              >
                 Bayar Sekarang
               </CheckoutButton>
               <IconButton
                 sx={{ display: { md: "none" } }}
                 onClick={() => checkout()}
+                disabled={selectedCart.length <= 0}
               >
                 <Avatar sx={{ bgcolor: "#5D5FEF" }}>
                   <ShoppingCartCheckout

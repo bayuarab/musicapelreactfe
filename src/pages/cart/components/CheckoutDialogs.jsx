@@ -95,6 +95,7 @@ const CheckoutDialogs = (props) => {
       paymentOption: options,
       paymentState: true,
     };
+    console.log(result);
     options === null ? console.log("Belum pilih pembayaran") : onClose(result);
   };
 
