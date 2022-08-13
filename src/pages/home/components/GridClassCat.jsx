@@ -46,6 +46,7 @@ export default function GridClassCat() {
 		const fetchApi = async () => {
 			try {
 				const response = await api.get("/");
+				console.log(response.status);
 				console.log(response.data);
 				setDataClass(response.data);
 			} catch (err) {
@@ -80,7 +81,7 @@ export default function GridClassCat() {
 									border: "solid 1px grey",
 								}}
 								alt="complex"
-								image={item.image}
+								image={`data:image/jpeg;base64,${item.image}`}
 							/>
 						</Link>
 						<Typography

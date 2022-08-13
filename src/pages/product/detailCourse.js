@@ -85,23 +85,19 @@ export default function DetailCourse() {
             height="400px"
           ></img>
         </Box>
-        <Typography>
+        <Typography sx={{ margin:'auto 2% auto 2%'}}>
           <h4>{detailData.category}</h4>
-        </Typography>
-        <Typography>{detailData.desc}</Typography>
+        </Typography >
+        <Typography sx={{ margin:'auto 2% auto 2%'}}>{detailData.desc}</Typography>
 
         <div style={{ height: "0px", border: "1px solid grey" }} />
         <Typography color="blue" sx={{ textAlign: "center" }}>
           <h4>Kelas Yang Tersedia</h4>
         </Typography>
-        <Box
-          className="kategoriKelas"
-          style={{
-            flex: "1",
-          }}
-        >
+        <Grid container spacing={2}>
           {detailOfACourse.map((item, index) => (
-            <Card sx={{ maxWidth: 345 }}>
+            <Grid key={item.id} item xs={3} sx={{ margin:'auto 5% auto 5%'}}>
+            <Card sx={{ maxWidth: 345 , margin:'auto auto auto auto'}}>
               <CardMedia
                 component="img"
                 height="140"
@@ -127,8 +123,9 @@ export default function DetailCourse() {
                 </CardActions>
               </CardActionArea>
             </Card>
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       </React.Fragment>
     </Grid>
   );
