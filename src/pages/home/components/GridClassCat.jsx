@@ -77,10 +77,9 @@ export default function GridClassCat() {
 									maxWidth: "50%",
 									maxHeight: "50%",
 									borderRadius: "20px",
-									border: "solid 1px grey",
 								}}
 								alt="complex"
-								image={item.image}
+								image={`data:image/jpeg;base64,${item.image}`}
 							/>
 						</Link>
 						<Typography

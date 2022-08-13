@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input } from "@mui/material";
-import { APIRequest } from "./APICalls";
 import axios from "axios";
 
-function DialogAddKelas(
+function DialogEditCat(
 	props = {
 		open: false,
 		id: 0,
@@ -12,6 +11,7 @@ function DialogAddKelas(
 	}
 ) {
 	/* useStates untuk keperluan POST merk baru */
+	const [id, setId] = useState("");
 	const [categoryName, setcategoryName] = useState("");
 	const [categoryDescription, setcategoryDescription] = useState("");
 	const [imagePreview, setImagePreview] = useState("");
@@ -54,10 +54,10 @@ function DialogAddKelas(
 
 	/* Method to POST new Brand Item */
 	const postKelas = () => {
-		const postDataa = { category: categoryName, image: base64, desc: categoryDescription };
+		const postDataa = { id: id, category: categoryName, image: base64, desc: categoryDescription };
 		console.log(postDataa);
 		axios
-			.post("https://localhost:7132/api/CourseCategory", postDataa)
+			.put("https://localhost:7132/api/CourseCategory", postDataa)
 			.then((res) => {
 				if (res.status === 200) {
 					console.log(res.status);
@@ -92,11 +92,12 @@ function DialogAddKelas(
 							<Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
 								<Grid>
 									<Box noValidate>
+										<TextField id="id" value={id} label="Id Kategori" onChange={(e) => setId(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="name" value={categoryName} label="Nama Kategori" onChange={(e) => setcategoryName(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="description" value={categoryDescription} label="Deskripsi Kategori" onChange={(e) => setcategoryDescription(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 
-										<Button disabled={categoryName === "" || categoryDescription === "" || base64 === "" ? true : false} type="submit" fullWidth variant="contained" style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }}>
-											Tambahkan Kategori Baru
+										<Button disabled={id === "" || categoryName === "" || categoryDescription === "" || base64 === "" ? true : false} type="submit" fullWidth variant="contained" style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }}>
+											Edit Kategori
 										</Button>
 									</Box>
 								</Grid>
@@ -109,4 +110,4 @@ function DialogAddKelas(
 	);
 }
 
-export default DialogAddKelas;
+export default DialogEditCat;
