@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input } from "@mui/material";
+import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input, Stack, Snackbar, Alert } from "@mui/material";
 import { APIRequest } from "./APICalls";
 import axios from "axios";
 
@@ -16,7 +16,21 @@ function DialogAddKelas(
 	const [categoryDescription, setcategoryDescription] = useState("");
 	const [imagePreview, setImagePreview] = useState("");
 	const [base64, setBase64] = useState("");
+	const [err, setErr] = useState("");
+	const [open, setOpen] = React.useState(false);
 	/* useStates untuk keperluan POST merk baru */
+
+	const Alerts = React.forwardRef(function Alerts(props, ref) {
+		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+	});
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
 
 	/* Methods to convert image input into base64 */
 	const onFileSubmit = (e) => {
@@ -49,6 +63,7 @@ function DialogAddKelas(
 			};
 			reader.readAsDataURL(file);
 		}
+		setOpen(true);
 	};
 	/* Methods to convert image input into base64 */
 
@@ -67,7 +82,9 @@ function DialogAddKelas(
 			})
 			.catch((err) => {
 				console.log(err.response.data);
+				setErr("Error : Kategori Tidak Valid");
 			});
+		setOpen(true);
 	};
 	/* Method to POST new Brand Item */
 
@@ -105,6 +122,13 @@ function DialogAddKelas(
 					</DialogContent>
 				</div>
 			</Dialog>
+			<Stack spacing={2} sx={{ width: "100%" }}>
+				<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+					<Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+						{err}
+					</Alerts>
+				</Snackbar>
+			</Stack>
 		</div>
 	);
 }
