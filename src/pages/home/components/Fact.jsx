@@ -58,11 +58,13 @@ export default function Fact() {
 					<Grid key={index} item xs={4}>
 						<Item
 							sx={{
-								height: {
-									md: "32vh",
-									sm: "20vh",
-									xs: "18vh",
-								},
+                height: '100%',
+                paddingBottom:'15%'
+								// height: {
+								// 	md: "32vh",
+								// 	sm: "20vh",
+								// 	xs: "18vh",
+								// },
 							}}>
 							<Box>
 								<Typography

@@ -53,7 +53,7 @@ export default function DetailCourse() {
       })
       .then((res) => {
         if (res.status === 200) {
-          setDetailOfACourse([res.data]);
+          setDetailOfACourse(res.data);
           console.log(res.data);
         }
       })
@@ -97,7 +97,7 @@ export default function DetailCourse() {
         </Typography>
         <Grid container spacing={2}>
           {detailOfACourse.map((item, index) => (
-            <Grid key={item.id} item xs={3} sx={{ margin:'auto 5% auto 5%'}}>
+            <Grid key={item.id} item xs={4}>
             <Card sx={{ maxWidth: 345 , margin:'auto auto auto auto'}}>
               <CardMedia
                 component="img"
