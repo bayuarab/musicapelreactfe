@@ -50,35 +50,35 @@ const PageRoutes = () => {
 					<Route path="/missing" element={<Missing />} />
 				</Route>
 
-<<<<<<<<< Temporary merge branch 1
 				{/* Admin route */}
-				{/* <Route element={<RequiredAuth allowedRoles={["admin"]} />}> */}
-				<Route path="/admin">
-					<Route index element={<ManageKelas />} />
-					<Route path="/admin/kelas" element={<ManageKelas />} />
-					<Route path="/admin/category" element={<ManageKategori />} />
-					<Route path="/admin/invoices" element={<UserInvoices />} />
-					<Route path="/admin/users" element={<ManageUser />} />
+				<Route element={<RequiredAuth allowedRoles={["admin"]} />}>
+					<Route path="/admin">
+						<Route index element={<ManageKelas />} />
+						<Route path="/admin/kelas" element={<ManageKelas />} />
+						<Route path="/admin/category" element={<ManageKategori />} />
+						<Route path="/admin/invoices" element={<UserInvoices />} />
+						<Route path="/admin/users" element={<ManageUser />} />
+					</Route>
 				</Route>
-				{/* </Route> */}
 			</Route>
 		</Routes>
 	);
-=========
-        {/* Admin route */}
-        <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
-          <Route path="/admin">
-            <Route index element={<ManageKelas />} />
-            <Route path="/admin/kelas" element={<ManageKelas />} />
-            <Route path="/admin/category" element={<ManageKategori />} />
-            <Route path="/admin/invoices" element={<UserInvoices />} />
-            <Route path="/admin/users" element={<ManageUser />} />
-          </Route>
-        </Route>
-      </Route>
-    </Routes>
-  );
->>>>>>>>> Temporary merge branch 2
+
+	{
+		/* Admin route */
+	}
+	//         <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
+	//           <Route path="/admin">
+	//             <Route index element={<ManageKelas />} />
+	//             <Route path="/admin/kelas" element={<ManageKelas />} />
+	//             <Route path="/admin/category" element={<ManageKategori />} />
+	//             <Route path="/admin/invoices" element={<UserInvoices />} />
+	//             <Route path="/admin/users" element={<ManageUser />} />
+	//           </Route>
+	//         </Route>
+	//       </Route>
+	//     </Routes>
+	//   );
 };
 
 export default PageRoutes;
