@@ -46,8 +46,8 @@ export default function CategoryCourse() {
   const navigate = useNavigate();
   const [openAlertSucces, setOpenAlertSucces] = useState(false);
   const [openAlertError, setOpenAlertError] = useState(false);
-  const [openAlertWarning, setOpenAlertWarning] = useState(false)
-  const [scheduleCourse, setScheduleCourse] = useState('pilih jadwal kelas');
+  const [openAlertWarning, setOpenAlertWarning] = useState(false);
+  const [scheduleCourse, setScheduleCourse] = useState("pilih jadwal kelas");
 
   const UserID = auth?.userId;
 
@@ -101,7 +101,7 @@ export default function CategoryCourse() {
           setDetailOfACourse(res.data);
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
     console.log(params);
   };
 
@@ -121,13 +121,15 @@ export default function CategoryCourse() {
       .then((res) => {
         if (res.status === 200) {
           setcekJadwal(res.data);
-          console.log("res data", res.data)
+          console.log("res data", res.data);
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
-  useEffect(() => { getcekJadwal(); }, [])
+  useEffect(() => {
+    getcekJadwal();
+  }, []);
   /* useStates untuk keperluan GET detail dari sebuah jadwal */
 
   let paramss = useParams();
@@ -145,11 +147,11 @@ export default function CategoryCourse() {
           console.log(res.data);
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
     console.log("lahhhhh", paramss);
   };
   useEffect(() => {
-    getdetailOfACourseCategory((paramss.courseid));
+    getdetailOfACourseCategory(paramss.courseid);
   }, [paramss]);
 
   //console.log("categoryid",detailOfACourse.categoryId)
@@ -193,7 +195,11 @@ export default function CategoryCourse() {
       return;
     }
 
-    const postDataa = { userId: UserID, courseId: detailOfACourse.id, scheduleId: scheduleCourse };
+    const postDataa = {
+      userId: UserID,
+      courseId: detailOfACourse.id,
+      scheduleId: scheduleCourse,
+    };
     console.log(postDataa);
     axios
       .post("https://localhost:7132/api/Cart", postDataa)
@@ -257,6 +263,7 @@ export default function CategoryCourse() {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.id,
             masterInvoiceId: masterInvoicess,
+            schedule: items.schedule,
           };
         });
         console.log("details", details);
@@ -313,7 +320,6 @@ export default function CategoryCourse() {
 
   return (
     <Grid>
-
       <Box display="flex">
         <Grid
           width="45%"
@@ -365,12 +371,8 @@ export default function CategoryCourse() {
               >
                 <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
                 {cekJadwal.map((jadwal, i) => (
-
                   <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-
-
                 ))}
-
               </Select>
 
               <Box
@@ -397,38 +399,34 @@ export default function CategoryCourse() {
               </Box>
             </>
           )}
-
-
         </Grid>
-
       </Box>
       <Typography>{detailOfACourse.courseDesc}</Typography>
 
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertSucces === true ?
+      {openAlertSucces === true ? (
         <Alert className="success-alert" variant="filled" severity="success">
           kelas berhasil ditambahkan ke keranjang!
         </Alert>
-        :
+      ) : (
         <></>
-      }
+      )}
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertWarning === true ?
+      {openAlertWarning === true ? (
         <Alert className="success-alert" variant="filled" severity="warning">
           Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
         </Alert>
-        :
+      ) : (
         <></>
-      }
+      )}
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertError === true ?
+      {openAlertError === true ? (
         <Alert className="success-alert" variant="filled" severity="error">
           isilah dulu jadwalnya!
         </Alert>
-        :
+      ) : (
         <></>
-      }
-
+      )}
 
       <div style={{ height: "0px", border: "1px solid grey" }} />
       <Typography color="blue" sx={{ textAlign: "center" }}>

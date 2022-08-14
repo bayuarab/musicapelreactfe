@@ -113,7 +113,7 @@ const CartList = (props) => {
                       color: "#4F4F4F",
                     }}
                   >
-                    {items.jadwal}
+                    {items.schedule}
                   </Typography>
                   <Typography
                     sx={{

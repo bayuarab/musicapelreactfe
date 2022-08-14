@@ -164,6 +164,7 @@ const CartPage = () => {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.courseId,
             masterInvoiceId: masterInvoicess,
+            schedule: items.schedule,
           };
         });
         console.log(details);
