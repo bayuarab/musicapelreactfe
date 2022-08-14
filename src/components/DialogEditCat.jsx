@@ -99,6 +99,7 @@ function DialogEditCat(
       })
       .catch((err) => {
         console.log(err.response.data);
+        setSeverityType("error");
         setErr("Error : Kategori Tidak Valid");
         setOpen(true);
       });
