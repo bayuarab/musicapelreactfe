@@ -18,7 +18,7 @@ const DialogButton = styled(Button)(({ theme }) => ({
 }));
 
 const DeleteDialog = (props) => {
-	const { onClose, logState, selectedUser } = props;
+	const { onClose, logState, selectedCat } = props;
 	const handleClose = (state) => {
 		onClose(state);
 	};
@@ -43,7 +43,7 @@ const DeleteDialog = (props) => {
 								fontWeight: "400",
 								fontFamily: "Poppins",
 							}}>
-							Category : {selectedUser?.category} Id : {selectedUser?.id}
+							Category : {selectedCat?.category} Id : {selectedCat?.id}
 						</Typography>
 					</DialogContentText>
 				</DialogContent>
