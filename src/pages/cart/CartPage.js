@@ -29,6 +29,7 @@ import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 const StyledCheckbox = styled(Checkbox)({
@@ -75,7 +76,7 @@ const filterCartItems = (arr, filterValue, operator) => {
 
 const CartPage = () => {
   const { setComponentState } = useComponentBarState();
-  const [cart, setCart] = useState([]);
+  const { cart, setCart } = useCart();
   const [selectedCart, setSelectedCart] = useState([]);
   const [cost, setCost] = useState(calculateTotalCost(cart));
   const [selectedOp, setSelectedOp] = useState(null);
@@ -146,7 +147,7 @@ const CartPage = () => {
       }
     };
     fetchApiCart();
-  }, [cart.length, userID]);
+  }, [setCart, userID]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
@@ -164,6 +165,7 @@ const CartPage = () => {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.courseId,
             masterInvoiceId: masterInvoicess,
+            schedule: items.schedule,
           };
         });
         console.log(details);
@@ -191,14 +193,14 @@ const CartPage = () => {
 
   const handleCheckoutClose = (value) => {
     const { paymentOption, paymentState } = value;
+    console.log("paymentOption", paymentOption);
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
-      userID,
-      selectedOp,
+      paymentOption,
       auth,
       calculateTotalCost,
     };
@@ -327,12 +329,17 @@ const CartPage = () => {
               </Typography>
             </Box>
             <Box sx={{ paddingRight: "2%" }}>
-              <CheckoutButton variant="contained" onClick={() => checkout()}>
+              <CheckoutButton
+                variant="contained"
+                disabled={selectedCart.length <= 0}
+                onClick={() => checkout()}
+              >
                 Bayar Sekarang
               </CheckoutButton>
               <IconButton
                 sx={{ display: { md: "none" } }}
                 onClick={() => checkout()}
+                disabled={selectedCart.length <= 0}
               >
                 <Avatar sx={{ bgcolor: "#5D5FEF" }}>
                   <ShoppingCartCheckout

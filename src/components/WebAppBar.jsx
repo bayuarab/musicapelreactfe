@@ -11,6 +11,7 @@ import {
 
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Divider,
@@ -24,6 +25,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useCart } from "../context/CartProvider";
 import { useComponentBarState } from "../context/ComponentStateProvider";
 import useAuth from "../hooks/useAuth";
 import LogoutDialog from "./LogoutDialog";
@@ -35,6 +37,15 @@ const StyledToolbar = styled(Toolbar)({
   backgroundColor: "#F2C94C",
   height: "76px",
 });
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
 
 const SideIcons = styled(Box)(({ theme }) => ({
   display: "none",
@@ -61,6 +72,7 @@ function WebAppBar(props) {
   const [openLogout, setOpenLogout] = useState(false);
   const { auth, setAuth } = useAuth();
   const { componentState } = useComponentBarState();
+  const { cart } = useCart();
   const navigate = useNavigate();
 
   const handleCloseLogout = (state) => {
@@ -207,7 +219,9 @@ function WebAppBar(props) {
           <SideIcons>
             <Link to="/cart">
               <IconButton sx={{ color: "black" }}>
-                <ShoppingCart />
+                <StyledBadge badgeContent={cart?.length || 0} color="secondary">
+                  <ShoppingCart />
+                </StyledBadge>
               </IconButton>
             </Link>
             <Link style={{ textDecoration: "none" }} to="/my-course">

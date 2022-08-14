@@ -38,17 +38,17 @@ export function generateNewInvoice(registeredInvoice, auth) {
 export function generateNewMasterInvoice({
   selectedCart,
   registeredInvoice,
-  userID,
-  selectedOp,
+  paymentOption,
   auth,
   calculateTotalCost,
 }) {
+  console.log(paymentOption);
   return {
     NoInvoice: generateNewInvoice(registeredInvoice, auth),
     PurchaseDate: generateCurrentDate(),
     Qty: selectedCart.length,
     Cost: calculateTotalCost(selectedCart),
+    Method: paymentOption,
     UserId: auth.userId,
-    Method: selectedOp,
   };
 }

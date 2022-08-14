@@ -19,6 +19,7 @@ import Carousel from "react-multi-carousel";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/userAPI";
 import { getClaimedCourses } from "../../components/GetClaimedCourse";
+import { useCart } from "../../context/CartProvider";
 import useAuth from "../../hooks/useAuth";
 import numberFormat from "../../utilities/NumbeFormat";
 import CheckoutDialogs from "../cart/components/CheckoutDialogs";
@@ -38,6 +39,7 @@ const calculateTotalCost = (carts) => {
 export default function CategoryCourse() {
   const [age, setAge] = React.useState("");
   const [err, setErr] = useState("");
+  const { setCart } = useCart();
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
@@ -46,8 +48,8 @@ export default function CategoryCourse() {
   const navigate = useNavigate();
   const [openAlertSucces, setOpenAlertSucces] = useState(false);
   const [openAlertError, setOpenAlertError] = useState(false);
-  const [openAlertWarning, setOpenAlertWarning] = useState(false)
-  const [scheduleCourse, setScheduleCourse] = useState('pilih jadwal kelas');
+  const [openAlertWarning, setOpenAlertWarning] = useState(false);
+  const [scheduleCourse, setScheduleCourse] = useState("pilih jadwal kelas");
 
   const UserID = auth?.userId;
 
@@ -89,6 +91,40 @@ export default function CategoryCourse() {
     }
   };
 
+  //update cart
+  const fetchApiCart = async (userId) => {
+    try {
+      const response = await api.get(`/Cart/${userId}`);
+      console.log(response.data);
+      setCart(response.data);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  /* useStates untuk keperluan GET detail jadwal dari sebuah kelas*/
+  const [cekJadwal, setcekJadwal] = useState([]);
+  const getcekJadwal = async (courseId) => {
+    await axios
+      .get(`https://localhost:7132/api/Schedule/ByCourseId/${courseId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setcekJadwal(res.data);
+          console.log("res data", res.data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  // useEffect(() => {
+  //   getcekJadwal();
+  // }, []);
+  /* useStates untuk keperluan GET detail jadwal dari sebuah kelas */
+
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
   const [detailOfACourse, setDetailOfACourse] = useState([]);
   const getdetailOfACourse = async (url) => {
@@ -99,9 +135,10 @@ export default function CategoryCourse() {
       .then((res) => {
         if (res.status === 200) {
           setDetailOfACourse(res.data);
+          getcekJadwal(url);
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
     console.log(params);
   };
 
@@ -112,23 +149,6 @@ export default function CategoryCourse() {
   }, [params]);
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
-
-  /* useStates untuk keperluan GET detail dari sebuah jadwal */
-  const [cekJadwal, setcekJadwal] = useState([]);
-  const getcekJadwal = async () => {
-    await axios
-      .get(`https://localhost:7132/api/Schedule`)
-      .then((res) => {
-        if (res.status === 200) {
-          setcekJadwal(res.data);
-          console.log("res data", res.data)
-        }
-      })
-      .catch((err) => { });
-  };
-
-  useEffect(() => { getcekJadwal(); }, [])
-  /* useStates untuk keperluan GET detail dari sebuah jadwal */
 
   let paramss = useParams();
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
@@ -145,11 +165,11 @@ export default function CategoryCourse() {
           console.log(res.data);
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
     console.log("lahhhhh", paramss);
   };
   useEffect(() => {
-    getdetailOfACourseCategory((paramss.courseid));
+    getdetailOfACourseCategory(paramss.courseid);
   }, [paramss]);
 
   //console.log("categoryid",detailOfACourse.categoryId)
@@ -193,7 +213,11 @@ export default function CategoryCourse() {
       return;
     }
 
-    const postDataa = { userId: UserID, courseId: detailOfACourse.id, scheduleId: scheduleCourse };
+    const postDataa = {
+      userId: UserID,
+      courseId: detailOfACourse.id,
+      scheduleId: scheduleCourse,
+    };
     console.log(postDataa);
     axios
       .post("https://localhost:7132/api/Cart", postDataa)
@@ -204,6 +228,7 @@ export default function CategoryCourse() {
           console.log(res.status);
           console.log(res.data);
           setErr("Berhasil menambahkan cart");
+          fetchApiCart(UserID);
         }
       })
       .catch((err) => {
@@ -257,6 +282,7 @@ export default function CategoryCourse() {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.id,
             masterInvoiceId: masterInvoicess,
+            schedule: items.schedule,
           };
         });
         console.log("details", details);
@@ -285,7 +311,7 @@ export default function CategoryCourse() {
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
-      selectedOp,
+      paymentOption,
       UserID,
       auth,
       calculateTotalCost,
@@ -313,7 +339,6 @@ export default function CategoryCourse() {
 
   return (
     <Grid>
-
       <Box display="flex">
         <Grid
           width="45%"
@@ -365,12 +390,8 @@ export default function CategoryCourse() {
               >
                 <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
                 {cekJadwal.map((jadwal, i) => (
-
                   <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-
-
                 ))}
-
               </Select>
 
               <Box
@@ -397,38 +418,34 @@ export default function CategoryCourse() {
               </Box>
             </>
           )}
-
-
         </Grid>
-
       </Box>
       <Typography>{detailOfACourse.courseDesc}</Typography>
 
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertSucces === true ?
+      {openAlertSucces === true ? (
         <Alert className="success-alert" variant="filled" severity="success">
           kelas berhasil ditambahkan ke keranjang!
         </Alert>
-        :
+      ) : (
         <></>
-      }
+      )}
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertWarning === true ?
+      {openAlertWarning === true ? (
         <Alert className="success-alert" variant="filled" severity="warning">
           Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
         </Alert>
-        :
+      ) : (
         <></>
-      }
+      )}
       {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertError === true ?
+      {openAlertError === true ? (
         <Alert className="success-alert" variant="filled" severity="error">
           isilah dulu jadwalnya!
         </Alert>
-        :
+      ) : (
         <></>
-      }
-
+      )}
 
       <div style={{ height: "0px", border: "1px solid grey" }} />
       <Typography color="blue" sx={{ textAlign: "center" }}>
