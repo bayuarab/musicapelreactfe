@@ -53,15 +53,6 @@ function ManageKelas() {
 	}, [searchQuery, refreshPage]);
 	/* useStates untuk keperluan GET daftar semua merk */
 
-  /* useStates dan metode-metode untuk keperluan POST hapus merk */
-  const [idToDelete, setIdToDelete] = useState();
-  const deleteBrand = async () => {
-      await axios.delete("https://localhost:7132/api/CourseCategory",{ courseCategoryId: idToDelete
-      }).then((res) => { if (res.status === 200) { console.log("status delete",res.status); setRefreshPage((status) => !status); } }).catch((err) => { })
-  }
-  useEffect(() => { getListOfBrands(); }, [searchQuery])
-  /* useStates dan metode-metode untuk keperluan POST hapus merk */
-
   /* useStates untuk membuka dialog untuk POST merk baru */
   const [openAdd, setOpenAdd] = useState(false);
   /* useStates untuk membuka dialog untuk POST merk baru */

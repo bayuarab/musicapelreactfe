@@ -24,9 +24,9 @@ import HeaderSet from "../../components/HeaderSet";
 import useAuth from "../../hooks/useAuth";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 import numberFormat from "../../utilities/NumbeFormat";
-
-let kategoris = getKategoriKelas();
-let musics = getMusic();
+import DialogAddCourse from "./components/DialogAddCourse";
+import DialogEditCourse from "./components/DialogEditCourse";
+import { useParams } from "react-router-dom";
 
 const theme = createTheme({
 	palette: {
@@ -60,6 +60,26 @@ function ManageKategori() {
 	useEffect(() => {
 		getListOfBrands();
 	}, [searchQuery, refreshPage]);
+
+
+
+	const [idToDelete, setIdToDelete] = useState();
+	const deleteCourse = async () => {
+		console.log("idtodelete", idToDelete)
+
+		await axios
+		  .delete(`https://localhost:7132/api/Course/${idToDelete}`,{idToDelete})
+		  .then((res) => {
+			if (res.status === 200) {
+			  setIdToDelete(res.data);
+			  console.log(res.data);
+			}
+		  })
+		  .catch((err) => { });
+	  };
+	  useEffect(() => {
+		deleteCourse();
+	  }, [refreshPage]);
 
 	/* useStates dan metode-metode untuk keperluan POST Add Product */
 	const [openAdd, setOpenAdd] = useState(false);
@@ -161,11 +181,12 @@ function ManageKategori() {
 								variant="outlined"
 								size="medium"
 								style={{ backgroundColor: "F2C94C", color: "black" }}
-								// onClick={async (e) => {
-								//     await e.preventDefault();
-								//     await setIdToDelete(item.id);
-								//     await deleteProduct();
-								// }}
+								onClick={async (e) => {
+								    await e.preventDefault();
+								    await setIdToDelete(item.id);
+								    await deleteCourse();
+									setRefreshPage((status) => !status);
+								}}
 							>
 								Hapus
 							</Button>
@@ -200,7 +221,7 @@ function ManageKategori() {
 								<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 									{/* TITLE */}
 									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold", paddingTop: "10px" }}>
-										Manage Kategori
+										Manage Kelas
 									</Typography>
 
 									{/* BOX PENCARIAN DATA */}
@@ -245,16 +266,16 @@ function ManageKategori() {
 									</Grid>
 
 									{/* DIALOG ADD*/}
-									{/* <ManageProductDialogAddItem
+									<DialogAddCourse
                                         open={openAdd}
                                         onClose={() => {
                                             setOpenAdd(false);
                                             setRefreshPage((status) => !status);
                                         }}
-                                    /> */}
+                                    />
 
 									{/* DIALOG EDIT */}
-									{/* <ManageProductDialogEditItem
+									<DialogEditCourse
                                         open={openEdit}
                                         editItemProduct={editItemProduct}
                                         onClose={() => {
@@ -262,7 +283,7 @@ function ManageKategori() {
                                             setRefreshPage((status) => !status);
                                         }
                                         }
-                                    /> */}
+                                    />
 								</Paper>
 							</Grid>
 						</Grid>
