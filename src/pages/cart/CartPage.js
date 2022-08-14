@@ -29,6 +29,7 @@ import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 const StyledCheckbox = styled(Checkbox)({
@@ -75,7 +76,7 @@ const filterCartItems = (arr, filterValue, operator) => {
 
 const CartPage = () => {
   const { setComponentState } = useComponentBarState();
-  const [cart, setCart] = useState([]);
+  const { cart, setCart } = useCart();
   const [selectedCart, setSelectedCart] = useState([]);
   const [cost, setCost] = useState(calculateTotalCost(cart));
   const [selectedOp, setSelectedOp] = useState(null);
@@ -146,7 +147,7 @@ const CartPage = () => {
       }
     };
     fetchApiCart();
-  }, [cart.length, userID]);
+  }, [setCart, userID]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));

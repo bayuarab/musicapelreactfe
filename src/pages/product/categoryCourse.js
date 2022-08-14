@@ -19,6 +19,7 @@ import Carousel from "react-multi-carousel";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/userAPI";
 import { getClaimedCourses } from "../../components/GetClaimedCourse";
+import { useCart } from "../../context/CartProvider";
 import useAuth from "../../hooks/useAuth";
 import numberFormat from "../../utilities/NumbeFormat";
 import CheckoutDialogs from "../cart/components/CheckoutDialogs";
@@ -38,6 +39,7 @@ const calculateTotalCost = (carts) => {
 export default function CategoryCourse() {
   const [age, setAge] = React.useState("");
   const [err, setErr] = useState("");
+  const { setCart } = useCart();
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
@@ -89,6 +91,40 @@ export default function CategoryCourse() {
     }
   };
 
+  //update cart
+  const fetchApiCart = async (userId) => {
+    try {
+      const response = await api.get(`/Cart/${userId}`);
+      console.log(response.data);
+      setCart(response.data);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  /* useStates untuk keperluan GET detail jadwal dari sebuah kelas*/
+  const [cekJadwal, setcekJadwal] = useState([]);
+  const getcekJadwal = async (courseId) => {
+    await axios
+      .get(`https://localhost:7132/api/Schedule/ByCourseId/${courseId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setcekJadwal(res.data);
+          console.log("res data", res.data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  // useEffect(() => {
+  //   getcekJadwal();
+  // }, []);
+  /* useStates untuk keperluan GET detail jadwal dari sebuah kelas */
+
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
   const [detailOfACourse, setDetailOfACourse] = useState([]);
   const getdetailOfACourse = async (url) => {
@@ -99,6 +135,7 @@ export default function CategoryCourse() {
       .then((res) => {
         if (res.status === 200) {
           setDetailOfACourse(res.data);
+          getcekJadwal(url);
         }
       })
       .catch((err) => {});
@@ -112,25 +149,6 @@ export default function CategoryCourse() {
   }, [params]);
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
-
-  /* useStates untuk keperluan GET detail dari sebuah jadwal */
-  const [cekJadwal, setcekJadwal] = useState([]);
-  const getcekJadwal = async () => {
-    await axios
-      .get(`https://localhost:7132/api/Schedule`)
-      .then((res) => {
-        if (res.status === 200) {
-          setcekJadwal(res.data);
-          console.log("res data", res.data);
-        }
-      })
-      .catch((err) => {});
-  };
-
-  useEffect(() => {
-    getcekJadwal();
-  }, []);
-  /* useStates untuk keperluan GET detail dari sebuah jadwal */
 
   let paramss = useParams();
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
@@ -210,6 +228,7 @@ export default function CategoryCourse() {
           console.log(res.status);
           console.log(res.data);
           setErr("Berhasil menambahkan cart");
+          fetchApiCart(UserID);
         }
       })
       .catch((err) => {
