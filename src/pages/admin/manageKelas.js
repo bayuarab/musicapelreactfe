@@ -11,10 +11,11 @@ import useAuth from "../../hooks/useAuth";
 // import ManageBrandDialogEditItem from '../components/ManageBrandDialogEditItem';
 // import { APIRequest } from '../components/APICalls';
 import axios from "axios";
-import APIRequest from "../../components/APICalls";
 import DialogAddKelas from "../../components/DialogAddKelas";
 import DialogEditCat from "../../components/DialogEditCat";
+import DialogDeleteCat from "../../components/DialogDeleteCat";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
+import api from "../../api/courseCatAPI";
 
 let kategoris = getKategoriKelas();
 let musics = getMusic();
@@ -38,6 +39,32 @@ function ManageKelas() {
 	const [refreshPage, setRefreshPage] = useState(false);
 	const [searchQuery, setSearchQuery] = useState();
 	const [listOfBrands, setListOfBrands] = useState([]);
+	const [category, setCat] = useState([]);
+	const [selectedCat, setSelectedCat] = useState({});
+	const [openDelete, setOpenDelete] = useState(false);
+
+	const handleCloseDelete = (state) => {
+		if (!state) return setOpenDelete(false);
+		const fetchDelete = async () => {
+			try {
+				const response = await api.delete(`/${selectedCat.id}`);
+				console.log(response.data);
+				setCat((item) => item.filter((item) => item.id !== selectedCat.id));
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		fetchDelete();
+		setOpenDelete(false);
+	};
+
+	const handleClickOpenDelete = (category) => {
+		setSelectedCat(category);
+		setOpenDelete(true);
+	};
+
 	const getListOfBrands = async () => {
 		await axios
 			.get("https://localhost:7132/api/CourseCategory")
@@ -48,23 +75,22 @@ function ManageKelas() {
 			})
 			.catch((err) => {});
 	};
+
 	useEffect(() => {
 		getListOfBrands();
 	}, [searchQuery, refreshPage]);
 	/* useStates untuk keperluan GET daftar semua merk */
 
-  /* useStates dan metode-metode untuk keperluan POST hapus merk */
-  const [idToDelete, setIdToDelete] = useState();
-  const deleteBrand = async () => {
-      await axios.delete("https://localhost:7132/api/CourseCategory",{ courseCategoryId: idToDelete
-      }).then((res) => { if (res.status === 200) { console.log("status delete",res.status); setRefreshPage((status) => !status); } }).catch((err) => { })
-  }
-  useEffect(() => { getListOfBrands(); }, [searchQuery])
-  /* useStates dan metode-metode untuk keperluan POST hapus merk */
+	useEffect(() => {
+		getListOfBrands();
+	}, [searchQuery]);
 
-  /* useStates untuk membuka dialog untuk POST merk baru */
-  const [openAdd, setOpenAdd] = useState(false);
-  /* useStates untuk membuka dialog untuk POST merk baru */
+	useEffect(() => {
+		getListOfBrands();
+	}, [setListOfBrands]);
+
+	/* useStates untuk membuka dialog untuk POST merk baru */
+	const [openAdd, setOpenAdd] = useState(false);
 
 	/* useStates untuk membuka dialog untuk POST edit merk */
 	const [editItemData, setEditItemData] = useState();
@@ -184,12 +210,7 @@ function ManageKelas() {
 																</Button>
 															</Grid>
 															<Grid item xs={12} md={4}>
-																<Button
-																	fullWidth
-																	variant="outlined"
-																	color="primary"
-																	// onClick={async (e) => { await e.preventDefault(); await setIdToDelete(invoice.id); await deleteBrand(); }}
-																>
+																<Button fullWidth variant="outlined" color="primary" onClick={() => handleClickOpenDelete(invoice)}>
 																	Hapus Kategori
 																</Button>
 															</Grid>
@@ -204,6 +225,7 @@ function ManageKelas() {
 						</Grid>
 					</Container>
 				</Box>
+				<DialogDeleteCat selectedCat={selectedCat} logState={openDelete} onClose={handleCloseDelete} />
 			</Box>
 		</ThemeProvider>
 	);

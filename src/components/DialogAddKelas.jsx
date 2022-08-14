@@ -63,7 +63,6 @@ function DialogAddKelas(
 			};
 			reader.readAsDataURL(file);
 		}
-		setOpen(true);
 	};
 	/* Methods to convert image input into base64 */
 
@@ -83,8 +82,8 @@ function DialogAddKelas(
 			.catch((err) => {
 				console.log(err.response.data);
 				setErr("Error : Kategori Tidak Valid");
+				setOpen(true);
 			});
-		setOpen(true);
 	};
 	/* Method to POST new Brand Item */
 
