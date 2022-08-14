@@ -140,7 +140,7 @@ function ManageUser() {
   }, [setUsers]);
 
   const userFilter = () => {
-    return searchUser?.length >= 0
+    return searchUser?.length > 0
       ? users?.filter(
           (item) =>
             item.nama.includes(searchUser) || item.email.includes(searchUser)

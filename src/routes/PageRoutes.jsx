@@ -22,63 +22,61 @@ import CategoryCourse from "../pages/product/categoryCourse";
 import DetailCourse from "../pages/product/detailCourse";
 
 const PageRoutes = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<Layout />}>
-				{/* Public Route */}
-				<Route path="/" element={<Home />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/registration" element={<Register />} />
-				<Route path="/forget" element={<Forget />} />
-				<Route path="category/:categoryid" element={<DetailCourse />} />
-				<Route path="course">
-					<Route path=":courseid" element={<CategoryCourse />} />
-				</Route>
-				<Route path="/missing" element={<Missing />} />
-				<Route path="*" element={<NotFound />} />
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* Public Route */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Register />} />
+        <Route path="/forget" element={<Forget />} />
+        <Route path="category/:categoryid" element={<DetailCourse />} />
+        <Route path="course">
+          <Route path=":courseid" element={<CategoryCourse />} />
+        </Route>
+        <Route path="/missing" element={<Missing />} />
+        <Route path="*" element={<NotFound />} />
 
-				{/* User and admin route */}
-				<Route element={<RequiredAuth allowedRoles={["student"]} />}>
-					<Route path="/cart" element={<CartPage />} />
-					<Route path="/my-course" element={<MyCourses />} />
-					<Route path="/my-invoice">
-						<Route index element={<InvoiceMaster />} />
-						<Route path=":invoiceID" element={<InvoiceDetails />} />
-					</Route>
-					<Route path="/payment-status" element={<SuccessPayment />} />
-					<Route path="*" element={<Route path="*" element={<NotFound />} />} />
-					<Route path="/missing" element={<Missing />} />
-				</Route>
+        {/* User and admin route */}
+        <Route element={<RequiredAuth allowedRoles={["student"]} />}>
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/my-course" element={<MyCourses />} />
+          <Route path="/my-invoice">
+            <Route index element={<InvoiceMaster />} />
+            <Route path=":invoiceID" element={<InvoiceDetails />} />
+          </Route>
+          <Route path="/payment-status" element={<SuccessPayment />} />
+          <Route path="*" element={<Route path="*" element={<NotFound />} />} />
+          <Route path="/missing" element={<Missing />} />
+        </Route>
 
-				{/* Admin route */}
-				<Route element={<RequiredAuth allowedRoles={["admin"]} />}>
-					<Route path="/admin">
-						<Route index element={<ManageKelas />} />
-						<Route path="/admin/kelas" element={<ManageKelas />} />
-						<Route path="/admin/category" element={<ManageKategori />} />
-						<Route path="/admin/invoices" element={<UserInvoices />} />
-						<Route path="/admin/users" element={<ManageUser />} />
-					</Route>
-				</Route>
-			</Route>
-		</Routes>
-	);
+        {/* Admin route */}
+        <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
+          <Route path="/admin">
+            <Route index element={<ManageKelas />} />
+            <Route path="/admin/kelas" element={<ManageKelas />} />
+            <Route path="/admin/category" element={<ManageKategori />} />
+            <Route path="/admin/invoices" element={<UserInvoices />} />
+            <Route path="/admin/users" element={<ManageUser />} />
+          </Route>
+        </Route>
+      </Route>
+    </Routes>
+  );
 
-	{
-		/* Admin route */
-	}
-	//         <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
-	//           <Route path="/admin">
-	//             <Route index element={<ManageKelas />} />
-	//             <Route path="/admin/kelas" element={<ManageKelas />} />
-	//             <Route path="/admin/category" element={<ManageKategori />} />
-	//             <Route path="/admin/invoices" element={<UserInvoices />} />
-	//             <Route path="/admin/users" element={<ManageUser />} />
-	//           </Route>
-	//         </Route>
-	//       </Route>
-	//     </Routes>
-	//   );
+  /* Admin route */
+  //         <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
+  //           <Route path="/admin">
+  //             <Route index element={<ManageKelas />} />
+  //             <Route path="/admin/kelas" element={<ManageKelas />} />
+  //             <Route path="/admin/category" element={<ManageKategori />} />
+  //             <Route path="/admin/invoices" element={<UserInvoices />} />
+  //             <Route path="/admin/users" element={<ManageUser />} />
+  //           </Route>
+  //         </Route>
+  //       </Route>
+  //     </Routes>
+  //   );
 };
 
 export default PageRoutes;
