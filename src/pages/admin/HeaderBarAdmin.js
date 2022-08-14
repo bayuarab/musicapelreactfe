@@ -25,6 +25,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import ListIcon from "@mui/icons-material/List";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LogoutDialog from "../../components/LogoutDialog";
+import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
@@ -88,6 +89,7 @@ const Drawer = styled(MuiDrawer, {
 function HeaderBarAdmin() {
   const [open, setOpen] = useState(false);
   const { setAuth } = useAuth();
+  const { setCart } = useCart();
   const navigate = useNavigate();
   const [openLogout, setOpenLogout] = useState(false);
   const { setComponentState } = useComponentBarState();
@@ -99,6 +101,7 @@ function HeaderBarAdmin() {
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
     setAuth({});
+    setCart([]);
     navigate("/", { replace: true });
     setOpenLogout(false);
   };

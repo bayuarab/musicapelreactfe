@@ -9,6 +9,7 @@ import {
   CardMedia,
   FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   Typography,
@@ -49,7 +50,7 @@ export default function CategoryCourse() {
   const [openAlertSucces, setOpenAlertSucces] = useState(false);
   const [openAlertError, setOpenAlertError] = useState(false);
   const [openAlertWarning, setOpenAlertWarning] = useState(false);
-  const [scheduleCourse, setScheduleCourse] = useState("pilih jadwal kelas");
+  const [scheduleCourse, setScheduleCourse] = useState("");
 
   const UserID = auth?.userId;
 
@@ -82,6 +83,11 @@ export default function CategoryCourse() {
         `/Cart/ByCourseId/${UserID}/${courseId}`
       );
       console.log(response.data);
+      setCart(
+        response.data.filter(
+          (item) => item.userId === UserID && item.id !== courseId
+        )
+      );
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
@@ -275,7 +281,10 @@ export default function CategoryCourse() {
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
-      const selectedCart = [detailOfACourse];
+      const schedule = cekJadwal.find(
+        (schedules) => (schedules.id = scheduleCourse)
+      );
+      const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
       if (url === "MInvoice") {
         details = selectedCart.map((items) => {
           return {
@@ -291,6 +300,7 @@ export default function CategoryCourse() {
         fetchApiPostInvoice("InvoiceDetails", items);
         fetchDelete(items.courseId);
       });
+      fetchApiCart(auth.userId);
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
     } catch (err) {
@@ -307,7 +317,10 @@ export default function CategoryCourse() {
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
-    const selectedCart = [detailOfACourse];
+    const schedule = cekJadwal.find(
+      (schedules) => (schedules.id = scheduleCourse)
+    );
+    const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
@@ -330,9 +343,12 @@ export default function CategoryCourse() {
       setErr("Course sudah dibeli");
       return;
     }
-
+    if (scheduleCourse == "") return setOpenAlertError(true);
+    const schedule = cekJadwal.find((item) => (item.id = scheduleCourse));
+    console.log("schedule", schedule.jadwal);
+    const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
     console.log("Barang yang di checkout:");
-    console.table(detailOfACourse);
+    console.table(selectedCart);
     console.log(`Total cost: ${detailOfACourse.price}`);
     setCheckoutDialogState(true);
   };
@@ -382,17 +398,21 @@ export default function CategoryCourse() {
             </Button>
           ) : (
             <>
-              <Select
-                defaultValue={0}
-                value={scheduleCourse}
-                onChange={(e) => setScheduleCourse(e.target.value)}
-                size="medium"
-              >
-                <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
-                {cekJadwal.map((jadwal, i) => (
-                  <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-                ))}
-              </Select>
+              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
+                  <Select
+                    label="Pilih Jadwal Kelas"
+                    value={scheduleCourse}
+                    onChange={(e) => setScheduleCourse(e.target.value)}
+                    size="medium"
+                  >
+                    {cekJadwal.map((jadwal, i) => (
+                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
 
               <Box
                 display="flex"
