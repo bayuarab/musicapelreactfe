@@ -12,7 +12,7 @@ export function generateNewInvoice(registeredInvoice, auth) {
   const getRef = () => {
     return registeredInvoice?.length <= 0
       ? {
-          resNum: 0,
+          resNum: 1,
           refToken: auth?.nama.substring(0, 3).toUpperCase(),
         }
       : {

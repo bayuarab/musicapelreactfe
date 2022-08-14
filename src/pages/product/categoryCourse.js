@@ -413,9 +413,36 @@ export default function CategoryCourse() {
               Ke Kelasku
             </Button>
           ) : claimedCart ? (
-            <Button variant="contained" component={Link} to={`/cart`}>
-              Ke Cart
-            </Button>
+            <>
+              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
+                  <Select
+                    label="Pilih Jadwal Kelas"
+                    value={scheduleCourse}
+                    onChange={(e) => setScheduleCourse(e.target.value)}
+                    size="medium"
+                  >
+                    {cekJadwal.map((jadwal, i) => (
+                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box
+                display="flex"
+                sx={{
+                  margin: "3% 0 0 0",
+                }}
+              >
+                <Button variant="contained" component={Link} to={`/cart`}>
+                  Ke Cart
+                </Button>
+                <Button variant="contained" onClick={() => checkout()}>
+                  Beli Sekarang
+                </Button>
+              </Box>
+            </>
           ) : (
             <>
               <Box sx={{ minWidth: 240, maxWidth: 358 }}>
