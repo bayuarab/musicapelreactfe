@@ -51,6 +51,7 @@ export default function CategoryCourse() {
   const [openAlertError, setOpenAlertError] = useState(false);
   const [openAlertWarning, setOpenAlertWarning] = useState(false);
   const [scheduleCourse, setScheduleCourse] = useState("");
+  const [claimedCart, setClaimedCart] = useState(false);
 
   const UserID = auth?.userId;
 
@@ -101,8 +102,17 @@ export default function CategoryCourse() {
   const fetchApiCart = async (userId) => {
     try {
       const response = await api.get(`/Cart/${userId}`);
-      console.log(response.data);
+      console.table(response.data);
       setCart(response.data);
+      setClaimedCart(
+        response?.data.some(
+          (item) => item.courseId === parseInt(params.courseid)
+        )
+      );
+      // const state = response?.data.some(
+      //   (item) => item.courseId === parseInt(params.courseid)
+      // );
+      // console.log("claimedCart", state, params.courseid);
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
@@ -151,6 +161,7 @@ export default function CategoryCourse() {
   useEffect(() => {
     getdetailOfACourse(params.courseid);
     fetchApiClaimedCourse();
+    fetchApiCart(auth.userId);
     console.log(params.courseid);
   }, [params]);
 
@@ -343,7 +354,12 @@ export default function CategoryCourse() {
       setErr("Course sudah dibeli");
       return;
     }
-    if (scheduleCourse == "") return setOpenAlertError(true);
+    if (!scheduleCourse) {
+      setOpenAlertError(true);
+      setTimeout(() => setOpenAlertError(false), 2000);
+      return;
+    }
+
     const schedule = cekJadwal.find((item) => (item.id = scheduleCourse));
     console.log("schedule", schedule.jadwal);
     const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
@@ -395,6 +411,10 @@ export default function CategoryCourse() {
           {claimedCourse ? (
             <Button variant="contained" component={Link} to={`/my-course`}>
               Ke Kelasku
+            </Button>
+          ) : claimedCart ? (
+            <Button variant="contained" component={Link} to={`/cart`}>
+              Ke Cart
             </Button>
           ) : (
             <>

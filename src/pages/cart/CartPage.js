@@ -147,7 +147,7 @@ const CartPage = () => {
       }
     };
     fetchApiCart();
-  }, [setCart, userID]);
+  }, [setCart, userID, cart?.length]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
