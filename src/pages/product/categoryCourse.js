@@ -337,7 +337,7 @@ export default function CategoryCourse() {
 							height: "400px",
 						}}>
 						<img
-							src={`${detailOfACourse.courseImage}`}
+							src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
 							width="75%"
 							alt={detailOfACourse.courseImage}
 							style={{
