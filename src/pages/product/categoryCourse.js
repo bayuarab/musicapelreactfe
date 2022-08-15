@@ -292,26 +292,27 @@ export default function CategoryCourse() {
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
-      const schedule = cekJadwal.find(
-        (schedules) => (schedules.id = scheduleCourse)
-      );
-      const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
+      // const schedule = cekJadwal.find(
+      //   (schedules) => (schedules.id = scheduleCourse)
+      // );
+      const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
+      console.log(selectedCart);
       if (url === "MInvoice") {
         details = selectedCart.map((items) => {
           return {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.id,
             masterInvoiceId: masterInvoicess,
-            schedule: items.schedule,
+            scheduleId: items.schedule,
           };
         });
         console.log("details", details);
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
-        fetchDelete(items.courseId);
+        fetchDelete(params.courseid);
       });
-      fetchApiCart(auth.userId);
+      // fetchApiCart(auth.userId);
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
     } catch (err) {
@@ -328,10 +329,7 @@ export default function CategoryCourse() {
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
-    const schedule = cekJadwal.find(
-      (schedules) => (schedules.id = scheduleCourse)
-    );
-    const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
+    const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
@@ -360,9 +358,7 @@ export default function CategoryCourse() {
       return;
     }
 
-    const schedule = cekJadwal.find((item) => (item.id = scheduleCourse));
-    console.log("schedule", schedule.jadwal);
-    const selectedCart = [{ ...detailOfACourse, schedule: schedule.jadwal }];
+    const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
     console.log("Barang yang di checkout:");
     console.table(selectedCart);
     console.log(`Total cost: ${detailOfACourse.price}`);
@@ -385,7 +381,7 @@ export default function CategoryCourse() {
             }}
           >
             <img
-              src={`${detailOfACourse.courseImage}`}
+              src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
               width="75%"
               alt={detailOfACourse.courseImage}
               style={{

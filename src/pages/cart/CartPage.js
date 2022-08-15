@@ -107,6 +107,22 @@ const CartPage = () => {
     }
   };
 
+  const fetchApiCart = async () => {
+    try {
+      const response = await api.get(`/Cart/${userID}`);
+      console.log(response.data);
+      setCart(response.data);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found")
+        setApiDataMessage("Masih kosong, silahkan belanja");
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
   useEffect(() => {
     setComponentState({ paymentPageState: false, footerState: false });
   }, [setComponentState]);
@@ -131,21 +147,6 @@ const CartPage = () => {
   }, [userID]);
 
   useEffect(() => {
-    const fetchApiCart = async () => {
-      try {
-        const response = await api.get(`/Cart/${userID}`);
-        console.log(response.data);
-        setCart(response.data);
-      } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        if (err.response.data === "Not Found")
-          setApiDataMessage("Masih kosong, silahkan belanja");
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      }
-    };
     fetchApiCart();
   }, [setCart, userID, cart?.length]);
 
@@ -165,7 +166,7 @@ const CartPage = () => {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.courseId,
             masterInvoiceId: masterInvoicess,
-            schedule: items.schedule,
+            scheduleId: items.scheduleId,
           };
         });
         console.log(details);
@@ -186,7 +187,7 @@ const CartPage = () => {
 
   const checkout = () => {
     console.log("Barang yang di checkout:");
-    console.log(selectedCart);
+    console.table(selectedCart);
     console.log(`Total cost: ${cost}`);
     setCheckoutDialogState(true);
   };

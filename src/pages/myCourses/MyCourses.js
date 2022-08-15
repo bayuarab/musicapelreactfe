@@ -56,14 +56,19 @@ const MyCourses = () => {
       </Typography>
     </Box>
   ) : (
-    <Box>
+    <Box
+    // style={{
+    //   paddingTop: "45px",
+    //   paddingBottom: "100px",
+    // }}
+    >
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: "18px",
-          paddingLeft: "4.5%",
-          paddingRight: "4.5%",
+          // paddingLeft: "4.5%",
+          // paddingRight: "4.5%",
           paddingTop: "45px",
           paddingBottom: "60px",
         }}
@@ -88,7 +93,7 @@ const MyCourses = () => {
                 >
                   <ImgContainer>
                     <img
-                      src={items.courseImage}
+                      src={`data:image/jpeg;base64,${items.courseImage}`}
                       alt={items.course}
                       loading="lazy"
                       objectfit="true"
