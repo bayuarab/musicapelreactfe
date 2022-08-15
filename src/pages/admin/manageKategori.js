@@ -138,7 +138,7 @@ function ManageKategori() {
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
 									}}>
-									{item.courseTitle}
+									{item.id} - {item.courseTitle}
 								</Typography>
 
 								{/* Brand Name */}
