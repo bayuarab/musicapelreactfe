@@ -11,8 +11,9 @@ import { Link, useNavigate } from "react-router-dom";
 // import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from "@mui/icons-material/Category";
 // import HomeIcon from "@mui/icons-material/Home";
-import ListIcon from "@mui/icons-material/List";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import ClassIcon from "@mui/icons-material/Class";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LogoutDialog from "../../components/LogoutDialog";
 import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
@@ -146,19 +147,19 @@ function HeaderBarAdmin() {
 						{/* {mainListItems} */}
 						<ListItemButton component={Link} to={"/admin/kelas"}>
 							<ListItemIcon>
-								<ListIcon color="primary" />
-							</ListItemIcon>
-							<ListItemText primary="Manage Kelas" />
-						</ListItemButton>
-						<ListItemButton component={Link} to={"/admin/category"}>
-							<ListItemIcon>
 								<CategoryIcon color="primary" />
 							</ListItemIcon>
 							<ListItemText primary="Manage Kategori" />
 						</ListItemButton>
+						<ListItemButton component={Link} to={"/admin/category"}>
+							<ListItemIcon>
+								<ClassIcon color="primary" />
+							</ListItemIcon>
+							<ListItemText primary="Manage Kelas" />
+						</ListItemButton>
 						<ListItemButton component={Link} to={"/admin/invoices"}>
 							<ListItemIcon>
-								<LocalShippingIcon color="primary" />
+								<CreditScoreIcon color="primary" />
 							</ListItemIcon>
 							<ListItemText primary="Manage Invoices" />
 						</ListItemButton>
@@ -170,7 +171,7 @@ function HeaderBarAdmin() {
 						</ListItemButton>
 						<ListItemButton component={Link} to={"/admin/schedule"}>
 							<ListItemIcon>
-								<ManageAccountsIcon color="primary" />
+								<CalendarMonthIcon color="primary" />
 							</ListItemIcon>
 							<ListItemText primary="Manage Schedule" />
 						</ListItemButton>
