@@ -86,7 +86,7 @@ export default function Login() {
         const roles = response?.data?.roles;
         const userId = response?.data?.id;
         const nama = response?.data?.nama;
-        setAuth({ ...auth, nama, roles, userId });
+        setAuth({ ...auth, nama, roles, userId, email: dataLogin.email });
         if (roles === "student") fetchApiCart(userId);
         roles === "admin"
           ? // <Navigate to="/admin/kelas" replace={true} />

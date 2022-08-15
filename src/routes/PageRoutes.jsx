@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../components/Layout";
 import RequiredAuth from "../components/RequiredAuth";
+import MyAccount from "../pages/account/MyAccount";
 // import ManageInvoices from "../pages/admin/manageInvoices";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
@@ -34,6 +35,7 @@ const PageRoutes = () => {
         <Route path="course">
           <Route path=":courseid" element={<CategoryCourse />} />
         </Route>
+        <Route path="/my-account" element={<MyAccount />} />
         <Route path="/missing" element={<Missing />} />
         <Route path="*" element={<NotFound />} />
 
