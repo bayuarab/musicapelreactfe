@@ -61,25 +61,23 @@ function ManageKategori() {
 		getListOfBrands();
 	}, [searchQuery, refreshPage]);
 
-
-
 	const [idToDelete, setIdToDelete] = useState();
 	const deleteCourse = async () => {
-		console.log("idtodelete", idToDelete)
+		console.log("idtodelete", idToDelete);
 
 		await axios
-		  .delete(`https://localhost:7132/api/Course/${idToDelete}`,{idToDelete})
-		  .then((res) => {
-			if (res.status === 200) {
-			  setIdToDelete(res.data);
-			  console.log(res.data);
-			}
-		  })
-		  .catch((err) => { });
-	  };
-	  useEffect(() => {
+			.delete(`https://localhost:7132/api/Course/${idToDelete}`, { idToDelete })
+			.then((res) => {
+				if (res.status === 200) {
+					setIdToDelete(res.data);
+					console.log(res.data);
+				}
+			})
+			.catch((err) => {});
+	};
+	useEffect(() => {
 		deleteCourse();
-	  }, [refreshPage]);
+	}, [refreshPage]);
 
 	/* useStates dan metode-metode untuk keperluan POST Add Product */
 	const [openAdd, setOpenAdd] = useState(false);
@@ -108,7 +106,7 @@ function ManageKategori() {
 								}}>
 								{item.courseImage ? (
 									<img
-										src={`${item.courseImage}`}
+										src={`data:image/jpeg;base64,${item.courseImage}`}
 										alt="No Image"
 										style={{
 											height: "100%",
@@ -182,12 +180,11 @@ function ManageKategori() {
 								size="medium"
 								style={{ backgroundColor: "F2C94C", color: "black" }}
 								onClick={async (e) => {
-								    await e.preventDefault();
-								    await setIdToDelete(item.id);
-								    await deleteCourse();
+									await e.preventDefault();
+									await setIdToDelete(item.id);
+									await deleteCourse();
 									setRefreshPage((status) => !status);
-								}}
-							>
+								}}>
 								Hapus
 							</Button>
 						</CardActions>
@@ -267,23 +264,22 @@ function ManageKategori() {
 
 									{/* DIALOG ADD*/}
 									<DialogAddCourse
-                                        open={openAdd}
-                                        onClose={() => {
-                                            setOpenAdd(false);
-                                            setRefreshPage((status) => !status);
-                                        }}
-                                    />
+										open={openAdd}
+										onClose={() => {
+											setOpenAdd(false);
+											setRefreshPage((status) => !status);
+										}}
+									/>
 
 									{/* DIALOG EDIT */}
 									<DialogEditCourse
-                                        open={openEdit}
-                                        editItemProduct={editItemProduct}
-                                        onClose={() => {
-                                            setOpenEdit(false);
-                                            setRefreshPage((status) => !status);
-                                        }
-                                        }
-                                    />
+										open={openEdit}
+										editItemProduct={editItemProduct}
+										onClose={() => {
+											setOpenEdit(false);
+											setRefreshPage((status) => !status);
+										}}
+									/>
 								</Paper>
 							</Grid>
 						</Grid>
