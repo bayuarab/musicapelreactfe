@@ -9,6 +9,7 @@ import {
   CardMedia,
   FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   Typography,
@@ -49,7 +50,8 @@ export default function CategoryCourse() {
   const [openAlertSucces, setOpenAlertSucces] = useState(false);
   const [openAlertError, setOpenAlertError] = useState(false);
   const [openAlertWarning, setOpenAlertWarning] = useState(false);
-  const [scheduleCourse, setScheduleCourse] = useState("pilih jadwal kelas");
+  const [scheduleCourse, setScheduleCourse] = useState("");
+  const [claimedCart, setClaimedCart] = useState(false);
 
   const UserID = auth?.userId;
 
@@ -82,6 +84,11 @@ export default function CategoryCourse() {
         `/Cart/ByCourseId/${UserID}/${courseId}`
       );
       console.log(response.data);
+      setCart(
+        response.data.filter(
+          (item) => item.userId === UserID && item.id !== courseId
+        )
+      );
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
@@ -95,8 +102,17 @@ export default function CategoryCourse() {
   const fetchApiCart = async (userId) => {
     try {
       const response = await api.get(`/Cart/${userId}`);
-      console.log(response.data);
+      console.table(response.data);
       setCart(response.data);
+      setClaimedCart(
+        response?.data.some(
+          (item) => item.courseId === parseInt(params.courseid)
+        )
+      );
+      // const state = response?.data.some(
+      //   (item) => item.courseId === parseInt(params.courseid)
+      // );
+      // console.log("claimedCart", state, params.courseid);
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
@@ -145,6 +161,7 @@ export default function CategoryCourse() {
   useEffect(() => {
     getdetailOfACourse(params.courseid);
     fetchApiClaimedCourse();
+    fetchApiCart(auth.userId);
     console.log(params.courseid);
   }, [params]);
 
@@ -275,22 +292,27 @@ export default function CategoryCourse() {
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
-      const selectedCart = [detailOfACourse];
+      // const schedule = cekJadwal.find(
+      //   (schedules) => (schedules.id = scheduleCourse)
+      // );
+      const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
+      console.log(selectedCart);
       if (url === "MInvoice") {
         details = selectedCart.map((items) => {
           return {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.id,
             masterInvoiceId: masterInvoicess,
-            schedule: items.schedule,
+            scheduleId: items.schedule,
           };
         });
         console.log("details", details);
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
-        fetchDelete(items.courseId);
+        fetchDelete(params.courseid);
       });
+      // fetchApiCart(auth.userId);
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
     } catch (err) {
@@ -307,7 +329,7 @@ export default function CategoryCourse() {
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
-    const selectedCart = [detailOfACourse];
+    const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
@@ -330,9 +352,15 @@ export default function CategoryCourse() {
       setErr("Course sudah dibeli");
       return;
     }
+    if (!scheduleCourse) {
+      setOpenAlertError(true);
+      setTimeout(() => setOpenAlertError(false), 2000);
+      return;
+    }
 
+    const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
     console.log("Barang yang di checkout:");
-    console.table(detailOfACourse);
+    console.table(selectedCart);
     console.log(`Total cost: ${detailOfACourse.price}`);
     setCheckoutDialogState(true);
   };
@@ -353,7 +381,7 @@ export default function CategoryCourse() {
             }}
           >
             <img
-              src={`${detailOfACourse.courseImage}`}
+              src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
               width="75%"
               alt={detailOfACourse.courseImage}
               style={{
@@ -380,19 +408,54 @@ export default function CategoryCourse() {
             <Button variant="contained" component={Link} to={`/my-course`}>
               Ke Kelasku
             </Button>
+          ) : claimedCart ? (
+            <>
+              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
+                  <Select
+                    label="Pilih Jadwal Kelas"
+                    value={scheduleCourse}
+                    onChange={(e) => setScheduleCourse(e.target.value)}
+                    size="medium"
+                  >
+                    {cekJadwal.map((jadwal, i) => (
+                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box
+                display="flex"
+                sx={{
+                  margin: "3% 0 0 0",
+                }}
+              >
+                <Button variant="contained" component={Link} to={`/cart`}>
+                  Ke Cart
+                </Button>
+                <Button variant="contained" onClick={() => checkout()}>
+                  Beli Sekarang
+                </Button>
+              </Box>
+            </>
           ) : (
             <>
-              <Select
-                defaultValue={0}
-                value={scheduleCourse}
-                onChange={(e) => setScheduleCourse(e.target.value)}
-                size="medium"
-              >
-                <MenuItem value={0}>Pilih Jadwal Kelas</MenuItem>
-                {cekJadwal.map((jadwal, i) => (
-                  <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-                ))}
-              </Select>
+              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
+                  <Select
+                    label="Pilih Jadwal Kelas"
+                    value={scheduleCourse}
+                    onChange={(e) => setScheduleCourse(e.target.value)}
+                    size="medium"
+                  >
+                    {cekJadwal.map((jadwal, i) => (
+                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
 
               <Box
                 display="flex"

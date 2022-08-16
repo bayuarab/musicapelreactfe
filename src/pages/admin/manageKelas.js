@@ -87,7 +87,7 @@ function ManageKelas() {
           : console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
-        setSeverityType("danger");
+        setSeverityType("error");
         setErr("Error: Gagal menghapus, terjadi kesalahan");
         setOpen(true);
       }

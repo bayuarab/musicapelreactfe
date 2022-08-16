@@ -72,12 +72,13 @@ function WebAppBar(props) {
   const [openLogout, setOpenLogout] = useState(false);
   const { auth, setAuth } = useAuth();
   const { componentState } = useComponentBarState();
-  const { cart } = useCart();
+  const { cart, setCart } = useCart();
   const navigate = useNavigate();
 
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
     setAuth({});
+    setCart([]);
     navigate("/", { replace: true });
     setOpenLogout(false);
   };

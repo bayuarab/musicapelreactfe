@@ -63,7 +63,7 @@ const CartList = (props) => {
                 </Box>
                 <ImgContainer>
                   <img
-                    src={items.courseImage}
+                    src={`data:image/jpeg;base64,${items.courseImage}`}
                     alt={items.course}
                     loading="lazy"
                     objectfit="true"

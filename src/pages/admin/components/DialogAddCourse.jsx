@@ -13,8 +13,8 @@ function DialogAddCourse(
 	/* useStates untuk keperluan POST merk baru */
 	const [courseTitle, setCourseTitle] = useState("");
 	const [courseDesc, setCourseDesc] = useState("");
-    const [coursePrice, setCoursePrice] = useState("");
-    const [courseCategoryId, setCourseCategoryId] = useState("");
+	const [coursePrice, setCoursePrice] = useState("");
+	const [courseCategoryId, setCourseCategoryId] = useState("");
 	const [imagePreview, setImagePreview] = useState("");
 	const [base64, setBase64] = useState("");
 	const [err, setErr] = useState("");
@@ -112,11 +112,11 @@ function DialogAddCourse(
 									<Box noValidate>
 										<TextField id="name" value={courseTitle} label="Nama Kelas" onChange={(e) => setCourseTitle(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="description" value={courseDesc} label="Deskripsi Kelas" onChange={(e) => setCourseDesc(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
-                                        <TextField id="price" value={coursePrice} label="Harga Kelas" onChange={(e) => setCoursePrice(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+										<TextField id="price" value={coursePrice} label="Harga Kelas" onChange={(e) => setCoursePrice(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="categoryid" value={courseCategoryId} label="Kategori ID" onChange={(e) => setCourseCategoryId(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
-										
+
 										<Button disabled={courseTitle === "" || courseDesc === "" || coursePrice === "" || courseCategoryId === "" || base64 === "" ? true : false} type="submit" fullWidth variant="contained" style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }}>
-											Tambahkan Kategori Baru
+											Tambahkan Kelas Baru
 										</Button>
 									</Box>
 								</Grid>

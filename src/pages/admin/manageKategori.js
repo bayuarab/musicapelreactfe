@@ -34,7 +34,7 @@ const theme = createTheme({
 			main: "#F2C94C",
 		},
 		secondary: {
-			main: "#F2C94C",
+			main: "#4F4F4F",
 		},
 		white: {
 			main: "#ffffff",
@@ -125,7 +125,7 @@ const photoUpload = (e) => {
 
 	const [idToDelete, setIdToDelete] = useState();
 	const deleteCourse = async () => {
-		console.log("idtodelete", idToDelete)
+		console.log("idtodelete", idToDelete);
 
 		await axios
 			.delete(`https://localhost:7132/api/Course/${idToDelete}`, { idToDelete })
@@ -135,7 +135,7 @@ const photoUpload = (e) => {
 					console.log(res.data);
 				}
 			})
-			.catch((err) => { });
+			.catch((err) => {});
 	};
 	useEffect(() => {
 		deleteCourse();
@@ -189,7 +189,7 @@ const photoUpload = (e) => {
 								}}>
 								{item.courseImage ? (
 									<img
-										src={`${item.courseImage}`}
+										src={`data:image/jpeg;base64,${item.courseImage}`}
 										alt="No Image"
 										style={{
 											height: "100%",
@@ -221,7 +221,7 @@ const photoUpload = (e) => {
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
 									}}>
-									{item.courseTitle}
+									{item.id} - {item.courseTitle}
 								</Typography>
 
 								{/* Brand Name */}
@@ -309,8 +309,7 @@ const photoUpload = (e) => {
 									await setIdToDelete(item.id);
 									await deleteCourse();
 									setRefreshPage((status) => !status);
-								}}
-							>
+								}}>
 								Hapus
 							</Button>
 						</CardActions>
@@ -343,7 +342,7 @@ const photoUpload = (e) => {
 							<Grid item xs={12}>
 								<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 									{/* TITLE */}
-									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold", paddingTop: "10px" }}>
+									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold" }}>
 										Manage Kelas
 									</Typography>
 

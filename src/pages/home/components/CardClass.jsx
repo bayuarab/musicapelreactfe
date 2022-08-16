@@ -98,13 +98,16 @@ export default function CardClass() {
                 <Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
                   <CardMedia
                     component="img"
-                    style={{
+                    sx={{
                       objectFit: "cover",
                       maxWidth: "100%",
+                      // minHeight: {
+                      //   lg: "280px",
+                      // },
                       maxHeight: "280px",
                       borderRadius: "20px",
                     }}
-                    image={item.courseImage}
+                    image={`data:image/jpeg;base64,${item.courseImage}`}
                   />
                 </Link>
                 {/* <Typography
