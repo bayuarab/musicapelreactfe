@@ -59,3 +59,9 @@
 .contentWrapper {
   flex: 1;
 }
+
+.carouselCategory {
+} @media only screen and (max-width: 880px) {.carouselCategory card{
+overflow-x:auto;
+float: left;
+}}

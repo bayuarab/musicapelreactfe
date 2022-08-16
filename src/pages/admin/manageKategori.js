@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, Container, Grid, Icon, Paper, TextField, Toolbar, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, Container, Dialog, DialogContent, DialogTitle, Grid, Icon, Input, Paper, TextField, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
@@ -25,7 +25,7 @@ import useAuth from "../../hooks/useAuth";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 import numberFormat from "../../utilities/NumbeFormat";
 import DialogAddCourse from "./components/DialogAddCourse";
-import DialogEditCourse from "./components/DialogEditCourse";
+//import DialogEditCourse from "./components/DialogEditCourse";
 import { useParams } from "react-router-dom";
 
 const theme = createTheme({
@@ -42,11 +42,30 @@ const theme = createTheme({
 	},
 });
 
-function ManageKategori() {
+function ManageKategori(
+	props = {
+        open: false,
+        id: props.id,
+        onClose: () => { },
+        onAdd: () => { },
+    }
+) {
+    /* useStates untuk keperluan POST merk baru */
+    const [courseTitle, setCourseTitle] = useState("");
+    const [courseDesc, setCourseDesc] = useState("");
+    const [coursePrice, setCoursePrice] = useState("");
+    const [courseCategoryId, setCourseCategoryId] = useState("");
+    const [imagePreview, setImagePreview] = useState("");
+    const [base64, setBase64] = useState("");
+    const [err, setErr] = useState("");
 	const [search, setSearch] = useState("");
 	const [refreshPage, setRefreshPage] = useState(false);
 	const [searchQuery, setSearchQuery] = useState();
 	const [listOfBrands, setListOfBrands] = useState([]);
+	const [openAll, setOpenAll] = useState(false);
+	const [open, setOpen] = React.useState(false);
+
+
 	const getListOfBrands = async () => {
 		await axios
 			.get("https://localhost:7132/api/Course/LandingPage")
@@ -55,11 +74,54 @@ function ManageKategori() {
 					setListOfBrands(res.data);
 				}
 			})
-			.catch((err) => {});
+			.catch((err) => { });
 	};
 	useEffect(() => {
 		getListOfBrands();
 	}, [searchQuery, refreshPage]);
+
+ /* Methods to convert image input into base64 */
+ const onFileSubmit = (e) => {
+	e.preventDefault();
+	console.log(base64);
+};
+const onChange = (e) => {
+	console.log("file", e.target.files[0]);
+	let file = e.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = _handleReaderLoaded;
+		reader.readAsBinaryString(file);
+	}
+};
+
+const handleClickOpenAll = () => {
+    setOpenAll(true);
+  };
+
+  const handleCloseAll = () => {
+    setOpenAll(false);
+  };
+
+const _handleReaderLoaded = (readerEvt) => {
+	let binaryString = readerEvt.target.result;
+	setBase64(btoa(binaryString));
+};
+const photoUpload = (e) => {
+	e.preventDefault();
+	const reader = new FileReader();
+	const file = e.target.files[0];
+	console.log("reader", reader);
+	console.log("file", file);
+	if (reader !== undefined && file !== undefined) {
+		reader.onloadend = () => {
+			setImagePreview(reader.result);
+		};
+		reader.readAsDataURL(file);
+	}
+	setOpen(true);
+};
+/* Methods to convert image input into base64 */
 
 	const [idToDelete, setIdToDelete] = useState();
 	const deleteCourse = async () => {
@@ -79,16 +141,37 @@ function ManageKategori() {
 		deleteCourse();
 	}, [refreshPage]);
 
-	/* useStates dan metode-metode untuk keperluan POST Add Product */
+	/* useStates dan metode-metode untuk keperluan Add kelas */
 	const [openAdd, setOpenAdd] = useState(false);
 	/* useStates untuk keperluan POST Add Product */
 
-	/* useStates dan metode-metode untuk keperluan POST Edit Product */
+	/* useStates dan metode-metode untuk keperluan Edit kelas */
 	const [editItemProduct, setEditItemProduct] = useState();
 	const [openEdit, setOpenEdit] = useState(false);
 	/* useStates untuk keperluan POST Edit Product */
 
 	const { auth } = useAuth();
+
+	/* Method to edit new course Item */
+	const [idToEdit, setIdToEdit] = useState();
+    const editKelas = () => {
+        const postDataa = { id: idToEdit, courseTitle: courseTitle, courseCategoryId: courseCategoryId, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
+        console.log(postDataa);
+        axios
+            .put("https://localhost:7132/api/Course", postDataa)
+            .then((res) => {
+                if (res.status === 200) {
+                    console.log(res.status);
+                    console.log(res.data);
+                    props.onClose();
+                }
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            });
+        setOpen(true);
+    };
+    /* Method to POST new Brand Item */
 
 	const renderList = (item, index) => {
 		return (
@@ -166,13 +249,55 @@ function ManageKategori() {
 								variant="contained"
 								size="medium"
 								style={{ backgroundColor: "F2C94C", color: "black" }}
-								onClick={(e) => {
-									e.preventDefault();
-									setOpenEdit(true);
-									setEditItemProduct(item);
-								}}>
+								onClick={async (e) => {
+									await e.preventDefault();
+									await setIdToEdit(item.id);
+									await editKelas();
+									setRefreshPage((status) => !status);
+									handleClickOpenAll();
+								}}
+								>
 								Edit
 							</Button>
+							<Dialog open={openAll} onClose={handleCloseAll}>
+								<div style={{ padding: "20px", width: "100%" }}>
+									{/* TITLE */}
+									<DialogTitle>Tambahkan Kelas Baru</DialogTitle>
+									<DialogContent>
+										{/* FORM INPUT */}
+										<form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
+											{imagePreview === "" ? "" : <img style={{ width: "100%", height: "100%" }} src={imagePreview} alt="upload" />}
+											<Input type="file" name="avatar" id="file" accept=".jpef, .png, .jpg" onChange={photoUpload} src={imagePreview} />
+										</form>
+
+										<form
+											onSubmit={(e) => {
+												e.preventDefault();
+												editKelas();
+											}}>
+											<Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
+												<Grid>
+													<Box noValidate>
+														<TextField id="name" value={courseTitle} label="Nama Kelas" onChange={(e) => setCourseTitle(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+														<TextField id="description" value={courseDesc} label="Deskripsi Kelas" onChange={(e) => setCourseDesc(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+														<TextField id="price" value={coursePrice} label="Harga Kelas" onChange={(e) => setCoursePrice(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+														<TextField id="categoryid" value={courseCategoryId} label="Kategori ID" onChange={(e) => setCourseCategoryId(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+
+														<Button disabled={courseTitle === "" || courseDesc === "" || coursePrice === "" || courseCategoryId === "" || base64 === "" ? true : false} type="submit" fullWidth variant="contained" style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }}
+														onClick={async (e) => {
+															await e.preventDefault();
+															setRefreshPage((status) => !status);
+															handleCloseAll();
+														}}>
+															Tambahkan Kategori Baru
+														</Button>
+													</Box>
+												</Grid>
+											</Grid>
+										</form>
+									</DialogContent>
+								</div>
+							</Dialog>
 
 							{/* Delete button */}
 							<Button
@@ -272,14 +397,15 @@ function ManageKategori() {
 									/>
 
 									{/* DIALOG EDIT */}
-									<DialogEditCourse
+									{/* <DialogEditCourse
 										open={openEdit}
 										editItemProduct={editItemProduct}
 										onClose={() => {
 											setOpenEdit(false);
 											setRefreshPage((status) => !status);
-										}}
-									/>
+										}
+										}
+									/> */}
 								</Paper>
 							</Grid>
 						</Grid>
