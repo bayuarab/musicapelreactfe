@@ -1,15 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Snackbar,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 
@@ -21,26 +10,24 @@ function DialogAddJadwal(
 		onAdd: () => {},
 	}
 ) {
-  /* useStates untuk keperluan POST merk baru */
-  const [categoryName, setcategoryName] = useState("");
-  const [categoryDescription, setcategoryDescription] = useState("");
-  const [err, setErr] = useState("");
-  const [open, setOpen] = React.useState(false);
-  const [severityType, setSeverityType] = useState("error");
-  /* useStates untuk keperluan POST merk baru */
->>>>>>> 7ff27bccde67ee9c1bb0eb2be75d448d7877b5ee
+	/* useStates untuk keperluan POST merk baru */
+	const [categoryName, setcategoryName] = useState("");
+	const [categoryDescription, setcategoryDescription] = useState("");
+	const [err, setErr] = useState("");
+	const [open, setOpen] = React.useState(false);
+	const [severityType, setSeverityType] = useState("error");
+	/* useStates untuk keperluan POST merk baru */
+	const Alerts = React.forwardRef(function Alerts(props, ref) {
+		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+	});
 
-  const Alerts = React.forwardRef(function Alerts(props, ref) {
-    return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
+		setOpen(false);
+	};
 
 	/* Method to POST new Brand Item */
 	const postJadwal = () => {
@@ -55,7 +42,7 @@ function DialogAddJadwal(
 				if (res.status === 200) {
 					console.log(res.data);
 					setSeverityType("success");
-					setErr("Berhasil menambahkan kategori");
+					setErr("Berhasil menambahkan jadwal kelas");
 					setOpen(true);
 					props.onClose();
 				}
@@ -63,55 +50,50 @@ function DialogAddJadwal(
 			.catch((err) => {
 				console.log(err.response.data);
 				setSeverityType("error");
-				setErr("Error : Kategori Tidak Valid");
+				setErr("Error : Jadwal Tidak Valid");
 				setOpen(true);
 			});
 	};
 
-  return (
-    <div>
-      <Dialog open={props.open} onClose={props.onClose}>
-        <div style={{ padding: "20px", width: "100%" }}>
-          {/* TITLE */}
-          <DialogTitle>Tambahkan Jadwal Kelas Baru</DialogTitle>
-          <DialogContent>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                postJadwal();
-              }}
-            >
-              <Grid
-                columnGap="10px"
-                justifyContent="center"
-                style={{ paddingBottom: "10px" }}
-              >
-                <Grid>
-                  <Box noValidate>
-                    <TextField
-                      id="name"
-                      value={jadwal}
-                      label="Jadwal"
-                      onChange={(e) => setJadwal(e.target.value)}
-                      style={{
-                        display: "flex",
-                        flexGrow: 1,
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    />
-                    <TextField
-                      id="description"
-                      value={courseId}
-                      label="Id Kelas"
-                      onChange={(e) => setCourseId(e.target.value)}
-                      style={{
-                        display: "flex",
-                        flexGrow: 1,
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    />
+	return (
+		<div>
+			<Dialog open={props.open} onClose={props.onClose}>
+				<div style={{ padding: "20px", width: "100%" }}>
+					{/* TITLE */}
+					<DialogTitle>Tambahkan Jadwal Kelas Baru</DialogTitle>
+					<DialogContent>
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								postJadwal();
+							}}>
+							<Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
+								<Grid>
+									<Box noValidate>
+										<TextField
+											id="name"
+											value={jadwal}
+											label="Jadwal"
+											onChange={(e) => setJadwal(e.target.value)}
+											style={{
+												display: "flex",
+												flexGrow: 1,
+												marginTop: "20px",
+												marginBottom: "20px",
+											}}
+										/>
+										<TextField
+											id="description"
+											value={courseId}
+											label="Id Kelas"
+											onChange={(e) => setCourseId(e.target.value)}
+											style={{
+												display: "flex",
+												flexGrow: 1,
+												marginTop: "20px",
+												marginBottom: "20px",
+											}}
+										/>
 
 										<Button
 											disabled={jadwal === "" || courseId === "" ? true : false}
