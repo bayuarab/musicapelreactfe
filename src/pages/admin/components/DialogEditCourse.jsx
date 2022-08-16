@@ -5,7 +5,7 @@ import axios from "axios";
 function DialogEditCourse(
     props = {
         open: false,
-        id: 0,
+        id: props.id,
         onClose: () => { },
         onAdd: () => { },
     }
@@ -69,9 +69,9 @@ function DialogEditCourse(
     };
     /* Methods to convert image input into base64 */
 
-    /* Method to POST new Brand Item */
-    const postKelas = () => {
-        const postDataa = { id: id, courseTitle: courseTitle, courseCategoryId: courseCategoryId, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
+    /* Method to edit new course Item */
+    const editKelas = () => {
+        const postDataa = { id: props.id, courseTitle: courseTitle, courseCategoryId: courseCategoryId, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
         console.log(postDataa);
         axios
             .put("https://localhost:7132/api/Course", postDataa)
@@ -105,12 +105,11 @@ function DialogEditCourse(
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                postKelas();
+                                editKelas();
                             }}>
                             <Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
                                 <Grid>
                                     <Box noValidate>
-                                        <TextField id="id" value={id} label="Id Kelas" onChange={(e) => setId(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
                                         <TextField id="name" value={courseTitle} label="Nama Kelas" onChange={(e) => setCourseTitle(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
                                         <TextField id="description" value={courseDesc} label="Deskripsi Kelas" onChange={(e) => setCourseDesc(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
                                         <TextField id="price" value={coursePrice} label="Harga Kelas" onChange={(e) => setCoursePrice(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
