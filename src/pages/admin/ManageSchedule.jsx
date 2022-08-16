@@ -98,12 +98,12 @@ function ManageSchedule() {
 	};
 
 	const handleCloseLogout = (state) => {
-		if (!state) return setOpenLogout(false);
+		if (!state) return setOpenDialog(false);
 		const fetchDelete = async () => {
 			try {
-				const response = await axios.delete(`https://localhost:7132/api/Schedule/${selectedUser.id}`);
+				const response = await axios.delete(`https://localhost:7132/api/Schedule/${selectedSchedule.id}`);
 				console.log(response.data);
-				setUsers((item) => item.filter((item) => item.id !== selectedUser.id));
+				setSchedules((item) => item.filter((item) => item.id !== selectedSchedule.id));
 				setSeverityType("warning");
 				setMessage("Jadwal telah dihapus dari daftar");
 				setSnackbarState(true);
@@ -117,7 +117,7 @@ function ManageSchedule() {
 			}
 		};
 		fetchDelete();
-		setOpenLogout(false);
+		setOpenDialog(false);
 	};
 
 	const handleClickOpenLogout = (user) => {

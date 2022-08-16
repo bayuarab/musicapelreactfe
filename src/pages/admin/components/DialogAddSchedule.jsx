@@ -11,8 +11,8 @@ function DialogAddJadwal(
 	}
 ) {
 	/* useStates untuk keperluan POST merk baru */
-	const [categoryName, setcategoryName] = useState("");
-	const [categoryDescription, setcategoryDescription] = useState("");
+	const [jadwal, setJadwal] = useState("");
+	const [courseId, setCourseId] = useState("");
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
 	const [severityType, setSeverityType] = useState("error");
