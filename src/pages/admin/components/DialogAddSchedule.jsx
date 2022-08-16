@@ -2,7 +2,7 @@ import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar,
 import axios from "axios";
 import React, { useState } from "react";
 
-function DialogAddKelas(
+function DialogAddJadwal(
 	props = {
 		open: false,
 		id: 0,
@@ -10,13 +10,11 @@ function DialogAddKelas(
 		onAdd: () => {},
 	}
 ) {
-	/* useStates untuk keperluan POST merk baru */
-	const [categoryName, setcategoryName] = useState("");
-	const [categoryDescription, setcategoryDescription] = useState("");
+	const [jadwal, setJadwal] = useState("");
+	const [courseId, setCourseId] = useState("");
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
 	const [severityType, setSeverityType] = useState("error");
-	/* useStates untuk keperluan POST merk baru */
 
 	const Alerts = React.forwardRef(function Alerts(props, ref) {
 		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,17 +29,16 @@ function DialogAddKelas(
 	};
 
 	/* Method to POST new Brand Item */
-	const postKelas = () => {
+	const postJadwal = () => {
 		const postDataa = {
-			jadwal: categoryName,
-			courseId: categoryDescription,
+			jadwal: jadwal,
+			courseId: courseId,
 		};
 		console.log(postDataa);
 		axios
 			.post("https://localhost:7132/api/Schedule", postDataa)
 			.then((res) => {
 				if (res.status === 200) {
-					console.log(res.status);
 					console.log(res.data);
 					setSeverityType("success");
 					setErr("Berhasil menambahkan kategori");
@@ -56,28 +53,27 @@ function DialogAddKelas(
 				setOpen(true);
 			});
 	};
-	/* Method to POST new Brand Item */
 
 	return (
 		<div>
 			<Dialog open={props.open} onClose={props.onClose}>
 				<div style={{ padding: "20px", width: "100%" }}>
 					{/* TITLE */}
-					<DialogTitle>Tambahkan Kelas Baru</DialogTitle>
+					<DialogTitle>Tambahkan Jadwal Kelas Baru</DialogTitle>
 					<DialogContent>
 						<form
 							onSubmit={(e) => {
 								e.preventDefault();
-								postKelas();
+								postJadwal();
 							}}>
 							<Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
 								<Grid>
 									<Box noValidate>
 										<TextField
 											id="name"
-											value={categoryName}
+											value={jadwal}
 											label="Jadwal"
-											onChange={(e) => setcategoryName(e.target.value)}
+											onChange={(e) => setJadwal(e.target.value)}
 											style={{
 												display: "flex",
 												flexGrow: 1,
@@ -87,9 +83,9 @@ function DialogAddKelas(
 										/>
 										<TextField
 											id="description"
-											value={categoryDescription}
+											value={courseId}
 											label="Id Kelas"
-											onChange={(e) => setcategoryDescription(e.target.value)}
+											onChange={(e) => setCourseId(e.target.value)}
 											style={{
 												display: "flex",
 												flexGrow: 1,
@@ -99,7 +95,7 @@ function DialogAddKelas(
 										/>
 
 										<Button
-											disabled={categoryName === "" || categoryDescription === "" ? true : false}
+											disabled={jadwal === "" || courseId === "" ? true : false}
 											type="submit"
 											fullWidth
 											variant="contained"
@@ -129,4 +125,4 @@ function DialogAddKelas(
 	);
 }
 
-export default DialogAddKelas;
+export default DialogAddJadwal;

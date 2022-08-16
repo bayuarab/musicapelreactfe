@@ -105,7 +105,7 @@ function ManageSchedule() {
 				console.log(response.data);
 				setUsers((item) => item.filter((item) => item.id !== selectedUser.id));
 				setSeverityType("warning");
-				setMessage("User telah dihapus dari daftar");
+				setMessage("Jadwal telah dihapus dari daftar");
 				setSnackbarState(true);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
