@@ -6,6 +6,7 @@ import MyAccount from "../pages/account/MyAccount";
 // import ManageInvoices from "../pages/admin/manageInvoices";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
+import ManagePaymentMethod from "../pages/admin/ManagePaymentMethod";
 import ManageUser from "../pages/admin/ManageUsers";
 import UserInvoices from "../pages/admin/UserInvoices";
 import CartPage from "../pages/cart/CartPage";
@@ -31,13 +32,14 @@ const PageRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Register />} />
         <Route path="/forget" element={<Forget />} />
-        <Route path="category/:categoryid" element={<DetailCourse />} />
-        <Route path="course">
+        <Route path="/category/:categoryid" element={<DetailCourse />} />
+        <Route path="/course">
           <Route path=":courseid" element={<CategoryCourse />} />
         </Route>
         <Route path="/my-account" element={<MyAccount />} />
         <Route path="/missing" element={<Missing />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/admin/test-payment" element={<ManagePaymentMethod />} />
 
         {/* User and admin route */}
         <Route element={<RequiredAuth allowedRoles={["student"]} />}>
@@ -60,6 +62,7 @@ const PageRoutes = () => {
             <Route path="/admin/category" element={<ManageKategori />} />
             <Route path="/admin/invoices" element={<UserInvoices />} />
             <Route path="/admin/users" element={<ManageUser />} />
+            <Route path="/admin/payment" element={<ManagePaymentMethod />} />
           </Route>
         </Route>
       </Route>
