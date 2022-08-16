@@ -269,6 +269,7 @@ function ManageKelas() {
                                     color="primary"
                                     component={Link}
                                     to={`/admin/category`}
+                                    state={{ categoryFilter: item.category }}
                                   >
                                     Daftar Kelas
                                   </Button>

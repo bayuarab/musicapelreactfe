@@ -100,10 +100,10 @@ const Alerts = React.forwardRef(function Alerts(props, ref) {
 });
 
 function ManageSchedule() {
-  const [users, setUsers] = useState([]);
-  const [searchUser, setSearchUser] = useState("");
-  const [selectedUser, setSelectedUser] = useState({});
-  const [openLogout, setOpenLogout] = useState(false);
+  const [schedules, setSchedules] = useState([]);
+  const [searchSchedule, setSearchSchedule] = useState("");
+  const [selectedSchedule, setSelectedSchedule] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
   const [severityType, setSeverityType] = useState("error");
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = React.useState(false);
@@ -118,16 +118,18 @@ function ManageSchedule() {
   };
 
   const handleCloseLogout = (state) => {
-    if (!state) return setOpenLogout(false);
+    if (!state) return setOpenDialog(false);
     const fetchDelete = async () => {
       try {
         const response = await axios.delete(
-          `https://localhost:7132/api/Schedule/${selectedUser.id}`
+          `https://localhost:7132/api/Schedule/${selectedSchedule.id}`
         );
         console.log(response.data);
-        setUsers((item) => item.filter((item) => item.id !== selectedUser.id));
+        setSchedules((item) =>
+          item.filter((item) => item.id !== selectedSchedule.id)
+        );
         setSeverityType("warning");
-        setMessage("User telah dihapus dari daftar");
+        setMessage("Schedule telah dihapus dari daftar");
         setSnackbarState(true);
       } catch (err) {
         !err.response
@@ -135,18 +137,22 @@ function ManageSchedule() {
           : console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
-        setSeverityType("danger");
-        setMessage("Error: Gagal menghapus, terjadi kesalahan");
+        setMessage(
+          !err.response.status === 400
+            ? "Error: Gagal menghapus, terjadi kesalahan"
+            : "Error: Tidak dapat menghapus jadwal pada kelas yang telah diakuisisi"
+        );
+        setSeverityType("error");
         setSnackbarState(true);
       }
     };
     fetchDelete();
-    setOpenLogout(false);
+    setOpenDialog(false);
   };
 
   const handleClickOpenLogout = (user) => {
-    setSelectedUser(user);
-    setOpenLogout(true);
+    setSelectedSchedule(user);
+    setOpenDialog(true);
   };
 
   useEffect(() => {
@@ -156,7 +162,7 @@ function ManageSchedule() {
           "https://localhost:7132/api/Schedule/Admin"
         );
         console.log(response.data);
-        setUsers(response.data);
+        setSchedules(response.data);
       } catch (err) {
         !err.response
           ? console.log(`Error: ${err.message}`)
@@ -167,16 +173,16 @@ function ManageSchedule() {
     };
 
     fetchApi();
-  }, [setUsers]);
+  }, [setSchedules, schedules?.length, refreshPage]);
 
   const userFilter = () => {
-    return searchUser?.length > 0
-      ? users?.filter(
+    return searchSchedule?.length > 0
+      ? schedules?.filter(
           (item) =>
-            item.courseTitle.includes(searchUser) ||
-            item.courseId.toString().includes(searchUser)
+            item.courseTitle.includes(searchSchedule) ||
+            item.courseId.toString().includes(searchSchedule)
         )
-      : users;
+      : schedules;
   };
 
   return (
@@ -218,8 +224,8 @@ function ManageSchedule() {
                     {/* BOX PENCARIAN DATA */}
                     <div style={{ display: "flex", padding: "20px 0" }}>
                       <TextField
-                        value={searchUser}
-                        onChange={(e) => setSearchUser(e.target.value)}
+                        value={searchSchedule}
+                        onChange={(e) => setSearchSchedule(e.target.value)}
                         id="input-with-icon-textfield"
                         label="Pencarian Jadwal"
                         InputProps={{
@@ -315,8 +321,8 @@ function ManageSchedule() {
             </Container>
           </Box>
           <DeleteDialog
-            selectedUser={selectedUser}
-            logState={openLogout}
+            selectedUser={selectedSchedule}
+            logState={openDialog}
             onClose={handleCloseLogout}
           />
           <AddDialog
