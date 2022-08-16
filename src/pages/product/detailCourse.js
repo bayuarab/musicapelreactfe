@@ -10,49 +10,73 @@ export default function DetailCourse() {
 	const [dataClass, setDataClass] = useState("");
 	let params = useParams();
 
-	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-	const [detailOfACategory, setDetailOfACategory] = useState([]);
-	const getdetailOfACategory = async (url) => {
-		console.log("params", url);
-		await axios
-			.get(`https://localhost:7132/api/CourseCategory/${url}`, {
-				url,
-			})
-			.then((res) => {
-				if (res.status === 200) {
-					setDetailOfACategory(res.data);
-				}
-			})
-			.catch((err) => {});
-		console.log(params);
-	};
-	useEffect(() => {
-		getdetailOfACategory(params.categoryid);
-	}, [params]);
+  const pageResponsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 2,
+      partialVisibilityGutter: 30
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 2,
+      partialVisibilityGutter: 30
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1,
+      partialVisibilityGutter: 30
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      partialVisibilityGutter: 30
+    }
+  };
+
+  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+  const [detailOfACategory, setDetailOfACategory] = useState([]);
+  const getdetailOfACategory = async (url) => {
+    console.log("params", url);
+    await axios
+      .get(`https://localhost:7132/api/CourseCategory/${url}`, {
+        url,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setDetailOfACategory(res.data);
+        }
+      })
+      .catch((err) => { });
+    console.log(params);
+  };
+  useEffect(() => {
+    getdetailOfACategory(params.categoryid);
+  }, [params]);
 
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
-	let paramss = useParams();
-	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-	const [detailOfACourse, setDetailOfACourse] = useState([]);
-	const getdetailOfACourse = async (url) => {
-		console.log("paramss", url);
-		await axios
-			.get(`https://localhost:7132/api/Course/categoryId/${url}`, {
-				url,
-			})
-			.then((res) => {
-				if (res.status === 200) {
-					setDetailOfACourse(res.data);
-					console.log(res.data);
-				}
-			})
-			.catch((err) => {});
-		console.log(paramss);
-	};
-	useEffect(() => {
-		getdetailOfACourse(paramss.categoryid);
-	}, [paramss]);
+  let paramss = useParams();
+  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+  const [detailOfACourse, setDetailOfACourse] = useState([]);
+  const getdetailOfACourse = async (url) => {
+    console.log("paramss", url);
+    await axios
+      .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+        url,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setDetailOfACourse(res.data);
+          console.log(res.data);
+        }
+      })
+      .catch((err) => { });
+    console.log(paramss);
+  };
+  useEffect(() => {
+    getdetailOfACourse(paramss.categoryid);
+  }, [paramss]);
 
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
