@@ -1,4 +1,4 @@
-import { DeleteForever, Search } from "@mui/icons-material";
+import { DeleteForever, Search, ModeEdit } from "@mui/icons-material";
 import { Alert, Box, Button, Container, Grid, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -18,6 +18,9 @@ const theme = createTheme({
 		secondary: {
 			main: "#4F4F4F",
 		},
+		remove: {
+			main: "#9F290F",
+		},
 		white: {
 			main: "#ffffff",
 		},
@@ -35,7 +38,6 @@ const theme = createTheme({
 						paddingBottom: "10px",
 						textTransform: "Capitalize",
 						borderRadius: "8px",
-						color: "#4F4F4F",
 					},
 				},
 			],
@@ -228,9 +230,18 @@ function ManageSchedule() {
 															<StyledTableCell align="left">{row.courseId}</StyledTableCell>
 															<StyledTableCell align="left">{row.jadwal}</StyledTableCell>
 															<StyledTableCell align="center">
-																<Button onClick={() => handleClickOpenLogout(row)} variant="outlined" startIcon={<DeleteForever />} aria-label="delete">
-																	Hapus Jadwal
-																</Button>
+																<Grid container spacing={1}>
+																	<Grid item xs={6}>
+																		<Button onClick={() => handleClickOpenLogout(row)} variant="outlined" color="secondary" startIcon={<ModeEdit />} aria-label="delete">
+																			Edit
+																		</Button>
+																	</Grid>
+																	<Grid item xs={6}>
+																		<Button onClick={() => handleClickOpenLogout(row)} variant="outlined" color="remove" startIcon={<DeleteForever />} aria-label="delete">
+																			Hapus
+																		</Button>
+																	</Grid>
+																</Grid>
 															</StyledTableCell>
 														</StyledTableRow>
 													))}

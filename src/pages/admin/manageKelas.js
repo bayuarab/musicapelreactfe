@@ -1,4 +1,4 @@
-import SearchIcon from "@mui/icons-material/Search";
+import { Search, DeleteForever, ModeEdit, List } from "@mui/icons-material";
 import { Alert, Box, Button, Card, CardContent, CardMedia, Container, Grid, Paper, Snackbar, Stack, TextField, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -25,6 +25,9 @@ const theme = createTheme({
 		},
 		secondary: {
 			main: "#4F4F4F",
+		},
+		remove: {
+			main: "#9F290F",
 		},
 		white: {
 			main: "#ffffff",
@@ -160,7 +163,7 @@ function ManageKelas() {
 												id="input-with-icon-textfield"
 												label="Pencarian Berdasarkan Nama atau Id Kategori"
 												InputProps={{
-													endAdornment: <SearchIcon color="primary" />,
+													endAdornment: <Search color="primary" />,
 												}}
 												variant="outlined"
 												style={{
@@ -181,12 +184,12 @@ function ManageKelas() {
 										</div>
 
 										{kategoriFilter().map((item) => (
-											<Card key={item.id} style={{ margin: "2% 0" }}>
-												<Grid container spacing={3}>
+											<Grid key={item.id} style={{ margin: "2% 0" }}>
+												<Grid container mb="2vh">
 													<Grid item xs={12} md={2}>
-														<CardMedia component="img" style={{ objectFit: "contain" }} height="100" image={`data:image/jpeg;base64,${item.image}`} alt="Image" />
+														<CardMedia component="img" style={{ objectFit: "contain" }} height="100%" image={`data:image/jpeg;base64,${item.image}`} alt="Image" />
 													</Grid>
-													<Grid item xs={12} md={10}>
+													<Grid item xs={12} md={8}>
 														<CardContent>
 															<Typography gutterBottom variant="h5" component="div">
 																{item.category}
@@ -197,36 +200,38 @@ function ManageKelas() {
 															<Typography variant="body2" color="text.secondary">
 																{item.desc}
 															</Typography>
-
-															<Grid container spacing={1}>
-																<Grid item xs={12} md={4}>
-																	<Button fullWidth variant="outlined" color="primary" component={Link} to={`/admin/category`}>
-																		Daftar Kelas
-																	</Button>
-																</Grid>
-																<Grid item xs={12} md={4}>
-																	<Button
-																		fullWidth
-																		variant="outlined"
-																		color="primary"
-																		onClick={(e) => {
-																			e.preventDefault();
-																			setOpenEdit(true);
-																			setEditItemData(item);
-																		}}>
-																		Edit Kategori
-																	</Button>
-																</Grid>
-																<Grid item xs={12} md={4}>
-																	<Button fullWidth variant="outlined" color="primary" onClick={() => handleClickOpenDelete(item)}>
-																		Hapus Kategori
-																	</Button>
-																</Grid>
-															</Grid>
 														</CardContent>
 													</Grid>
+													<Grid item xs={12} md={2}>
+														<Grid container spacing={2}>
+															<Grid item mb="0.5%" xs={4} md={12}>
+																<Button fullWidth variant="outlined" startIcon={<List />} color="secondary" component={Link} to={`/admin/category`}>
+																	Kelas
+																</Button>
+															</Grid>
+															<Grid item mb="0.5%" xs={4} md={12}>
+																<Button
+																	fullWidth
+																	startIcon={<ModeEdit />}
+																	variant="outlined"
+																	color="secondary"
+																	onClick={(e) => {
+																		e.preventDefault();
+																		setOpenEdit(true);
+																		setEditItemData(item);
+																	}}>
+																	Edit
+																</Button>
+															</Grid>
+															<Grid item mb="0.5%" xs={4} md={12}>
+																<Button fullWidth variant="contained" color="remove" style={{ color: "white" }} startIcon={<DeleteForever />} onClick={() => handleClickOpenDelete(item)}>
+																	Hapus
+																</Button>
+															</Grid>
+														</Grid>
+													</Grid>
 												</Grid>
-											</Card>
+											</Grid>
 										))}
 									</Paper>
 								</Grid>
