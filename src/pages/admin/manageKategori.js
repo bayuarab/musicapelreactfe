@@ -34,7 +34,7 @@ const theme = createTheme({
 			main: "#F2C94C",
 		},
 		secondary: {
-			main: "#F2C94C",
+			main: "#4F4F4F",
 		},
 		white: {
 			main: "#ffffff",
@@ -138,7 +138,7 @@ function ManageKategori() {
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
 									}}>
-									{item.courseTitle}
+									{item.id} - {item.courseTitle}
 								</Typography>
 
 								{/* Brand Name */}
@@ -217,7 +217,7 @@ function ManageKategori() {
 							<Grid item xs={12}>
 								<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 									{/* TITLE */}
-									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold", paddingTop: "10px" }}>
+									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold" }}>
 										Manage Kelas
 									</Typography>
 

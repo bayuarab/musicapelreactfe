@@ -7,6 +7,7 @@ import MyAccount from "../pages/account/MyAccount";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
 import ManagePaymentMethod from "../pages/admin/ManagePaymentMethod";
+import ManageSchedule from "../pages/admin/ManageSchedule";
 import ManageUser from "../pages/admin/ManageUsers";
 import UserInvoices from "../pages/admin/UserInvoices";
 import CartPage from "../pages/cart/CartPage";
@@ -62,6 +63,7 @@ const PageRoutes = () => {
             <Route path="/admin/category" element={<ManageKategori />} />
             <Route path="/admin/invoices" element={<UserInvoices />} />
             <Route path="/admin/users" element={<ManageUser />} />
+            <Route path="/admin/schedule" element={<ManageSchedule />} />
             <Route path="/admin/payment" element={<ManagePaymentMethod />} />
           </Route>
         </Route>
