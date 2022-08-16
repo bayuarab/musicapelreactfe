@@ -3,17 +3,52 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Avatar,
   Box,
   Button,
+  Snackbar,
+  Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import UserChangeDataDialog from "./components/UserChangeDataDialog";
+
+const Alerts = forwardRef(function Alerts(props, ref) {
+  return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const MyAccount = () => {
   const [expanded, setExpanded] = useState(false);
   const { auth } = useAuth();
+  const [snackbarState, setSnackbarState] = useState(false);
+  const [dialogOption, setDialogOption] = useState("password");
+  const [severityType, setSeverityType] = useState("error");
+  const [message, setMessage] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarState(false);
+  };
+
+  const handleCloseDialog = (state, dialogState = null) => {
+    const { severity, msg } = dialogState;
+    if (severity === "out" && state) return setOpenDialog(false);
+    setSeverityType(severity);
+    setMessage(msg);
+    setSnackbarState(true);
+    if (!state) return setOpenDialog(true);
+    setOpenDialog(false);
+  };
+
+  const handleClickOpenDialog = (dialogOps) => {
+    setDialogOption(dialogOps);
+    setOpenDialog(true);
+  };
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -76,6 +111,7 @@ const MyAccount = () => {
                       fontFamily: "Poppins",
                       textTransform: "capitalize",
                     }}
+                    onClick={() => handleClickOpenDialog("password")}
                   >
                     Change Password
                   </Button>
@@ -89,6 +125,26 @@ const MyAccount = () => {
           </Box>
         </Box>
       </center>
+      <UserChangeDataDialog
+        dialogOption={dialogOption}
+        logState={openDialog}
+        onClose={handleCloseDialog}
+      />
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar
+          open={snackbarState}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alerts
+            onClose={handleCloseSnackbar}
+            severity={severityType}
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alerts>
+        </Snackbar>
+      </Stack>
     </div>
   );
 };

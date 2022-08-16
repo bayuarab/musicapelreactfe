@@ -37,7 +37,6 @@ const PageRoutes = () => {
         <Route path="/course">
           <Route path=":courseid" element={<CategoryCourse />} />
         </Route>
-        <Route path="/my-account" element={<MyAccount />} />
         <Route path="/missing" element={<Missing />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/admin/test-payment" element={<ManagePaymentMethod />} />
@@ -51,6 +50,7 @@ const PageRoutes = () => {
             <Route path=":invoiceID" element={<InvoiceDetails />} />
           </Route>
           <Route path="/payment-status" element={<SuccessPayment />} />
+          <Route path="/my-account" element={<MyAccount />} />
           <Route path="*" element={<Route path="*" element={<NotFound />} />} />
           <Route path="/missing" element={<Missing />} />
         </Route>
