@@ -211,11 +211,7 @@ function ManagePaymentMethod() {
 
   const optionFilter = () => {
     return searchOption?.length > 0
-      ? options?.filter(
-          (item) =>
-            item.nama.includes(searchOption) ||
-            item.email.includes(searchOption)
-        )
+      ? options?.filter((item) => item.method.includes(searchOption))
       : options;
   };
 

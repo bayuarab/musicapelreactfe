@@ -115,6 +115,18 @@ function ManageKelas() {
   useEffect(() => {
     getListOfBrands();
   }, [refreshPage]);
+  /* useStates untuk keperluan GET daftar semua merk */
+
+  // useEffect(() => {
+  // 	getListOfBrands();
+  // }, [searchQuery]);
+
+  // useEffect(() => {
+  //   console.log(searchQuery);
+  //   console.log(listOfBrands);
+  // }, [searchQuery]);
+
+  /* useStates untuk membuka dialog untuk POST merk baru */
   const [openAdd, setOpenAdd] = useState(false);
 
   /* useStates untuk membuka dialog untuk POST edit merk */
