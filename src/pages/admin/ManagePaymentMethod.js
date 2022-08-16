@@ -38,6 +38,9 @@ const theme = createTheme({
     secondary: {
       main: "#4F4F4F",
     },
+    remove: {
+      main: "#9F290F",
+    },
     white: {
       main: "#ffffff",
     },
@@ -55,24 +58,22 @@ const theme = createTheme({
             paddingBottom: "10px",
             textTransform: "Capitalize",
             borderRadius: "8px",
-            borderColor: "#4F4F4F",
-            color: "#4F4F4F",
           },
         },
-        {
-          props: { variant: "contained" },
-          style: {
-            fontFamily: "Poppins",
-            fontSize: "16px",
-            fontWeight: "600",
-            paddingTop: "10px",
-            paddingBottom: "10px",
-            textTransform: "Capitalize",
-            borderRadius: "8px",
-            backgroundColor: "#4F4F4F",
-            color: "white",
-          },
-        },
+        // {
+        //   props: { variant: "contained" },
+        //   style: {
+        //     fontFamily: "Poppins",
+        //     fontSize: "16px",
+        //     fontWeight: "600",
+        //     paddingTop: "10px",
+        //     paddingBottom: "10px",
+        //     textTransform: "Capitalize",
+        //     borderRadius: "8px",
+        //     backgroundColor: "#4F4F4F",
+        //     color: "white",
+        //   },
+        // },
       ],
     },
   },
@@ -339,19 +340,21 @@ function ManagePaymentMethod() {
                                       // setSelectedOption(row)
                                       handleClickOpenDialog("edit", row)
                                     }
+                                    color="secondary"
                                     variant="outlined"
                                     startIcon={<Edit />}
                                   >
-                                    Ubah Opsi
+                                    Ubah
                                   </Button>
                                   <Button
                                     onClick={() =>
                                       handleClickOpenDialog("delete", row)
                                     }
-                                    variant="contained"
+                                    color="remove"
+                                    variant="outlined"
                                     startIcon={<DeleteForever />}
                                   >
-                                    Hapus Opsi
+                                    Hapus
                                   </Button>
                                 </Box>
                               </StyledTableCell>

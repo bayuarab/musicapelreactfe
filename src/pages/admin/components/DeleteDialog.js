@@ -25,6 +25,7 @@ const DialogButton = styled(Button)(({ theme }) => ({
   textTransform: "Capitalize",
   paddingTop: "4px",
   paddingBottom: "4px",
+  color: "black",
 }));
 
 const DeleteDialog = (props) => {

@@ -60,7 +60,7 @@ const MyAccount = () => {
         <Box
           sx={{
             padding: "4%",
-            paddingTop: "6%",
+            paddingTop: "5%",
             paddingBottom: "7%",
           }}
         >

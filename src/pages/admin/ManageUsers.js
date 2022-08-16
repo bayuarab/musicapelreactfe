@@ -35,6 +35,9 @@ const theme = createTheme({
     secondary: {
       main: "#4F4F4F",
     },
+    remove: {
+      main: "#9F290F",
+    },
     white: {
       main: "#ffffff",
     },
@@ -52,7 +55,6 @@ const theme = createTheme({
             paddingBottom: "10px",
             textTransform: "Capitalize",
             borderRadius: "8px",
-            color: "#4F4F4F",
           },
         },
       ],
@@ -260,10 +262,11 @@ function ManageUser() {
                                 <Button
                                   onClick={() => handleClickOpenLogout(row)}
                                   variant="outlined"
+                                  color="remove"
                                   startIcon={<DeleteForever />}
                                   aria-label="delete"
                                 >
-                                  Hapus Akun
+                                  Hapus
                                 </Button>
                               </StyledTableCell>
                             </StyledTableRow>
