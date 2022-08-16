@@ -56,19 +56,14 @@ const MyCourses = () => {
       </Typography>
     </Box>
   ) : (
-    <Box
-    // style={{
-    //   paddingTop: "45px",
-    //   paddingBottom: "100px",
-    // }}
-    >
+    <Box maxWidth={"100%"}>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: "18px",
-          // paddingLeft: "4.5%",
-          // paddingRight: "4.5%",
+          paddingLeft: "4.5%",
+          paddingRight: "4.5%",
           paddingTop: "45px",
           paddingBottom: "60px",
         }}
@@ -79,73 +74,63 @@ const MyCourses = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "space-between",
                 }}
               >
+                <ImgContainer>
+                  <img
+                    src={`data:image/jpeg;base64,${items.courseImage}`}
+                    alt={items.course}
+                    loading="lazy"
+                    objectfit="true"
+                    width={"200px"}
+                    height={"133px"}
+                    style={{
+                      borderRadius: "16px",
+                    }}
+                  />
+                </ImgContainer>
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
+                    gap: "8px",
+                    marginLeft: "8px",
+                    width: "80vw",
                   }}
                 >
-                  <ImgContainer>
-                    <img
-                      src={`data:image/jpeg;base64,${items.courseImage}`}
-                      alt={items.course}
-                      loading="lazy"
-                      objectfit="true"
-                      width={"200px"}
-                      height={"133px"}
-                      style={{
-                        borderRadius: "16px",
-                      }}
-                    />
-                  </ImgContainer>
-                  <Box
+                  <Typography
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                      marginLeft: "8px",
-                      width: "80vw",
+                      paddingTop: "10px",
+                      fontFamily: "Poppins",
+                      fontSize: "16px",
+                      fontWeight: "400",
+                      color: "#828282",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        paddingTop: "10px",
-                        fontFamily: "Poppins",
-                        fontSize: "16px",
-                        fontWeight: "400",
-                        color: "#828282",
-                      }}
-                    >
-                      {items.category}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        marginTop: "-6px",
-                        fontFamily: "Poppins",
-                        fontSize: "24px",
-                        fontWeight: "600",
-                        color: "#333333",
-                      }}
-                    >
-                      {items.course}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontFamily: "Poppins",
-                        fontSize: "20px",
-                        fontWeight: "400",
-                        color: "#5D5FEF",
-                      }}
-                    >
-                      {items.schedule}
-                    </Typography>
-                  </Box>
+                    {items.category}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      marginTop: "-6px",
+                      fontFamily: "Poppins",
+                      fontSize: "24px",
+                      fontWeight: "600",
+                      color: "#333333",
+                    }}
+                  >
+                    {items.course}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "Poppins",
+                      fontSize: "20px",
+                      fontWeight: "400",
+                      color: "#5D5FEF",
+                    }}
+                  >
+                    {items.schedule}
+                  </Typography>
                 </Box>
               </Box>
               <Divider sx={{ mt: "18px" }} />

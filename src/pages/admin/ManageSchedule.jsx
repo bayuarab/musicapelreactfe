@@ -2,13 +2,13 @@ import { DeleteForever, Search } from "@mui/icons-material";
 import { Alert, Box, Button, Container, Grid, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
-import HeaderSet from "../../components/HeaderSet";
-import DeleteDialog from "./components/DialogDeleteSchedule";
-import AddDialog from "./components/DialogAddSchedule";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import HeaderSet from "../../components/HeaderSet";
+import AddDialog from "./components/DialogAddSchedule";
+import DeleteDialog from "./components/DialogDeleteSchedule";
 
 const theme = createTheme({
 	palette: {
@@ -80,10 +80,10 @@ const Alerts = React.forwardRef(function Alerts(props, ref) {
 });
 
 function ManageSchedule() {
-	const [users, setUsers] = useState([]);
-	const [searchUser, setSearchUser] = useState("");
-	const [selectedUser, setSelectedUser] = useState({});
-	const [openLogout, setOpenLogout] = useState(false);
+	const [schedules, setSchedules] = useState([]);
+	const [searchSchedule, setSearchSchedule] = useState("");
+	const [selectedSchedule, setSelectedSchedule] = useState({});
+	const [openDialog, setOpenDialog] = useState(false);
 	const [severityType, setSeverityType] = useState("error");
 	const [message, setMessage] = useState("");
 	const [snackbarState, setSnackbarState] = React.useState(false);
@@ -105,7 +105,7 @@ function ManageSchedule() {
 				console.log(response.data);
 				setUsers((item) => item.filter((item) => item.id !== selectedUser.id));
 				setSeverityType("warning");
-				setMessage("Jadwal telah dihapus dari daftar");
+				setMessage("User telah dihapus dari daftar");
 				setSnackbarState(true);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
@@ -121,8 +121,8 @@ function ManageSchedule() {
 	};
 
 	const handleClickOpenLogout = (user) => {
-		setSelectedUser(user);
-		setOpenLogout(true);
+		setSelectedSchedule(user);
+		setOpenDialog(true);
 	};
 
 	useEffect(() => {
@@ -130,7 +130,7 @@ function ManageSchedule() {
 			try {
 				const response = await axios.get("https://localhost:7132/api/Schedule/Admin");
 				console.log(response.data);
-				setUsers(response.data);
+				setSchedules(response.data);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
 				if (err.response.data === "Not Found") console.log(err.response.status);
@@ -139,10 +139,10 @@ function ManageSchedule() {
 		};
 
 		fetchApi();
-	}, [setUsers]);
+	}, [setSchedules, schedules?.length, refreshPage]);
 
 	const userFilter = () => {
-		return searchUser?.length > 0 ? users?.filter((item) => item.jadwal.includes(searchUser) || item.courseId.includes(searchUser)) : users;
+		return searchSchedule?.length > 0 ? schedules?.filter((item) => item.courseTitle.includes(searchSchedule) || item.courseId.toString().includes(searchSchedule)) : schedules;
 	};
 
 	return (
@@ -174,8 +174,8 @@ function ManageSchedule() {
 										{/* BOX PENCARIAN DATA */}
 										<div style={{ display: "flex", padding: "20px 0" }}>
 											<TextField
-												value={searchUser}
-												onChange={(e) => setSearchUser(e.target.value)}
+												value={searchSchedule}
+												onChange={(e) => setSearchSchedule(e.target.value)}
 												id="input-with-icon-textfield"
 												label="Pencarian Jadwal"
 												InputProps={{
@@ -242,7 +242,7 @@ function ManageSchedule() {
 							</Grid>
 						</Container>
 					</Box>
-					<DeleteDialog selectedUser={selectedUser} logState={openLogout} onClose={handleCloseLogout} />
+					<DeleteDialog selectedUser={selectedSchedule} logState={openDialog} onClose={handleCloseLogout} />
 					<AddDialog
 						open={openAdd}
 						onClose={() => {

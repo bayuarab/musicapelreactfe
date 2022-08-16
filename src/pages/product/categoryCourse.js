@@ -45,7 +45,7 @@ export default function CategoryCourse() {
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
   const [claimedCourse, setClaimedCourse] = useState(false);
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
   const navigate = useNavigate();
   const [openAlertSucces, setOpenAlertSucces] = useState(false);
   const [openAlertError, setOpenAlertError] = useState(false);
@@ -109,10 +109,6 @@ export default function CategoryCourse() {
           (item) => item.courseId === parseInt(params.courseid)
         )
       );
-      // const state = response?.data.some(
-      //   (item) => item.courseId === parseInt(params.courseid)
-      // );
-      // console.log("claimedCart", state, params.courseid);
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
@@ -196,35 +192,9 @@ export default function CategoryCourse() {
     setAge(event.target.value);
   };
 
-  //Get courses
-  // useEffect(() => {
-  //   const fetchApiClaimedCourse = async () => {
-  //     try {
-  //       const response = await api.get(`/Courses/${auth?.userId}`);
-  //       console.log("ClaimedCourse", response.data);
-  //       setClaimedCourse(response.data);
-  //       const claimedCourseState = response?.data.some(
-  //         (item) => item.courseId == detailOfACourse.id
-  //       );
-  //       console.log(detailOfACourse.id);
-  //       console.log(claimedCourseState);
-  //     } catch (err) {
-  //       !err.response
-  //         ? console.log(`Error: ${err.message}`)
-  //         : console.log(err.response.data);
-  //       if (err.response.data === "Not Found") console.log(err.response.status);
-  //       console.log(err.response.headers);
-  //     }
-  //   };
-  //   fetchApiClaimedCourse();
-  // }, []);
-
   /* Method to POST new Brand Item */
   const postCart = () => {
     if (!auth?.roles) navigate("/login", { replace: true });
-    // const courseValid = claimedCourse.some(
-    //   (item) => item.courseId == detailOfACourse.id
-    // );
     if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;
@@ -292,9 +262,6 @@ export default function CategoryCourse() {
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
-      // const schedule = cekJadwal.find(
-      //   (schedules) => (schedules.id = scheduleCourse)
-      // );
       const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
       console.log(selectedCart);
       if (url === "MInvoice") {
@@ -345,9 +312,6 @@ export default function CategoryCourse() {
 
   const checkout = () => {
     if (!auth?.roles) navigate("/login", { replace: true });
-    // const courseValid = claimedCourse.some(
-    //   (item) => item.courseId == detailOfACourse.id
-    // );
     if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;

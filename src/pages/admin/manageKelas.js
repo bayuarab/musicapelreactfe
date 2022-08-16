@@ -98,18 +98,6 @@ function ManageKelas() {
 	useEffect(() => {
 		getListOfBrands();
 	}, [refreshPage]);
-	/* useStates untuk keperluan GET daftar semua merk */
-
-	// useEffect(() => {
-	// 	getListOfBrands();
-	// }, [searchQuery]);
-
-	// useEffect(() => {
-	//   console.log(searchQuery);
-	//   console.log(listOfBrands);
-	// }, [searchQuery]);
-
-	/* useStates untuk membuka dialog untuk POST merk baru */
 	const [openAdd, setOpenAdd] = useState(false);
 
 	/* useStates untuk membuka dialog untuk POST edit merk */
@@ -212,7 +200,7 @@ function ManageKelas() {
 
 															<Grid container spacing={1}>
 																<Grid item xs={12} md={4}>
-																	<Button fullWidth variant="outlined" color="secondary" component={Link} to={`/admin/category`}>
+																	<Button fullWidth variant="outlined" color="primary" component={Link} to={`/admin/category`}>
 																		Daftar Kelas
 																	</Button>
 																</Grid>
@@ -220,7 +208,7 @@ function ManageKelas() {
 																	<Button
 																		fullWidth
 																		variant="outlined"
-																		color="secondary"
+																		color="primary"
 																		onClick={(e) => {
 																			e.preventDefault();
 																			setOpenEdit(true);
@@ -230,7 +218,7 @@ function ManageKelas() {
 																	</Button>
 																</Grid>
 																<Grid item xs={12} md={4}>
-																	<Button fullWidth variant="outlined" color="secondary" onClick={() => handleClickOpenDelete(item)}>
+																	<Button fullWidth variant="outlined" color="primary" onClick={() => handleClickOpenDelete(item)}>
 																		Hapus Kategori
 																	</Button>
 																</Grid>
