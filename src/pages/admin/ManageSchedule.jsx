@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import HeaderSet from "../../components/HeaderSet";
 import AddDialog from "./components/DialogAddSchedule";
 import DeleteDialog from "./components/DialogDeleteSchedule";
+import EditDialog from "./components/DialogEditSchedule";
 
 const theme = createTheme({
 	palette: {
@@ -90,7 +91,9 @@ function ManageSchedule() {
 	const [message, setMessage] = useState("");
 	const [snackbarState, setSnackbarState] = React.useState(false);
 	const [openAdd, setOpenAdd] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
 	const [refreshPage, setRefreshPage] = useState(false);
+	const [editItemData, setEditItemData] = useState();
 
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === "clickaway") {
@@ -230,9 +233,18 @@ function ManageSchedule() {
 															<StyledTableCell align="left">{row.courseId}</StyledTableCell>
 															<StyledTableCell align="left">{row.jadwal}</StyledTableCell>
 															<StyledTableCell align="center">
-																<Grid container spacing={1}>
+																<Grid container>
 																	<Grid item xs={6}>
-																		<Button onClick={() => handleClickOpenLogout(row)} variant="outlined" color="secondary" startIcon={<ModeEdit />} aria-label="delete">
+																		<Button
+																			onClick={(e) => {
+																				e.preventDefault();
+																				setOpenEdit(true);
+																				setEditItemData(row);
+																			}}
+																			variant="outlined"
+																			color="secondary"
+																			startIcon={<ModeEdit />}
+																			aria-label="delete">
 																			Edit
 																		</Button>
 																	</Grid>
@@ -253,7 +265,15 @@ function ManageSchedule() {
 							</Grid>
 						</Container>
 					</Box>
-					<DeleteDialog selectedUser={selectedSchedule} logState={openDialog} onClose={handleCloseLogout} />
+					<DeleteDialog selectedSchedule={selectedSchedule} logState={openDialog} onClose={handleCloseLogout} />
+					<EditDialog
+						selectedSchedule={editItemData}
+						openDialog={openEdit}
+						onClose={() => {
+							setOpenEdit(false);
+							setRefreshPage((status) => !status);
+						}}
+					/>
 					<AddDialog
 						open={openAdd}
 						onClose={() => {
