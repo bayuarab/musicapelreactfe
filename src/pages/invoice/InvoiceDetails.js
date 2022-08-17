@@ -38,6 +38,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontWeight: "500",
   },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "12px",
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -51,11 +54,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StyledNavLink = styled(Typography)({
+const StyledNavLink = styled(Typography)(({ theme }) => ({
   fontFamily: "Poppins",
   fontWeight: "600",
   fontSize: "16px",
-});
+  [theme.breakpoints.down("sm")]: {
+    display: "block",
+    fontSize: "12px",
+  },
+}));
 
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
@@ -101,11 +108,13 @@ const InvoiceDetails = () => {
     <Box
       sx={{
         padding: "5.5%",
-        paddingTop: "50px",
+        paddingTop: { md: "50px", xs: "20px" },
         paddingBottom: "90px",
       }}
     >
-      <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
+      <Box
+        sx={{ display: "flex", gap: "10px", mb: { md: "34px", xs: "20px" } }}
+      >
         <Link style={{ textDecoration: "none" }} to="/">
           <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
         </Link>
@@ -115,12 +124,12 @@ const InvoiceDetails = () => {
         <StyledNavLink color={"#5D5FEF"}>Rincian Invoice</StyledNavLink>
       </Box>
       <Typography
-        mb={"24px"}
         sx={{
           fontFamily: "Poppins",
           color: "#4F4F4F",
           fontWeight: "700",
-          fontSize: "20px",
+          fontSize: { md: "20px", xs: "16px" },
+          mb: { md: "24px", xs: "8px" },
         }}
       >
         Rincian Invoice
@@ -129,7 +138,7 @@ const InvoiceDetails = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "8px",
+          gap: { md: "8px", xs: "1px" },
           marginBottom: "32px",
         }}
       >
@@ -138,10 +147,10 @@ const InvoiceDetails = () => {
             fontFamily: "Poppins",
             color: "#4F4F4F",
             fontWeight: "500",
-            fontSize: "18px",
+            fontSize: { md: "18px", xs: "14px" },
           }}
         >
-          No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
+          No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
         </Typography>
         <Box
           sx={{
@@ -155,10 +164,10 @@ const InvoiceDetails = () => {
               fontFamily: "Poppins",
               color: "#4F4F4F",
               fontWeight: "500",
-              fontSize: "18px",
+              fontSize: { md: "18px", xs: "14px" },
             }}
           >
-            Tanggal Beli&nbsp;:{" "}
+            Tanggal Beli&nbsp;&nbsp;:{" "}
             {invoiceDetailData[0] ? invoiceDetailData[0].purchasedDate : "-"}
           </Typography>
           <Typography
@@ -166,16 +175,30 @@ const InvoiceDetails = () => {
               fontFamily: "Poppins",
               color: "#4F4F4F",
               fontWeight: "700",
-              fontSize: "18px",
+              fontSize: { md: "18px", xs: "14px" },
+              display: { md: "block", xs: "none" },
             }}
           >
             {/* .toLocaleString("de-DE") */}
-            Total Harga:&nbsp;&nbsp; IDR{" "}
+            Total Harga&nbsp;:&nbsp;&nbsp; IDR{" "}
             {invoiceDetailData[0]
               ? numberFormat(invoiceDetailData[0].cost)
               : "-"}
           </Typography>
         </Box>
+        <Typography
+          sx={{
+            fontFamily: "Poppins",
+            color: "#4F4F4F",
+            fontWeight: "700",
+            fontSize: { md: "18px", xs: "14px" },
+            display: { md: "none", xs: "block" },
+          }}
+        >
+          {/* .toLocaleString("de-DE") */}
+          Total Harga &nbsp;&nbsp;:&nbsp;&nbsp; IDR{" "}
+          {invoiceDetailData[0] ? numberFormat(invoiceDetailData[0].cost) : "-"}
+        </Typography>
       </Box>
       <TableContainer component={StyledPaper}>
         <Table sx={{}} aria-label="customized table">

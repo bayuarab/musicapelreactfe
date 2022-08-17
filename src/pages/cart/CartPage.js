@@ -248,11 +248,11 @@ const CartPage = () => {
     </Box>
   ) : (
     <Box
-      style={{
-        paddingTop: "45px",
+      sx={{
+        paddingTop: { md: "45px", xs: "20px" },
         paddingLeft: "4%",
         paddingRight: "4%",
-        paddingBottom: "100px",
+        paddingBottom: "80px",
       }}
     >
       <Box>
@@ -310,6 +310,7 @@ const CartPage = () => {
             >
               <Typography
                 sx={{
+                  display: { xs: "none", sm: "none", md: "block" },
                   color: "#333333",
                   fontSize: "18px",
                   fontFamilyL: "Poppins",
@@ -321,7 +322,7 @@ const CartPage = () => {
               <Typography
                 sx={{
                   color: "#5D5FEF",
-                  fontSize: "24px",
+                  fontSize: { md: "24px", sm: "20px", xs: "18px" },
                   fontFamilyL: "Poppins",
                   fontWeight: "500",
                 }}
@@ -338,15 +339,22 @@ const CartPage = () => {
                 Bayar Sekarang
               </CheckoutButton>
               <IconButton
+                size="small"
                 sx={{ display: { md: "none" } }}
                 onClick={() => checkout()}
                 disabled={selectedCart.length <= 0}
               >
-                <Avatar sx={{ bgcolor: "#5D5FEF" }}>
+                <Avatar
+                  sizes="small"
+                  sx={{
+                    bgcolor: selectedCart.length <= 0 ? "#AfAfAf" : "#5D5FEF",
+                  }}
+                >
                   <ShoppingCartCheckout
+                    fontSize="inherit"
                     sx={{
                       color: "white",
-                      fontSize: 30,
+                      // fontSize: 30,
                     }}
                   />
                 </Avatar>

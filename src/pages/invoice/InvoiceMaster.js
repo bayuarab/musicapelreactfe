@@ -39,6 +39,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontWeight: "500",
   },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "12px",
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -52,11 +55,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StyledNavLink = styled(Typography)({
+const StyledNavLink = styled(Typography)(({ theme }) => ({
   fontFamily: "Poppins",
   fontWeight: "600",
   fontSize: "16px",
-});
+  [theme.breakpoints.down("sm")]: {
+    display: "block",
+    fontSize: "12px",
+  },
+}));
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
@@ -101,11 +108,13 @@ const InvoiceMaster = () => {
     <Box
       sx={{
         padding: "5.5%",
-        paddingTop: "50px",
+        paddingTop: { md: "50px", xs: "20px" },
         paddingBottom: "90px",
       }}
     >
-      <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
+      <Box
+        sx={{ display: "flex", gap: "10px", mb: { md: "34px", xs: "20px" } }}
+      >
         <Link style={{ textDecoration: "none" }} to="/">
           <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
         </Link>
@@ -114,12 +123,12 @@ const InvoiceMaster = () => {
         </Link>
       </Box>
       <Typography
-        mb={"24px"}
         sx={{
           fontFamily: "Poppins",
           color: "#4F4F4F",
           fontWeight: "600",
-          fontSize: "20px",
+          fontSize: { md: "20px", xs: "16px" },
+          mb: { md: "24px", xs: "15px" },
         }}
       >
         Menu Invoice
@@ -162,7 +171,7 @@ const InvoiceMaster = () => {
                       variant="contained"
                       sx={{
                         fontFamily: "Poppins",
-                        fontSize: "14px",
+                        fontSize: { md: "14px", xs: "12px" },
                         backgroundColor: "#5D5FEF",
                         borderRadius: "8px",
                         textTransform: "Capitalize",

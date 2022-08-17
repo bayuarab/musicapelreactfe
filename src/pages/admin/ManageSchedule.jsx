@@ -1,4 +1,4 @@
-import { DeleteForever, Search, ModeEdit } from "@mui/icons-material";
+import { DeleteForever, ModeEdit, Search } from "@mui/icons-material";
 import { Alert, Box, Button, Container, Grid, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -116,7 +116,7 @@ function ManageSchedule() {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
 				console.log(err.response.status);
 				console.log(err.response.headers);
-				setSeverityType("danger");
+				setSeverityType("error");
 				setMessage("Error: Gagal menghapus, terjadi kesalahan");
 				setSnackbarState(true);
 			}

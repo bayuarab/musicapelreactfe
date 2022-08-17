@@ -21,7 +21,7 @@ const ImgContainer = styled(Box)(({ theme }) => ({
   height: "133px",
   borderRadius: "16px",
   borderColor: "#828282",
-  [theme.breakpoints.up("md")]: {
+  [theme.breakpoints.up("sm")]: {
     display: "block",
   },
 }));
@@ -81,50 +81,101 @@ const CartList = (props) => {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     marginLeft: "8px",
-                    width: "55vw",
+                    width: { md: "55vw" },
                   }}
                 >
-                  <Typography
+                  <Box
                     sx={{
-                      fontFamily: "Poppins",
-                      fontSize: "16px",
-                      fontWeight: "400",
-                      color: "#828282",
+                      display: { md: "none", sm: "none" },
+                      mb: "1px",
                     }}
                   >
-                    {items.category}
-                  </Typography>
-                  <Typography
+                    <Typography
+                      sx={{
+                        mt: { md: "-4px", sm: "-3px", xs: "-5px" },
+                        mb: { sm: "10px", xs: "10px" },
+                        fontFamily: "Poppins",
+                        fontSize: { md: "24px", sm: "20px", xs: "18px" },
+                        fontWeight: "600",
+                        color: "#333333",
+                      }}
+                    >
+                      {items.course}
+                    </Typography>
+                  </Box>
+                  <Box
                     sx={{
-                      mt: "-4px",
-                      fontFamily: "Poppins",
-                      fontSize: "24px",
-                      fontWeight: "600",
-                      color: "#333333",
+                      display: { xs: "flex", sm: "flex" },
+                      alignItems: "center",
                     }}
                   >
-                    {items.course}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: "Poppins",
-                      fontSize: "16px",
-                      fontWeight: "400",
-                      color: "#4F4F4F",
-                    }}
-                  >
-                    {items.schedule}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: "Poppins",
-                      fontSize: "20px",
-                      fontWeight: "600",
-                      color: "#5D5FEF",
-                    }}
-                  >
-                    IDR {items.price?.toLocaleString("de-DE")}
-                  </Typography>
+                    <Box
+                      component={"img"}
+                      src={`data:image/jpeg;base64,${items.courseImage}`}
+                      alt={items.course}
+                      loading="lazy"
+                      objectfit="true"
+                      width={"100px"}
+                      height={"90px"}
+                      sx={{
+                        borderRadius: "10px",
+                        display: { md: "none", sm: "none" },
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        marginLeft: "10px",
+                        width: { md: "55vw", xs: "40vw" },
+                        minHeight: { md: "133px" },
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontSize: { md: "16px" },
+                          fontWeight: "400",
+                          color: "#828282",
+                        }}
+                      >
+                        {items.category}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mt: { md: "-4px", sm: "3px" },
+                          fontFamily: "Poppins",
+                          fontSize: { md: "24px", sm: "24px", xs: "18px" },
+                          fontWeight: "600",
+                          color: "#333333",
+                          display: { md: "block", sm: "block", xs: "none" },
+                        }}
+                      >
+                        {items.course}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontSize: { md: "16px", sm: "14px", xs: "14px" },
+                          fontWeight: "400",
+                          color: "#4F4F4F",
+                        }}
+                      >
+                        {items.schedule}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontSize: { md: "20px", sm: "16px", xs: "16px" },
+                          fontWeight: "600",
+                          color: "#5D5FEF",
+                        }}
+                      >
+                        IDR {items.price?.toLocaleString("de-DE")}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
