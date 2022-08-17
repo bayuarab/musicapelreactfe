@@ -248,11 +248,11 @@ const CartPage = () => {
     </Box>
   ) : (
     <Box
-      style={{
-        paddingTop: "45px",
+      sx={{
+        paddingTop: { md: "45px", xs: "20px" },
         paddingLeft: "4%",
         paddingRight: "4%",
-        paddingBottom: "100px",
+        paddingBottom: "80px",
       }}
     >
       <Box>

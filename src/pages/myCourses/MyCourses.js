@@ -5,14 +5,16 @@ import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
 const ImgContainer = styled(Box)(({ theme }) => ({
-  display: "none",
-  marginRight: "15px",
-  width: "200px",
-  height: "133px",
-  borderRadius: "16px",
+  display: "block",
+  marginRight: "6px",
+  borderRadius: "12px",
   borderColor: "#828282",
   [theme.breakpoints.up("md")]: {
     display: "block",
+    borderRadius: "16px",
+    marginRight: "15px",
+    width: "200px",
+    height: "133px",
   },
 }));
 
@@ -64,7 +66,7 @@ const MyCourses = () => {
           gap: "18px",
           paddingLeft: "4.5%",
           paddingRight: "4.5%",
-          paddingTop: "45px",
+          paddingTop: { md: "45px", xs: "30px" },
           paddingBottom: "60px",
         }}
       >
@@ -78,15 +80,16 @@ const MyCourses = () => {
                 }}
               >
                 <ImgContainer>
-                  <img
+                  <Box
+                    component={"img"}
                     src={`data:image/jpeg;base64,${items.courseImage}`}
                     alt={items.course}
                     loading="lazy"
                     objectfit="true"
-                    width={"200px"}
-                    height={"133px"}
-                    style={{
-                      borderRadius: "16px",
+                    sx={{
+                      width: { md: "200px", xs: "100px" },
+                      minHeight: { md: "133px" },
+                      borderRadius: { md: "16px", xs: "10px" },
                     }}
                   />
                 </ImgContainer>
@@ -94,18 +97,19 @@ const MyCourses = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "8px",
+                    gap: { md: "8px", xs: "4px" },
                     marginLeft: "8px",
                     width: "80vw",
                   }}
                 >
                   <Typography
                     sx={{
-                      paddingTop: "10px",
+                      paddingTop: { md: "10px", xs: "4px" },
                       fontFamily: "Poppins",
-                      fontSize: "16px",
+                      fontSize: { md: "16px", xs: "12px" },
                       fontWeight: "400",
                       color: "#828282",
+                      display: { md: "block", xs: "none" },
                     }}
                   >
                     {items.category}
@@ -114,7 +118,7 @@ const MyCourses = () => {
                     sx={{
                       marginTop: "-6px",
                       fontFamily: "Poppins",
-                      fontSize: "24px",
+                      fontSize: { md: "24px", xs: "18px" },
                       fontWeight: "600",
                       color: "#333333",
                     }}
@@ -123,9 +127,10 @@ const MyCourses = () => {
                   </Typography>
                   <Typography
                     sx={{
+                      marginTop: { md: "0px", xs: "-6px" },
                       fontFamily: "Poppins",
-                      fontSize: "20px",
-                      fontWeight: "400",
+                      fontSize: { md: "20px", xs: "14px" },
+                      fontWeight: "500",
                       color: "#5D5FEF",
                     }}
                   >
@@ -133,7 +138,7 @@ const MyCourses = () => {
                   </Typography>
                 </Box>
               </Box>
-              <Divider sx={{ mt: "18px" }} />
+              <Divider sx={{ mt: { md: "18px", xs: "13px" } }} />
             </Box>
           );
         })}

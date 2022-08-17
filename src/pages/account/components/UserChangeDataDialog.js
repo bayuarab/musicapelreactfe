@@ -5,10 +5,10 @@ import {
   DialogContent,
   DialogTitle,
   Slide,
+  styled,
   TextField,
 } from "@mui/material";
 import { forwardRef, useState } from "react";
-import styled from "styled-components";
 import api from "../../../api/userAPI";
 import useAuth from "../../../hooks/useAuth";
 
@@ -17,6 +17,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 const DialogButton = styled(Button)(({ theme }) => ({
+  display: "block",
   fontFamily: "Poppins",
   width: "100%",
   fontSize: "16px",
@@ -27,12 +28,16 @@ const DialogButton = styled(Button)(({ theme }) => ({
   paddingBottom: "7px",
   color: "white",
   backgroundColor: "#5D5FEF",
+  [theme.breakpoints.down("sm")]: {
+    display: "block",
+    fontSize: "12px",
+  },
 }));
 
 const UserChangeDataDialog = (props) => {
   const { onClose, logState, dialogOption } = props;
-  const { auth } = useAuth();
-  const [postData, setPostData] = useState({ ...auth });
+  const { auth, setAuth } = useAuth();
+  const [postData, setPostData] = useState({ ...auth, nama: "" });
   const [dialogState, setDialogState] = useState({ oldPass: false });
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
 
@@ -81,7 +86,8 @@ const UserChangeDataDialog = (props) => {
         severity: "success",
         msg: `Berhasil, ${dialogOption} telah dirubah`,
       };
-      setPostData({ ...postData, password: "" });
+      if (url === "ChangeName") setAuth({ ...auth, nama: postData.nama });
+      setPostData({ ...postData, password: "", nama: "" });
       setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
       handleClose(true, feedback);
     } catch (err) {
@@ -100,8 +106,15 @@ const UserChangeDataDialog = (props) => {
 
   const changPassword = () => {
     return (
-      <Box sx={{ padding: "10px" }}>
-        <DialogTitle mb={1}>{"Ubah Password"}</DialogTitle>
+      <Box sx={{ padding: { md: "10px", xs: "5px" } }}>
+        <DialogTitle
+          sx={{
+            mb: { md: 1, xs: "0px" },
+            fontSize: { md: "24px", xs: "18px" },
+          }}
+        >
+          {"Ubah Password"}
+        </DialogTitle>
         <DialogContent>
           {!dialogState?.oldPass ? (
             <form
@@ -119,11 +132,12 @@ const UserChangeDataDialog = (props) => {
                   onChange={(e) => {
                     setPostData({ ...postData, password: e.target.value });
                   }}
-                  style={{
+                  sx={{
                     display: "flex",
+                    fontSize: "10px",
                     flexGrow: 1,
-                    marginTop: "20px",
-                    marginBottom: "20px",
+                    marginTop: { md: "20px", xs: "6px" },
+                    marginBottom: { md: "20px", xs: "10px" },
                   }}
                 />
 
@@ -132,11 +146,11 @@ const UserChangeDataDialog = (props) => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  style={{
+                  sx={{
                     display: "flex",
                     flexGrow: 1,
-                    marginTop: "20px",
-                    marginBottom: "20px",
+                    marginTop: { md: "20px", xs: "6px" },
+                    marginBottom: { md: "20px", xs: "6px" },
                   }}
                 >
                   Konfirmasi Password Lama
@@ -145,7 +159,6 @@ const UserChangeDataDialog = (props) => {
             </form>
           ) : (
             <form
-              // style={{ marginTop: "60px" }}
               onSubmit={(e) => {
                 e.preventDefault();
                 fetchApiPut("ChangePassword", {
@@ -167,11 +180,11 @@ const UserChangeDataDialog = (props) => {
                       newPassword: e.target.value,
                     });
                   }}
-                  style={{
+                  sx={{
                     display: "flex",
                     flexGrow: 1,
-                    marginTop: "20px",
-                    marginBottom: "20px",
+                    marginTop: { md: "20px", xs: "6px" },
+                    marginBottom: { md: "20px", xs: "10px" },
                   }}
                 />
                 <TextField
@@ -185,11 +198,11 @@ const UserChangeDataDialog = (props) => {
                       rePassword: e.target.value,
                     });
                   }}
-                  style={{
+                  sx={{
                     display: "flex",
                     flexGrow: 1,
-                    marginTop: "20px",
-                    marginBottom: "20px",
+                    marginTop: { md: "20px", xs: "20px" },
+                    marginBottom: { md: "20px", xs: "16px" },
                   }}
                 />
 
@@ -204,8 +217,8 @@ const UserChangeDataDialog = (props) => {
                   style={{
                     display: "flex",
                     flexGrow: 1,
-                    marginTop: "20px",
-                    marginBottom: "20px",
+                    marginTop: { md: "20px", xs: "16px" },
+                    marginBottom: { md: "20px", xs: "6px" },
                   }}
                 >
                   Ubah Password
@@ -218,6 +231,65 @@ const UserChangeDataDialog = (props) => {
     );
   };
 
+  const changeName = () => {
+    return (
+      <Box sx={{ padding: { md: "10px", xs: "5px" } }}>
+        <DialogTitle
+          sx={{
+            mb: { md: 1, xs: "0px" },
+            fontSize: { md: "24px", xs: "18px" },
+          }}
+        >
+          {"Ubah Nama"}
+        </DialogTitle>
+        <DialogContent>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.table(postData);
+              fetchApiPut("ChangeName", {
+                ...postData,
+                id: auth?.userId,
+              });
+            }}
+          >
+            <Box noValidate>
+              <TextField
+                value={postData.nama}
+                label="Nama Lengkap Pengguna"
+                // type="password"
+                onChange={(e) => {
+                  setPostData({ ...postData, nama: e.target.value });
+                }}
+                sx={{
+                  display: "flex",
+                  fontSize: "10px",
+                  flexGrow: 1,
+                  marginTop: { md: "20px", xs: "6px" },
+                  marginBottom: { md: "20px", xs: "10px" },
+                }}
+              />
+              <DialogButton
+                disabled={!postData.nama}
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  display: "flex",
+                  flexGrow: 1,
+                  marginTop: { md: "20px", xs: "6px" },
+                  marginBottom: { md: "20px", xs: "6px" },
+                }}
+              >
+                Ubah Nama Pengguna
+              </DialogButton>
+            </Box>
+          </form>
+        </DialogContent>
+      </Box>
+    );
+  };
+
   return (
     <Dialog
       open={logState}
@@ -225,13 +297,12 @@ const UserChangeDataDialog = (props) => {
       keepMounted
       onClose={() => {
         setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
-        setPostData({ ...postData, password: "" });
+        setPostData({ ...postData, password: "", nama: "" });
         handleClose(true, { severity: "out" });
       }}
       aria-describedby="alert-dialog-slide-description"
-      // sx={{ padding: "30px" }}
     >
-      {dialogOption === "password" ? changPassword() : <></>}
+      {dialogOption === "password" ? changPassword() : changeName()}
     </Dialog>
   );
 };
