@@ -81,6 +81,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontWeight: "500",
   },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "12px",
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -204,7 +207,10 @@ function ManageUser() {
                     <Typography
                       variant="h5"
                       color="secondary"
-                      style={{ fontWeight: "bold" }}
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: { md: "24px", xs: "18px" },
+                      }}
                     >
                       Manage User
                     </Typography>
@@ -259,15 +265,37 @@ function ManageUser() {
                                 {row.email}
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <Button
-                                  onClick={() => handleClickOpenLogout(row)}
-                                  variant="outlined"
-                                  color="remove"
-                                  startIcon={<DeleteForever />}
-                                  aria-label="delete"
+                                <Box
+                                  sx={{ display: { md: "block", xs: "none" } }}
                                 >
-                                  Hapus
-                                </Button>
+                                  <Button
+                                    onClick={() => handleClickOpenLogout(row)}
+                                    variant="outlined"
+                                    color="remove"
+                                    startIcon={<DeleteForever />}
+                                    aria-label="delete"
+                                  >
+                                    Hapus
+                                  </Button>
+                                </Box>
+                                <Box
+                                  sx={{ display: { md: "none", xs: "block" } }}
+                                >
+                                  <Button
+                                    onClick={() => handleClickOpenLogout(row)}
+                                    variant="outlined"
+                                    color="remove"
+                                    startIcon={
+                                      <DeleteForever
+                                        sx={{
+                                          marginLeft: "12px",
+                                          height: "18px",
+                                        }}
+                                      />
+                                    }
+                                    aria-label="delete"
+                                  ></Button>
+                                </Box>
                               </StyledTableCell>
                             </StyledTableRow>
                           ))}

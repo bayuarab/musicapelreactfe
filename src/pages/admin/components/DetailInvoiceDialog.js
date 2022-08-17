@@ -53,7 +53,7 @@ const DetailInvoiceDialog = (props) => {
     };
 
     if (logState) fetchApi();
-  }, [setInvoiceDetailData, logState]);
+  }, [setInvoiceDetailData, logState, masterInvoiceId]);
 
   return (
     <div>
@@ -81,7 +81,7 @@ const DetailInvoiceDialog = (props) => {
         <Box
           sx={{
             padding: "5.5%",
-            paddingTop: "50px",
+            paddingTop: { md: "50px", xs: "30px" },
             paddingBottom: "90px",
           }}
         >
@@ -89,8 +89,8 @@ const DetailInvoiceDialog = (props) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "8px",
-              marginBottom: "32px",
+              gap: { md: "8px", xs: "1px" },
+              marginBottom: { md: "32px", xs: "20px" },
             }}
           >
             <Typography
@@ -98,10 +98,10 @@ const DetailInvoiceDialog = (props) => {
                 fontFamily: "Poppins",
                 color: "#4F4F4F",
                 fontWeight: "500",
-                fontSize: "18px",
+                fontSize: { md: "18px", xs: "14px" },
               }}
             >
-              No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;:{" "}
+              No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:{" "}
               {invoiceDetailData.length > 0
                 ? invoiceDetailData[0].noInvoice
                 : "-"}
@@ -118,10 +118,10 @@ const DetailInvoiceDialog = (props) => {
                   fontFamily: "Poppins",
                   color: "#4F4F4F",
                   fontWeight: "500",
-                  fontSize: "18px",
+                  fontSize: { md: "18px", xs: "14px" },
                 }}
               >
-                Tanggal Beli&nbsp;:{" "}
+                Tanggal Beli&nbsp;&nbsp;:{" "}
                 {invoiceDetailData.length > 0
                   ? invoiceDetailData[0].purchasedDate
                   : "-"}
@@ -131,16 +131,32 @@ const DetailInvoiceDialog = (props) => {
                   fontFamily: "Poppins",
                   color: "#4F4F4F",
                   fontWeight: "700",
-                  fontSize: "18px",
+                  fontSize: { md: "18px", xs: "14px" },
+                  display: { md: "block", xs: "none" },
                 }}
               >
                 {/* .toLocaleString("de-DE") */}
-                Total Harga:&nbsp;&nbsp; IDR{" "}
-                {invoiceDetailData.length > 0
+                Total Harga&nbsp;:&nbsp;&nbsp; IDR{" "}
+                {invoiceDetailData[0]
                   ? numberFormat(invoiceDetailData[0].cost)
                   : "-"}
               </Typography>
             </Box>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                color: "#4F4F4F",
+                fontWeight: "700",
+                fontSize: { md: "18px", xs: "14px" },
+                display: { md: "none", xs: "block" },
+              }}
+            >
+              {/* .toLocaleString("de-DE") */}
+              Total Harga &nbsp;&nbsp;:&nbsp;&nbsp; IDR{" "}
+              {invoiceDetailData[0]
+                ? numberFormat(invoiceDetailData[0].cost)
+                : "-"}
+            </Typography>
           </Box>
           <TableContainer component={StyledPaper}>
             <Table sx={{}} aria-label="customized table">

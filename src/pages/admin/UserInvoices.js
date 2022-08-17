@@ -76,6 +76,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontWeight: "500",
   },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "12px",
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -160,7 +163,10 @@ function UserInvoices() {
                   <Typography
                     variant="h5"
                     color="secondary"
-                    style={{ fontWeight: "bold" }}
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: { md: "24px", xs: "18px" },
+                    }}
                   >
                     User Invoices
                   </Typography>
@@ -219,16 +225,43 @@ function UserInvoices() {
                               {row.purchasedDate}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              <Button
-                                onClick={() =>
-                                  handleClickOpenDetail(row.masterInvoiceId)
-                                }
-                                variant="outlined"
-                                startIcon={<ArrowForward />}
-                                aria-label="delete"
+                              <Box
+                                sx={{
+                                  display: { md: "block", xs: "none" },
+                                }}
                               >
-                                Rincian
-                              </Button>
+                                <Button
+                                  onClick={() =>
+                                    handleClickOpenDetail(row.masterInvoiceId)
+                                  }
+                                  variant="outlined"
+                                  startIcon={<ArrowForward />}
+                                  aria-label="delete"
+                                >
+                                  Rincian
+                                </Button>
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: { md: "none", xs: "block" },
+                                }}
+                              >
+                                <Button
+                                  onClick={() =>
+                                    handleClickOpenDetail(row.masterInvoiceId)
+                                  }
+                                  variant="outlined"
+                                  startIcon={
+                                    <ArrowForward
+                                      sx={{
+                                        marginLeft: "12px",
+                                        height: "18px",
+                                      }}
+                                    />
+                                  }
+                                  aria-label="delete"
+                                ></Button>
+                              </Box>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))}

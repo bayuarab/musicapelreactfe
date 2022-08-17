@@ -79,23 +79,6 @@ const theme = createTheme({
   },
 });
 
-const LogoContainer = styled(Box)({
-  alignContent: "center",
-  alignSelf: "center",
-  marginTop: "-2px",
-  marginBottom: "-2px",
-  paddingLeft: "67px",
-  borderRadius: "11px",
-  width: "48px",
-});
-
-const LogoDiv = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  paddingTop: "5px",
-  paddingBottom: "5px",
-});
-
 const StyledPaper = styled(Paper)({
   border: 0,
   boxShadow: "none",
@@ -114,6 +97,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontWeight: "500",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "12px",
   },
 }));
 
@@ -247,17 +233,21 @@ function ManagePaymentMethod() {
                     <Typography
                       variant="h5"
                       color="secondary"
-                      style={{ fontWeight: "bold" }}
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: { md: "24px", xs: "18px" },
+                      }}
                     >
                       Manage Opsi Pembayaran
                     </Typography>
 
                     {/* BOX PENCARIAN DATA */}
-                    <div
-                      style={{
+                    <Box
+                      component={"div"}
+                      sx={{
                         display: "flex",
                         padding: "20px 0",
-                        gap: "20px",
+                        gap: { md: "20px", xs: "10px" },
                         justifyContent: "space-between",
                         alignItems: "center",
                       }}
@@ -276,14 +266,14 @@ function ManagePaymentMethod() {
                           flexGrow: 1,
                         }}
                       />
-                      <Box sx={{ paddingRight: "10px" }}>
+                      <Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
                         <Tooltip
                           TransitionComponent={Zoom}
                           title="Tambah opsi pembayaran"
                           placement="top"
                         >
                           <IconButton
-                            size="large"
+                            size="small"
                             sx={{
                               color: "#4f4f4f",
                             }}
@@ -293,12 +283,11 @@ function ManagePaymentMethod() {
                           </IconButton>
                         </Tooltip>
                       </Box>
-                    </div>
+                    </Box>
                     <TableContainer component={StyledPaper}>
                       <Table sx={{}} aria-label="customized table">
                         <TableHead>
                           <TableRow>
-                            <StyledTableCell align="center"></StyledTableCell>
                             <StyledTableCell align="center">
                               Opsi Pembayaran
                             </StyledTableCell>
@@ -311,26 +300,35 @@ function ManagePaymentMethod() {
                           {optionFilter()?.map((row, index) => (
                             <StyledTableRow key={index}>
                               <StyledTableCell align="center">
-                                <LogoContainer>
-                                  <LogoDiv>
-                                    <img
-                                      style={{ alignSelf: "center" }}
-                                      src={`data:image/jpeg;base64,${row.icon}`}
-                                      alt={row.method}
-                                      loading="lazy"
-                                      width={"37px"}
-                                      height={"37px"}
-                                    />
-                                  </LogoDiv>
-                                </LogoContainer>
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                <Box>{row.method}</Box>
+                                <Box
+                                  sx={{
+                                    marginLeft: { md: "30%", xs: "10%" },
+                                    paddingLeft: "10px",
+                                    paddingRight: "15px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: { md: "30px", xs: "10px" },
+                                  }}
+                                >
+                                  <Box
+                                    component={"img"}
+                                    style={{ alignSelf: "center" }}
+                                    src={`data:image/jpeg;base64,${row.icon}`}
+                                    alt={row.method}
+                                    loading="lazy"
+                                    sx={{
+                                      width: { md: "37px", xs: "28px" },
+                                      height: { md: "37px", xs: "28px" },
+                                      display: { md: "block", xs: "block" },
+                                    }}
+                                  />
+                                  <Box>{row.method}</Box>
+                                </Box>
                               </StyledTableCell>
                               <StyledTableCell align="center">
                                 <Box
                                   sx={{
-                                    display: "flex",
+                                    display: { md: "flex", xs: "none" },
                                     gap: "30px",
                                     justifyContent: "center",
                                   }}
@@ -356,6 +354,45 @@ function ManagePaymentMethod() {
                                   >
                                     Hapus
                                   </Button>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: { md: "none", xs: "flex" },
+                                    gap: "20px",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Button
+                                    onClick={() =>
+                                      // setSelectedOption(row)
+                                      handleClickOpenDialog("edit", row)
+                                    }
+                                    color="secondary"
+                                    variant="outlined"
+                                    startIcon={
+                                      <Edit
+                                        sx={{
+                                          marginLeft: "12px",
+                                          height: "18px",
+                                        }}
+                                      />
+                                    }
+                                  ></Button>
+                                  <Button
+                                    onClick={() =>
+                                      handleClickOpenDialog("delete", row)
+                                    }
+                                    color="remove"
+                                    variant="outlined"
+                                    startIcon={
+                                      <DeleteForever
+                                        sx={{
+                                          marginLeft: "12px",
+                                          height: "18px",
+                                        }}
+                                      />
+                                    }
+                                  ></Button>
                                 </Box>
                               </StyledTableCell>
                             </StyledTableRow>
