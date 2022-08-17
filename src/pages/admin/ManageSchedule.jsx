@@ -33,7 +33,10 @@ const theme = createTheme({
 					props: { variant: "outlined" },
 					style: {
 						fontFamily: "Poppins",
-						fontSize: "16px",
+						fontSize: {
+							md: "16px",
+							xs: "10px",
+						},
 						fontWeight: "600",
 						paddingTop: "10px",
 						paddingBottom: "10px",
@@ -182,7 +185,7 @@ function ManageSchedule() {
 												value={searchSchedule}
 												onChange={(e) => setSearchSchedule(e.target.value)}
 												id="input-with-icon-textfield"
-												label="Pencarian Jadwal"
+												label="Pencarian"
 												InputProps={{
 													endAdornment: <Search color="primary" />,
 												}}
@@ -234,7 +237,7 @@ function ManageSchedule() {
 															<StyledTableCell align="left">{row.jadwal}</StyledTableCell>
 															<StyledTableCell align="center">
 																<Grid container>
-																	<Grid item xs={6}>
+																	<Grid item mb="0.5vh" xs={12} md={6}>
 																		<Button
 																			onClick={(e) => {
 																				e.preventDefault();
@@ -248,7 +251,7 @@ function ManageSchedule() {
 																			Edit
 																		</Button>
 																	</Grid>
-																	<Grid item xs={6}>
+																	<Grid item mb="0.5vh" xs={12} md={6}>
 																		<Button onClick={() => handleClickOpenLogout(row)} variant="outlined" color="remove" startIcon={<DeleteForever />} aria-label="delete">
 																			Hapus
 																		</Button>
