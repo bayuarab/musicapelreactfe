@@ -33,6 +33,7 @@ import { useLocation } from "react-router-dom";
 import HideImageIcon from "@mui/icons-material/HideImage";
 import { DeleteForever, ModeEdit, Search } from "@mui/icons-material";
 
+
 // import { getNewArrivals } from '../jsonData/Data';
 // import HeaderbarAdmin from "../component/HeaderBarAdmin";
 // import ManageProductDialogAddItem from '../components/ManageProductDialogAddItem'
@@ -46,6 +47,7 @@ import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 import numberFormat from "../../utilities/NumbeFormat";
 import DialogAddCourse from "./components/DialogAddCourse";
 import DialogEditCourse from "./components/DialogEditCourse";
+import DialogDeleteCourse from "../../components/DialogDeleteCourse";
 import { useParams } from "react-router-dom";
 
 const theme = createTheme({
@@ -89,6 +91,10 @@ function ManageKategori(
 	const [listOfBrands, setListOfBrands] = useState([]);
 	const [openAll, setOpenAll] = useState(false);
 	const [open, setOpen] = React.useState(false);
+	const [editItemData, setEditItemData] = useState();
+	const [openDelete, setOpenDelete] = useState(false);
+	const [severityType, setSeverityType] = useState("error");
+	const [selectedCou, setSelectedCou] = useState({});
 
 	const getListOfBrands = async () => {
 		await axios
@@ -155,26 +161,34 @@ function ManageKategori(
 		}
 		setOpen(true);
 	};
-	/* Methods to convert image input into base64 */
 
-	const [idToDelete, setIdToDelete] = useState();
-	const deleteCourse = async () => {
-		console.log("idtodelete", idToDelete);
-
-		await axios
-			.delete(`https://localhost:7132/api/Course/${idToDelete}`, { idToDelete })
-			.then((res) => {
-				if (res.status === 200) {
-					setIdToDelete(res.data);
-					console.log(res.data);
-					setRefreshPage((status) => !status);
-				}
-			})
-			.catch((err) => { });
+	const handleCloseDelete = (state) => {
+		if (!state) return setOpenDelete(false);
+		const fetchDelete = async () => {
+			try {
+				const response = await axios.delete(`https://localhost:7132/api/Course/${selectedCou.id}`);
+				console.log(response.data);
+				getListOfBrands();
+				setSeverityType("warning");
+				setErr("Kategori telah dihapus dari daftar");
+				setOpen(true);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+				setSeverityType("error");
+				setErr("Error: Gagal menghapus, terjadi kesalahan");
+				setOpen(true);
+			}
+		};
+		fetchDelete();
+		setOpenDelete(false);
 	};
-	useEffect(() => {
-		deleteCourse();
-	}, [refreshPage]);
+
+	const handleClickOpenDelete = (course) => {
+		setSelectedCou(course);
+		setOpenDelete(true);
+	};
 
 	/* useStates dan metode-metode untuk keperluan Add kelas */
 	const [openAdd, setOpenAdd] = useState(false);
@@ -273,8 +287,8 @@ function ManageKategori(
 								style={{ backgroundColor: "F2C94C", color: "black" }}
 								onClick={async (e) => {
 									await e.preventDefault();
-									setRefreshPage((status) => !status);
 									setOpenEdit(true);
+									setEditItemData(item)
 								}}
 							>
 								Edit
@@ -285,13 +299,8 @@ function ManageKategori(
 								variant="outlined"
 								size="medium"
 								style={{ backgroundColor: "F2C94C", color: "black" }}
-								onClick={async (e) => {
-									await e.preventDefault();
-									await setIdToDelete(item.id);
-									await deleteCourse();
-									setRefreshPage((status) => !status);
-								}}
-							>
+								onClick={() => handleClickOpenDelete(item)}
+								>
 								Hapus
 							</Button>
 						</CardActions>
@@ -393,13 +402,17 @@ function ManageKategori(
 
 									{/* DIALOG EDIT */}
 									<DialogEditCourse
-										open={openEdit}
-										editItemProduct={editItemProduct}
+										selectedCourse={editItemData}
+										openDialog={openEdit}
 										onClose={() => {
 											setOpenEdit(false);
 											setRefreshPage((status) => !status);
 										}}
 									/>
+									<DialogDeleteCourse 
+									selectedCat={selectedCou} 
+									logState={openDelete} 
+									onClose={handleCloseDelete} />
 								</Paper>
 							</Grid>
 						</Grid>

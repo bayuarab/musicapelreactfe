@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input, Stack, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
 
-function DialogEditCourse(
-	props = {
-		open: false,
-		id: 0,
-		onClose: () => {},
-		onAdd: () => {},
-	}
-) {
+const DialogEditCourse = (props) => {
+	const { onClose, openDialog, selectedCourse } = props;
 	/* useStates untuk keperluan POST merk baru */
 	const [courseTitle, setCourseTitle] = useState("");
 	const [courseDesc, setCourseDesc] = useState("");
@@ -20,6 +14,7 @@ function DialogEditCourse(
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = useState("");
+	
 	/* useStates untuk keperluan POST merk baru */
 
 	const Alerts = React.forwardRef(function Alerts(props, ref) {
@@ -71,7 +66,7 @@ function DialogEditCourse(
 
 	/* Method to POST new Brand Item */
 	const postKelas = () => {
-		const postDataa = { id: id, courseTitle: courseTitle, courseCategoryId: courseCategoryId, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
+		const postDataa = { id: selectedCourse.id, courseTitle: courseTitle, courseCategoryId: courseCategoryId, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
 		console.log(postDataa);
 		axios
 			.put("https://localhost:7132/api/Course", postDataa)
@@ -91,10 +86,10 @@ function DialogEditCourse(
 
 	return (
 		<div>
-			<Dialog open={props.open} onClose={props.onClose}>
+			<Dialog open={openDialog} onClose={onClose}>
 				<div style={{ padding: "20px", width: "100%" }}>
 					{/* TITLE */}
-					<DialogTitle>Tambahkan Kelas Baru</DialogTitle>
+					<DialogTitle>Edit Kelas Baru {selectedCourse?.id}</DialogTitle>
 					<DialogContent>
 						{/* FORM INPUT */}
 						<form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
@@ -110,7 +105,6 @@ function DialogEditCourse(
 							<Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
 								<Grid>
 									<Box noValidate>
-										<TextField id="id" value={id} label="Id Kelas" onChange={(e) => setId(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="name" value={courseTitle} label="Nama Kelas" onChange={(e) => setCourseTitle(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="description" value={courseDesc} label="Deskripsi Kelas" onChange={(e) => setCourseDesc(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="price" value={coursePrice} label="Harga Kelas" onChange={(e) => setCoursePrice(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />

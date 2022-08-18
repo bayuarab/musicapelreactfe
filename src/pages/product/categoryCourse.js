@@ -102,6 +102,28 @@ export default function CategoryCourse() {
 	/* useStates untuk keperluan GET detail jadwal dari sebuah kelas */
 
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+  const [detailOfACourseCat, setDetailOfACourseCat] = useState([]);
+  
+	const getdetailOfACourseCat = async (category, course) => {
+		console.log("paramss", course);
+		console.log("paramss lah yah", category);
+		await axios
+		  .get(`https://localhost:7132/api/Course/categoryId/${category}/${course}`, {
+			category, course
+		  })
+		  .then((res) => {
+			if (res.status === 200) {
+			  setDetailOfACourseCat(res.data);
+			  console.log(res.data);
+			}
+		  })
+		  .catch((err) => { });
+		console.log(paramss);
+	  };
+	  useEffect(() => {
+		getdetailOfACourseCat(detailOfACourse.courseCategoryId, params.courseid);
+	  }, []);
+	  
   const [detailOfACourse, setDetailOfACourse] = useState([]);
   const getdetailOfACourse = async (url) => {
     await axios
@@ -112,6 +134,7 @@ export default function CategoryCourse() {
         if (res.status === 200) {
           setDetailOfACourse(res.data);
           getcekJadwal(url);
+		  getdetailOfACourseCat(res.data.courseCategoryId, res.data.id)
         }
       })
       .catch((err) => { });
@@ -124,6 +147,9 @@ export default function CategoryCourse() {
 		fetchApiCart(auth.userId);
 		console.log(params.courseid);
 	}, [params]);
+
+	
+
 
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
@@ -148,27 +174,7 @@ export default function CategoryCourse() {
 
   let paramss = useParams();
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACourseCat, setDetailOfACourseCat] = useState([]);
-
-  const getdetailOfACourseCat = async (category, course) => {
-    console.log("paramss", course);
-    console.log("paramss lah yah", category);
-    await axios
-      .get(`https://localhost:7132/api/Course/categoryId/${category}/${course}`, {
-        category, course
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACourseCat(res.data);
-          console.log(res.data);
-        }
-      })
-      .catch((err) => { });
-    console.log(paramss);
-  };
-  useEffect(() => {
-    getdetailOfACourseCat(3, params.courseid);
-  }, []);
+ 
   //console.log("categoryid",detailOfACourse.categoryId)
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
