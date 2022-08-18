@@ -158,7 +158,7 @@ function ManageKelas() {
 												}}
 											/>
 											<Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
-												<Tooltip TransitionComponent={Zoom} title="Tambah " placement="top">
+												<Tooltip TransitionComponent={Zoom} title="Tambah Kategori" placement="top">
 													<IconButton
 														size="small"
 														sx={{
