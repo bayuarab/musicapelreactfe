@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField } from "@mui/material";
-import axios from "axios";
+import api from "../../../api/baseApi";
 import React, { useState } from "react";
 
 function DialogAddJadwal(
@@ -30,29 +30,26 @@ function DialogAddJadwal(
 	};
 
 	/* Method to POST new Brand Item */
-	const postJadwal = () => {
+	const postJadwal = async () => {
 		const postDataa = {
 			jadwal: jadwal,
 			courseId: courseId,
 		};
-		console.log(postDataa);
-		axios
-			.post("https://localhost:7132/api/Schedule", postDataa)
-			.then((res) => {
-				if (res.status === 200) {
-					console.log(res.data);
-					setSeverityType("success");
-					setErr("Berhasil menambahkan jadwal kelas");
-					setOpen(true);
-					props.onClose();
-				}
-			})
-			.catch((err) => {
-				console.log(err.response.data);
-				setSeverityType("error");
-				setErr("Error : Jadwal Tidak Valid");
+		try {
+			const res = await api.post("/Schedule", postDataa);
+			if (res.status === 200) {
+				console.log(res.data);
+				setSeverityType("success");
+				setErr("Berhasil menambahkan jadwal kelas");
 				setOpen(true);
-			});
+				props.onClose();
+			}
+		} catch (err) {
+			console.log(err.response.data);
+			setSeverityType("error");
+			setErr("Error : Jadwal Tidak Valid");
+			setOpen(true);
+		}
 	};
 
 	return (

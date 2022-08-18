@@ -4,12 +4,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import HeaderSet from "../../components/HeaderSet";
 import AddDialog from "./components/DialogAddSchedule";
 import DeleteDialog from "./components/DialogDeleteSchedule";
 import EditDialog from "./components/DialogEditSchedule";
+import api from "../../api/baseApi";
 
 const theme = createTheme({
 	palette: {
@@ -109,7 +109,7 @@ function ManageSchedule() {
 		if (!state) return setOpenDialog(false);
 		const fetchDelete = async () => {
 			try {
-				const response = await axios.delete(`https://localhost:7132/api/Schedule/${selectedSchedule.id}`);
+				const response = await api.delete(`/Schedule/${selectedSchedule.id}`);
 				console.log(response.data);
 				setSchedules((item) => item.filter((item) => item.id !== selectedSchedule.id));
 				setSeverityType("warning");
@@ -136,7 +136,7 @@ function ManageSchedule() {
 	useEffect(() => {
 		const fetchApi = async () => {
 			try {
-				const response = await axios.get("https://localhost:7132/api/Schedule/Admin");
+				const response = await api.get("/Schedule/Admin");
 				console.log(response.data);
 				setSchedules(response.data);
 			} catch (err) {
@@ -237,7 +237,7 @@ function ManageSchedule() {
 															<StyledTableCell align="left">{row.jadwal}</StyledTableCell>
 															<StyledTableCell align="center">
 																<Grid container>
-																	<Grid item mb="0.5vh" xs={12} md={6}>
+																	<Grid item mb="0.5vh" xs={10} md={6}>
 																		<Button
 																			onClick={(e) => {
 																				e.preventDefault();
@@ -248,12 +248,12 @@ function ManageSchedule() {
 																			color="secondary"
 																			startIcon={<ModeEdit />}
 																			aria-label="delete">
-																			Edit
+																			<Typography sx={{ display: { md: "block", xs: "none" } }}>Edit</Typography>
 																		</Button>
 																	</Grid>
-																	<Grid item mb="0.5vh" xs={12} md={6}>
+																	<Grid item mb="0.5vh" xs={10} md={6}>
 																		<Button onClick={() => handleClickOpenLogout(row)} variant="outlined" color="remove" startIcon={<DeleteForever />} aria-label="delete">
-																			Hapus
+																			<Typography sx={{ display: { md: "block", xs: "none" } }}>Hapus</Typography>
 																		</Button>
 																	</Grid>
 																</Grid>

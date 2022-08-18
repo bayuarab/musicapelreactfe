@@ -9,8 +9,8 @@ import HeaderSet from "../../components/HeaderSet";
 // import ManageBrandDialogAddItem from '../components/ManageBrandDialogAddItem';
 // import ManageBrandDialogEditItem from '../components/ManageBrandDialogEditItem';
 // import { APIRequest } from '../components/APICalls';
-import axios from "axios";
 import api from "../../api/courseCatAPI";
+import apiBase from "../../api/baseApi";
 import DialogAddKelas from "../../components/DialogAddKelas";
 import DialogDeleteCat from "../../components/DialogDeleteCat";
 import DialogEditCat from "../../components/DialogEditCat";
@@ -90,8 +90,8 @@ function ManageKelas() {
 	};
 
 	const getListOfBrands = async () => {
-		await axios
-			.get("https://localhost:7132/api/CourseCategory")
+		await apiBase
+			.get("/CourseCategory")
 			.then((res) => {
 				if (res.status === 200) {
 					setListOfBrands(res.data);
@@ -125,7 +125,7 @@ function ManageKelas() {
 							overflow: "auto",
 						}}>
 						<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-							<Grid container spacing={3}>
+							<Grid container spacing={3} mt="3vh">
 								<Grid item xs={12}>
 									<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 										{/* TITLE */}
@@ -179,7 +179,7 @@ function ManageKelas() {
 															</Typography>
 														</CardContent>
 													</Grid>
-													<Grid item xs={12} md={2}>
+													<Grid item xs={12} md={2} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
 														<Grid container spacing={1}>
 															<Grid item mb="0.5%" xs={4} md={12}>
 																<Button
