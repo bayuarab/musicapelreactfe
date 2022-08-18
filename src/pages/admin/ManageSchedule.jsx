@@ -1,5 +1,5 @@
-import { DeleteForever, ModeEdit, Search } from "@mui/icons-material";
-import { Alert, Box, Button, Container, Grid, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
+import { DeleteForever, ModeEdit, Search, AddCircle } from "@mui/icons-material";
+import { Alert, Box, Button, Container, Grid, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography, IconButton } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
@@ -180,7 +180,15 @@ function ManageSchedule() {
 										</Typography>
 
 										{/* BOX PENCARIAN DATA */}
-										<div style={{ display: "flex", padding: "20px 0" }}>
+										<Box
+											component={"div"}
+											sx={{
+												display: "flex",
+												padding: "20px 0",
+												gap: { md: "20px", xs: "10px" },
+												justifyContent: "space-between",
+												alignItems: "center",
+											}}>
 											<TextField
 												value={searchSchedule}
 												onChange={(e) => setSearchSchedule(e.target.value)}
@@ -195,24 +203,19 @@ function ManageSchedule() {
 													flexGrow: 1,
 												}}
 											/>
-											<Tooltip TransitionComponent={Zoom} title="Add Product Items" placement="top">
-												<Button
-													variant="contained"
-													color="primary"
-													display="none"
-													onClick={() => {
-														setOpenAdd(true);
-													}}
-													style={{
-														width: "auto",
-														backgroundColor: "#F2C94C",
-														borderRadius: "",
-														color: "white",
-													}}>
-													Tambah Baru
-												</Button>
-											</Tooltip>
-										</div>
+											<Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
+												<Tooltip TransitionComponent={Zoom} title="Tambah Jadwal" placement="top">
+													<IconButton
+														size="small"
+														sx={{
+															color: "#4f4f4f",
+														}}
+														onClick={() => setOpenAdd(true)}>
+														<AddCircle />
+													</IconButton>
+												</Tooltip>
+											</Box>
+										</Box>
 										<TableContainer component={StyledPaper}>
 											<Table sx={{}} aria-label="customized table">
 												<TableHead>
