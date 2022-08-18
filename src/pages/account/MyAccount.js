@@ -9,6 +9,7 @@ import {
   Button,
   Snackbar,
   Stack,
+  styled,
   Typography,
 } from "@mui/material";
 import React, { forwardRef, useState } from "react";
@@ -18,6 +19,17 @@ import UserChangeDataDialog from "./components/UserChangeDataDialog";
 const Alerts = forwardRef(function Alerts(props, ref) {
   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  borderColor: "#F2C94C",
+  color: "black",
+  fontFamily: "Poppins",
+  textTransform: "capitalize",
+  [theme.breakpoints.down("sm")]: {
+    display: "block",
+    fontSize: "14px",
+  },
+}));
 
 const MyAccount = () => {
   const [expanded, setExpanded] = useState(false);
@@ -60,16 +72,16 @@ const MyAccount = () => {
         <Box
           sx={{
             padding: "4%",
-            paddingTop: "5%",
+            paddingTop: { md: "5%", xs: "25%" },
             paddingBottom: "7%",
           }}
         >
           <Avatar
-            alt={auth.nama}
+            alt={auth.nama.split(" ")[0]}
             src="/static/images/avatar/1.jpg"
-            sx={{ width: 125, height: 125 }}
+            sx={{ width: { md: 125, xs: 80 }, height: { md: 125, xs: 80 } }}
           />
-          <Box mt={"30px"} sx={{ width: "380px" }}>
+          <Box mt={"30px"} sx={{ width: { md: "380px", xs: "230px" } }}>
             <Accordion
               expanded={expanded === "panel1"}
               onChange={handleChange("panel1")}
@@ -86,40 +98,94 @@ const MyAccount = () => {
                     flexShrink: 0,
                     fontWeight: "400",
                     fontFamily: "Poppins",
+                    fontSize: { md: "24px", xs: "20px" },
                   }}
                 >
-                  {auth.nama}
+                  {auth.nama.split(" ")[0]}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ paddingLeft: "5%", paddingRight: "5%" }}>
                 <Typography
                   textAlign={"left"}
                   sx={{
+                    fontSize: { md: "23px", xs: "17px" },
+                    fontFamily: "Poppins",
+                    fontWeight: { md: "600", xs: "500" },
+                    // display: { xs: "none", md: "block" },
+                    marginTop: { xs: "-8px", md: "6px" },
+                  }}
+                >
+                  {auth.nama}
+                </Typography>
+                <Typography
+                  textAlign={"left"}
+                  sx={{
                     fontSize: "18px",
                     fontFamily: "Poppins",
                     fontWeight: "400",
+                    display: { xs: "none", md: "block" },
+                    marginTop: "12px",
                   }}
                 >
                   Email : {auth.email}
                 </Typography>
-                <Box mt={"45px"} paddingBottom={"7px"}>
-                  <Button
+                {/* <Typography
+                  textAlign={"left"}
+                  sx={{
+                    fontSize: "17px",
+                    fontFamily: "Poppins",
+                    fontWeight: "500",
+                    display: { xs: "block", md: "none" },
+                    marginTop: "-8px",
+                  }}
+                >
+                  {auth.nama}
+                </Typography> */}
+                <Typography
+                  textAlign={"left"}
+                  sx={{
+                    fontSize: "16px",
+                    fontFamily: "Poppins",
+                    fontWeight: "400",
+                    display: { xs: "block", md: "none" },
+                    marginTop: "8px",
+                  }}
+                >
+                  Email :
+                </Typography>
+                <Typography
+                  textAlign={"left"}
+                  sx={{
+                    fontSize: "14px",
+                    fontFamily: "Poppins",
+                    fontWeight: "400",
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                  {auth.email}
+                </Typography>
+                <Box
+                  sx={{
+                    mt: { md: "45px", xs: "30px" },
+                    paddingBottom: { md: "7px", xs: "3px" },
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: { md: "20px", xs: "10px" },
+                  }}
+                >
+                  <StyledButton
                     variant="outlined"
-                    sx={{
-                      borderColor: "#F2C94C",
-                      color: "black",
-                      fontFamily: "Poppins",
-                      textTransform: "capitalize",
-                    }}
+                    onClick={() => handleClickOpenDialog("name")}
+                  >
+                    Ubah Nama
+                  </StyledButton>
+                  <StyledButton
+                    variant="outlined"
                     onClick={() => handleClickOpenDialog("password")}
                   >
-                    Change Password
-                  </Button>
+                    Ubah Password
+                  </StyledButton>
                 </Box>
-
-                {/* <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography variant="h7">Email:</Typography>
-                </Box> */}
               </AccordionDetails>
             </Accordion>
           </Box>

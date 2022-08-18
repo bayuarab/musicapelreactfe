@@ -1,10 +1,7 @@
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import * as React from "react";
-// import "../App.css";
+import Stepper from "./Stepper";
 
 const factItems = [
 	{
@@ -21,14 +18,6 @@ const factItems = [
 	},
 ];
 
-// {gridItems.map((item) => (
-//   <ListItem key={item} disablePadding>
-//     <ListItemButton sx={{ textAlign: 'center' }}>
-//       <ListItemText primary={item} />
-//     </ListItemButton>
-//   </ListItem>
-// ))};
-
 const Item = styled(Paper)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
 	...theme.typography.body2,
@@ -38,7 +27,13 @@ const Item = styled(Paper)(({ theme }) => ({
 	borderRadius: "20px",
 }));
 
-export default function Fact() {
+export default function Fact(props) {
+	const { window } = props;
+
+	const drawer = <Stepper />;
+
+	const container = window !== undefined ? () => window().document.body : undefined;
+
 	return (
 		<Box
 			mb={{
@@ -48,6 +43,10 @@ export default function Fact() {
 			sx={{ flexGrow: 1, width: "78%" }}>
 			<Grid
 				container
+				component="fact"
+				sx={{
+					display: { xs: "none", sm: "flex" },
+				}}
 				spacing={{
 					lg: 7,
 					md: 5,
@@ -104,6 +103,15 @@ export default function Fact() {
 					</Grid>
 				))}
 			</Grid>
+			<Box component="fact">
+				<Box
+					container={container}
+					sx={{
+						display: { xs: "block", sm: "none" },
+					}}>
+					{drawer}
+				</Box>
+			</Box>
 		</Box>
 	);
 }

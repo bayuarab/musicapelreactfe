@@ -30,7 +30,7 @@ import { useLocation } from "react-router-dom";
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import HideImageIcon from "@mui/icons-material/HideImage";
-import SearchIcon from "@mui/icons-material/Search";
+import { DeleteForever, ModeEdit, Search } from "@mui/icons-material";
 
 // import { getNewArrivals } from '../jsonData/Data';
 // import HeaderbarAdmin from "../component/HeaderBarAdmin";
@@ -54,6 +54,9 @@ const theme = createTheme({
 		},
 		secondary: {
 			main: "#4F4F4F",
+		},
+		remove: {
+			main: "#9F290F",
 		},
 		white: {
 			main: "#ffffff",

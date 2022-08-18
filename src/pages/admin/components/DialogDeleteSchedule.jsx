@@ -18,7 +18,7 @@ const DialogButton = styled(Button)(({ theme }) => ({
 }));
 
 const DeleteDialog = (props) => {
-	const { onClose, logState, selectedUser } = props;
+	const { onClose, logState, selectedSchedule } = props;
 	const handleClose = (state) => {
 		onClose(state);
 	};
@@ -43,7 +43,7 @@ const DeleteDialog = (props) => {
 								fontWeight: "400",
 								fontFamily: "Poppins",
 							}}>
-							Jadwal: {selectedUser?.jadwal}
+							Jadwal: {selectedSchedule?.jadwal}
 						</Typography>
 						<Typography
 							sx={{
@@ -51,7 +51,7 @@ const DeleteDialog = (props) => {
 								fontWeight: "400",
 								fontFamily: "Poppins",
 							}}>
-							Kelas: {selectedUser?.courseTitle}
+							Kelas: {selectedSchedule?.courseTitle}
 						</Typography>
 					</DialogContentText>
 				</DialogContent>
