@@ -1,5 +1,24 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, Container, Dialog, DialogContent, DialogTitle, Grid, Icon, Input, Paper, TextField, Toolbar, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Card,
+	CardActionArea,
+	CardActions,
+	CardContent,
+	Container,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	Grid,
+	Icon,
+	Input,
+	Paper,
+	TextField,
+	Toolbar,
+	Typography,
+} from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
@@ -14,6 +33,7 @@ import { useLocation } from "react-router-dom";
 import HideImageIcon from "@mui/icons-material/HideImage";
 import { DeleteForever, ModeEdit, Search } from "@mui/icons-material";
 
+
 // import { getNewArrivals } from '../jsonData/Data';
 // import HeaderbarAdmin from "../component/HeaderBarAdmin";
 // import ManageProductDialogAddItem from '../components/ManageProductDialogAddItem'
@@ -26,7 +46,8 @@ import useAuth from "../../hooks/useAuth";
 import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 import numberFormat from "../../utilities/NumbeFormat";
 import DialogAddCourse from "./components/DialogAddCourse";
-//import DialogEditCourse from "./components/DialogEditCourse";
+import DialogEditCourse from "./components/DialogEditCourse";
+import DialogDeleteCourse from "../../components/DialogDeleteCourse";
 import { useParams } from "react-router-dom";
 
 const theme = createTheme({
@@ -50,8 +71,8 @@ function ManageKategori(
 	props = {
 		open: false,
 		id: props.id,
-		onClose: () => {},
-		onAdd: () => {},
+		onClose: () => { },
+		onAdd: () => { },
 	}
 ) {
 	/* useStates untuk keperluan POST merk baru */
@@ -70,6 +91,10 @@ function ManageKategori(
 	const [listOfBrands, setListOfBrands] = useState([]);
 	const [openAll, setOpenAll] = useState(false);
 	const [open, setOpen] = React.useState(false);
+	const [editItemData, setEditItemData] = useState();
+	const [openDelete, setOpenDelete] = useState(false);
+	const [severityType, setSeverityType] = useState("error");
+	const [selectedCou, setSelectedCou] = useState({});
 
 	const getListOfBrands = async () => {
 		await axios
@@ -77,16 +102,22 @@ function ManageKategori(
 			.then((res) => {
 				if (res.status === 200) {
 					setListOfBrands(res.data);
+					setRefreshPage((status) => !status);
 				}
 			})
-			.catch((err) => {});
+			.catch((err) => { });
 	};
 	useEffect(() => {
 		getListOfBrands();
 	}, [refreshPage]);
 
 	const filterList = () => {
-		return search?.length > 0 ? listOfBrands?.filter((item) => item.category.includes(search) || item.courseTitle.includes(search)) : listOfBrands;
+		return search?.length > 0
+			? listOfBrands?.filter(
+				(item) =>
+					item.category.includes(search) || item.courseTitle.includes(search)
+			)
+			: listOfBrands;
 	};
 
 	/* Methods to convert image input into base64 */
@@ -130,25 +161,34 @@ function ManageKategori(
 		}
 		setOpen(true);
 	};
-	/* Methods to convert image input into base64 */
 
-	const [idToDelete, setIdToDelete] = useState();
-	const deleteCourse = async () => {
-		console.log("idtodelete", idToDelete);
-
-		await axios
-			.delete(`https://localhost:7132/api/Course/${idToDelete}`, { idToDelete })
-			.then((res) => {
-				if (res.status === 200) {
-					setIdToDelete(res.data);
-					console.log(res.data);
-				}
-			})
-			.catch((err) => {});
+	const handleCloseDelete = (state) => {
+		if (!state) return setOpenDelete(false);
+		const fetchDelete = async () => {
+			try {
+				const response = await axios.delete(`https://localhost:7132/api/Course/${selectedCou.id}`);
+				console.log(response.data);
+				getListOfBrands();
+				setSeverityType("warning");
+				setErr("Kategori telah dihapus dari daftar");
+				setOpen(true);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				console.log(err.response.status);
+				console.log(err.response.headers);
+				setSeverityType("error");
+				setErr("Error: Gagal menghapus, terjadi kesalahan");
+				setOpen(true);
+			}
+		};
+		fetchDelete();
+		setOpenDelete(false);
 	};
-	useEffect(() => {
-		deleteCourse();
-	}, [refreshPage]);
+
+	const handleClickOpenDelete = (course) => {
+		setSelectedCou(course);
+		setOpenDelete(true);
+	};
 
 	/* useStates dan metode-metode untuk keperluan Add kelas */
 	const [openAdd, setOpenAdd] = useState(false);
@@ -160,34 +200,6 @@ function ManageKategori(
 	/* useStates untuk keperluan POST Edit Product */
 
 	const { auth } = useAuth();
-
-	/* Method to edit new course Item */
-	const [idToEdit, setIdToEdit] = useState();
-	const editKelas = () => {
-		const postDataa = {
-			id: idToEdit,
-			courseTitle: courseTitle,
-			courseCategoryId: courseCategoryId,
-			courseDesc: courseDesc,
-			price: coursePrice,
-			courseimage: base64,
-		};
-		console.log(postDataa);
-		axios
-			.put("https://localhost:7132/api/Course", postDataa)
-			.then((res) => {
-				if (res.status === 200) {
-					console.log(res.status);
-					console.log(res.data);
-					props.onClose();
-				}
-			})
-			.catch((err) => {
-				console.log(err.response.data);
-			});
-		setOpen(true);
-	};
-	/* Method to POST new Brand Item */
 
 	const renderList = (item, index) => {
 		return (
@@ -202,7 +214,8 @@ function ManageKategori(
 									display: "flex",
 									justifyContent: "center",
 									alignItems: "center",
-								}}>
+								}}
+							>
 								{item.courseImage ? (
 									<img
 										src={`data:image/jpeg;base64,${item.courseImage}`}
@@ -225,7 +238,8 @@ function ManageKategori(
 									justifyContent: "center",
 									height: "120px",
 									textAlign: "center",
-								}}>
+								}}
+							>
 								{/* Title */}
 								<Typography
 									variant="h6"
@@ -236,7 +250,8 @@ function ManageKategori(
 										display: "-webkit-box",
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
-									}}>
+									}}
+								>
 									{item.id} - {item.courseTitle}
 								</Typography>
 
@@ -251,136 +266,41 @@ function ManageKategori(
 										display: "-webkit-box",
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
-									}}>
+									}}
+								>
 									{item.category}
 								</Typography>
 
 								{/* Price */}
-								<Typography variant="subtitle1">IDR {numberFormat(item.price)}</Typography>
+								<Typography variant="subtitle1">
+									IDR {numberFormat(item.price)}
+								</Typography>
 							</CardContent>
 						</CardActionArea>
-						<CardActions style={{ backgroundColor: "", justifyContent: "center" }}>
+						<CardActions
+							style={{ backgroundColor: "", justifyContent: "center" }}
+						>
 							{/* Edit button */}
 							<Button
-								variant="outlined"
-								color="secondary"
+								variant="contained"
 								size="medium"
-								startIcon={<ModeEdit />}
+								style={{ backgroundColor: "F2C94C", color: "black" }}
 								onClick={async (e) => {
 									await e.preventDefault();
-									await setIdToEdit(item.id);
-									await editKelas();
-									setRefreshPage((status) => !status);
-									handleClickOpenAll();
-								}}>
+									setOpenEdit(true);
+									setEditItemData(item)
+								}}
+							>
 								Edit
 							</Button>
-							<Dialog open={openAll} onClose={handleCloseAll}>
-								<div style={{ padding: "20px", width: "100%" }}>
-									{/* TITLE */}
-									<DialogTitle>Tambahkan Kelas Baru</DialogTitle>
-									<DialogContent>
-										{/* FORM INPUT */}
-										<form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
-											{imagePreview === "" ? "" : <img style={{ width: "100%", height: "100%" }} src={imagePreview} alt="upload" />}
-											<Input type="file" name="avatar" id="file" accept=".jpef, .png, .jpg" onChange={photoUpload} src={imagePreview} />
-										</form>
-
-										<form
-											onSubmit={(e) => {
-												e.preventDefault();
-												editKelas();
-											}}>
-											<Grid columnGap="10px" justifyContent="center" style={{ paddingBottom: "10px" }}>
-												<Grid>
-													<Box noValidate>
-														<TextField
-															id="name"
-															value={courseTitle}
-															label="Nama Kelas"
-															onChange={(e) => setCourseTitle(e.target.value)}
-															style={{
-																display: "flex",
-																flexGrow: 1,
-																marginTop: "20px",
-																marginBottom: "20px",
-															}}
-														/>
-														<TextField
-															id="description"
-															value={courseDesc}
-															label="Deskripsi Kelas"
-															onChange={(e) => setCourseDesc(e.target.value)}
-															style={{
-																display: "flex",
-																flexGrow: 1,
-																marginTop: "20px",
-																marginBottom: "20px",
-															}}
-														/>
-														<TextField
-															id="price"
-															value={coursePrice}
-															label="Harga Kelas"
-															onChange={(e) => setCoursePrice(e.target.value)}
-															style={{
-																display: "flex",
-																flexGrow: 1,
-																marginTop: "20px",
-																marginBottom: "20px",
-															}}
-														/>
-														<TextField
-															id="categoryid"
-															value={courseCategoryId}
-															label="Kategori ID"
-															onChange={(e) => setCourseCategoryId(e.target.value)}
-															style={{
-																display: "flex",
-																flexGrow: 1,
-																marginTop: "20px",
-																marginBottom: "20px",
-															}}
-														/>
-
-														<Button
-															disabled={courseTitle === "" || courseDesc === "" || coursePrice === "" || courseCategoryId === "" || base64 === "" ? true : false}
-															type="submit"
-															fullWidth
-															variant="contained"
-															style={{
-																display: "flex",
-																flexGrow: 1,
-																marginTop: "20px",
-																marginBottom: "20px",
-															}}
-															onClick={async (e) => {
-																await e.preventDefault();
-																setRefreshPage((status) => !status);
-																handleCloseAll();
-															}}>
-															Tambah Kelas Baru
-														</Button>
-													</Box>
-												</Grid>
-											</Grid>
-										</form>
-									</DialogContent>
-								</div>
-							</Dialog>
 
 							{/* Delete button */}
 							<Button
 								variant="outlined"
 								size="medium"
-								color="remove"
-								startIcon={<DeleteForever />}
-								onClick={async (e) => {
-									await e.preventDefault();
-									await setIdToDelete(item.id);
-									await deleteCourse();
-									setRefreshPage((status) => !status);
-								}}>
+								style={{ backgroundColor: "F2C94C", color: "black" }}
+								onClick={() => handleClickOpenDelete(item)}
+								>
 								Hapus
 							</Button>
 						</CardActions>
@@ -401,11 +321,15 @@ function ManageKategori(
 				<Box
 					component="main"
 					sx={{
-						backgroundColor: (theme) => (theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900]),
+						backgroundColor: (theme) =>
+							theme.palette.mode === "light"
+								? theme.palette.grey[100]
+								: theme.palette.grey[900],
 						flexGrow: 1,
 						height: "100vh",
 						overflow: "auto",
-					}}>
+					}}
+				>
 					<Toolbar />
 
 					<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -413,7 +337,11 @@ function ManageKategori(
 							<Grid item xs={12}>
 								<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 									{/* TITLE */}
-									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold" }}>
+									<Typography
+										variant="h5"
+										color="secondary"
+										style={{ fontWeight: "bold" }}
+									>
 										Manage Kelas
 									</Typography>
 
@@ -425,7 +353,7 @@ function ManageKategori(
 											id="input-with-icon-textfield"
 											label="Pencarian Berdasarkan Nama Kategori"
 											InputProps={{
-												endAdornment: <Search color="primary" />,
+												endAdornment: <SearchIcon color="primary" />,
 											}}
 											variant="outlined"
 											style={{
@@ -434,7 +362,11 @@ function ManageKategori(
 												marginRight: "10px",
 											}}
 										/>
-										<Tooltip TransitionComponent={Zoom} title="Add Product Items" placement="top">
+										<Tooltip
+											TransitionComponent={Zoom}
+											title="Add Product Items"
+											placement="top"
+										>
 											<Button
 												variant="contained"
 												color="primary"
@@ -447,7 +379,8 @@ function ManageKategori(
 													backgroundColor: "#F2C94C",
 													borderRadius: "",
 													color: "white",
-												}}>
+												}}
+											>
 												Tambah Baru
 											</Button>
 										</Tooltip>
@@ -468,15 +401,18 @@ function ManageKategori(
 									/>
 
 									{/* DIALOG EDIT */}
-									{/* <DialogEditCourse
-										open={openEdit}
-										editItemProduct={editItemProduct}
+									<DialogEditCourse
+										selectedCourse={editItemData}
+										openDialog={openEdit}
 										onClose={() => {
 											setOpenEdit(false);
 											setRefreshPage((status) => !status);
-										}
-										}
-									/> */}
+										}}
+									/>
+									<DialogDeleteCourse 
+									selectedCat={selectedCou} 
+									logState={openDelete} 
+									onClose={handleCloseDelete} />
 								</Paper>
 							</Grid>
 						</Grid>

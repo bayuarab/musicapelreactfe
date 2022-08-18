@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input, Stack, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
 
@@ -19,6 +19,7 @@ function DialogAddCourse(
 	const [base64, setBase64] = useState("");
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
+	const [refreshPage, setRefreshPage] = useState(false);
 	/* useStates untuk keperluan POST merk baru */
 
 	const Alerts = React.forwardRef(function Alerts(props, ref) {
@@ -79,6 +80,7 @@ function DialogAddCourse(
 					console.log(res.status);
 					console.log(res.data);
 					props.onClose();
+					setRefreshPage((status) => !status);
 				}
 			})
 			.catch((err) => {
@@ -87,6 +89,9 @@ function DialogAddCourse(
 			});
 		setOpen(true);
 	};
+	// useEffect(() => {
+	// 	postKelas();
+	// }, [refreshPage]);
 	/* Method to POST new Brand Item */
 
 	return (
