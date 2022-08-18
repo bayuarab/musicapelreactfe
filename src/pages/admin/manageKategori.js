@@ -18,6 +18,7 @@ import {
 	Toolbar,
 	Typography,
 } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";

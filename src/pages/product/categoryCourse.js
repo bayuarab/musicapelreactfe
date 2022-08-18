@@ -167,7 +167,7 @@ export default function CategoryCourse() {
     console.log(paramss);
   };
   useEffect(() => {
-    getdetailOfACourseCat(detailOfACourse.courseCategoryId, params.courseid);
+    getdetailOfACourseCat(3, params.courseid);
   }, []);
   //console.log("categoryid",detailOfACourse.categoryId)
   /* useStates untuk keperluan GET detail dari sebuah produk */
