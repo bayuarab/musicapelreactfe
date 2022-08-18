@@ -76,7 +76,7 @@ const CartList = (props) => {
                 </ImgContainer>
                 <Box
                   sx={{
-                    minHeight: "133px",
+                    minHeight: "100px",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -86,14 +86,20 @@ const CartList = (props) => {
                 >
                   <Box
                     sx={{
-                      display: { md: "none", sm: "none" },
-                      mb: "1px",
+                      display: { sm: "none" },
+                      mb: "-20px",
                     }}
                   >
                     <Typography
                       sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: "vertical",
                         mt: { md: "-4px", sm: "-3px", xs: "-5px" },
-                        mb: { sm: "10px", xs: "10px" },
+                        mb: { sm: "10px", xs: "-10px" },
                         fontFamily: "Poppins",
                         fontSize: { md: "24px", sm: "20px", xs: "18px" },
                         fontWeight: "600",
@@ -116,10 +122,10 @@ const CartList = (props) => {
                       loading="lazy"
                       objectfit="true"
                       width={"100px"}
-                      height={"90px"}
+                      height={"60px"}
                       sx={{
                         borderRadius: "10px",
-                        display: { md: "none", sm: "none" },
+                        display: { sm: "none" },
                       }}
                     />
                     <Box
