@@ -1,5 +1,5 @@
-import { DeleteForever, List, ModeEdit, Search } from "@mui/icons-material";
-import { Alert, Box, Button, CardContent, CardMedia, Container, Grid, Paper, Snackbar, Stack, TextField, Toolbar, Typography } from "@mui/material";
+import { DeleteForever, List, ModeEdit, Search, AddCircle } from "@mui/icons-material";
+import { Alert, Box, Button, CardContent, CardMedia, Container, Grid, Paper, Snackbar, Stack, TextField, Toolbar, Typography, IconButton, Tooltip, Zoom } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
@@ -133,7 +133,15 @@ function ManageKelas() {
 											Manage Kategori Kursus
 										</Typography>
 										{/* BOX PENCARIAN DATA */}
-										<div style={{ display: "flex", padding: "20px 0" }}>
+										<Box
+											component={"div"}
+											sx={{
+												display: "flex",
+												padding: "20px 0",
+												gap: { md: "20px", xs: "10px" },
+												justifyContent: "space-between",
+												alignItems: "center",
+											}}>
 											<TextField
 												value={searchQuery}
 												onChange={(e) => setSearchQuery(e.target.value)}
@@ -149,16 +157,19 @@ function ManageKelas() {
 													marginRight: "10px",
 												}}
 											/>
-											<Button
-												variant="contained"
-												color="primary"
-												onClick={() => {
-													setOpenAdd(true);
-												}}
-												style={{ width: "auto", color: "white" }}>
-												Tambah Baru
-											</Button>
-										</div>
+											<Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
+												<Tooltip TransitionComponent={Zoom} title="Tambah Kategori" placement="top">
+													<IconButton
+														size="small"
+														sx={{
+															color: "#4f4f4f",
+														}}
+														onClick={() => setOpenAdd(true)}>
+														<AddCircle />
+													</IconButton>
+												</Tooltip>
+											</Box>
+										</Box>
 
 										{kategoriFilter().map((item) => (
 											<Grid key={item.id} style={{ margin: "2% 0" }}>

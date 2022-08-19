@@ -1,24 +1,6 @@
-import AddIcon from "@mui/icons-material/Add";
-import {
-	Box,
-	Button,
-	Card,
-	CardActionArea,
-	CardActions,
-	CardContent,
-	Container,
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	Grid,
-	Icon,
-	Input,
-	Paper,
-	TextField,
-	Toolbar,
-	Typography,
-} from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import { DeleteForever, ModeEdit, Search, AddCircle } from "@mui/icons-material";
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, Container, Dialog, DialogContent, DialogTitle, Grid, IconButton, Input, Paper, TextField, Toolbar, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
@@ -31,8 +13,6 @@ import { useLocation } from "react-router-dom";
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import HideImageIcon from "@mui/icons-material/HideImage";
-import { DeleteForever, ModeEdit, Search } from "@mui/icons-material";
-
 
 // import { getNewArrivals } from '../jsonData/Data';
 // import HeaderbarAdmin from "../component/HeaderBarAdmin";
@@ -71,8 +51,8 @@ function ManageKategori(
 	props = {
 		open: false,
 		id: props.id,
-		onClose: () => { },
-		onAdd: () => { },
+		onClose: () => {},
+		onAdd: () => {},
 	}
 ) {
 	/* useStates untuk keperluan POST merk baru */
@@ -105,19 +85,14 @@ function ManageKategori(
 					setRefreshPage((status) => !status);
 				}
 			})
-			.catch((err) => { });
+			.catch((err) => {});
 	};
 	useEffect(() => {
 		getListOfBrands();
 	}, [refreshPage]);
 
 	const filterList = () => {
-		return search?.length > 0
-			? listOfBrands?.filter(
-				(item) =>
-					item.category.includes(search) || item.courseTitle.includes(search)
-			)
-			: listOfBrands;
+		return search?.length > 0 ? listOfBrands?.filter((item) => item.category.includes(search) || item.courseTitle.includes(search)) : listOfBrands;
 	};
 
 	/* Methods to convert image input into base64 */
@@ -170,7 +145,7 @@ function ManageKategori(
 				console.log(response.data);
 				getListOfBrands();
 				setSeverityType("warning");
-				setErr("Kategori telah dihapus dari daftar");
+				setErr("Kelas telah dihapus dari daftar");
 				setOpen(true);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
@@ -214,8 +189,7 @@ function ManageKategori(
 									display: "flex",
 									justifyContent: "center",
 									alignItems: "center",
-								}}
-							>
+								}}>
 								{item.courseImage ? (
 									<img
 										src={`data:image/jpeg;base64,${item.courseImage}`}
@@ -238,8 +212,7 @@ function ManageKategori(
 									justifyContent: "center",
 									height: "120px",
 									textAlign: "center",
-								}}
-							>
+								}}>
 								{/* Title */}
 								<Typography
 									variant="h6"
@@ -250,8 +223,7 @@ function ManageKategori(
 										display: "-webkit-box",
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
-									}}
-								>
+									}}>
 									{item.id} - {item.courseTitle}
 								</Typography>
 
@@ -266,41 +238,32 @@ function ManageKategori(
 										display: "-webkit-box",
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
-									}}
-								>
+									}}>
 									{item.category}
 								</Typography>
 
 								{/* Price */}
-								<Typography variant="subtitle1">
-									IDR {numberFormat(item.price)}
-								</Typography>
+								<Typography variant="subtitle1">IDR {numberFormat(item.price)}</Typography>
 							</CardContent>
 						</CardActionArea>
-						<CardActions
-							style={{ backgroundColor: "", justifyContent: "center" }}
-						>
+						<CardActions style={{ backgroundColor: "", justifyContent: "center" }}>
 							{/* Edit button */}
 							<Button
-								variant="contained"
+								startIcon={<ModeEdit />}
+								variant="outlined"
 								size="medium"
+								color="secondary"
 								style={{ backgroundColor: "F2C94C", color: "black" }}
 								onClick={async (e) => {
 									await e.preventDefault();
 									setOpenEdit(true);
-									setEditItemData(item)
-								}}
-							>
+									setEditItemData(item);
+								}}>
 								Edit
 							</Button>
 
 							{/* Delete button */}
-							<Button
-								variant="outlined"
-								size="medium"
-								style={{ backgroundColor: "F2C94C", color: "black" }}
-								onClick={() => handleClickOpenDelete(item)}
-								>
+							<Button startIcon={<DeleteForever />} variant="outlined" size="medium" color="remove" style={{ backgroundColor: "F2C94C" }} onClick={() => handleClickOpenDelete(item)}>
 								Hapus
 							</Button>
 						</CardActions>
@@ -321,15 +284,11 @@ function ManageKategori(
 				<Box
 					component="main"
 					sx={{
-						backgroundColor: (theme) =>
-							theme.palette.mode === "light"
-								? theme.palette.grey[100]
-								: theme.palette.grey[900],
+						backgroundColor: (theme) => (theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900]),
 						flexGrow: 1,
 						height: "100vh",
 						overflow: "auto",
-					}}
-				>
+					}}>
 					<Toolbar />
 
 					<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -337,21 +296,25 @@ function ManageKategori(
 							<Grid item xs={12}>
 								<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 									{/* TITLE */}
-									<Typography
-										variant="h5"
-										color="secondary"
-										style={{ fontWeight: "bold" }}
-									>
+									<Typography variant="h5" color="secondary" style={{ fontWeight: "bold" }}>
 										Manage Kelas
 									</Typography>
 
 									{/* BOX PENCARIAN DATA */}
-									<div style={{ display: "flex", padding: "20px 0" }}>
+									<Box
+										component={"div"}
+										sx={{
+											display: "flex",
+											padding: "20px 0",
+											gap: { md: "20px", xs: "10px" },
+											justifyContent: "space-between",
+											alignItems: "center",
+										}}>
 										<TextField
 											value={search}
 											onChange={(e) => setSearch(e.target.value)}
 											id="input-with-icon-textfield"
-											label="Pencarian Berdasarkan Nama Kategori"
+											label="Pencarian Berdasarkan Nama Kelas"
 											InputProps={{
 												endAdornment: <SearchIcon color="primary" />,
 											}}
@@ -362,29 +325,19 @@ function ManageKategori(
 												marginRight: "10px",
 											}}
 										/>
-										<Tooltip
-											TransitionComponent={Zoom}
-											title="Add Product Items"
-											placement="top"
-										>
-											<Button
-												variant="contained"
-												color="primary"
-												display="none"
-												onClick={() => {
-													setOpenAdd(true);
-												}}
-												style={{
-													width: "auto",
-													backgroundColor: "#F2C94C",
-													borderRadius: "",
-													color: "white",
-												}}
-											>
-												Tambah Baru
-											</Button>
-										</Tooltip>
-									</div>
+										<Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
+											<Tooltip TransitionComponent={Zoom} title="Add Product Items" placement="top">
+												<IconButton
+													size="small"
+													sx={{
+														color: "#4f4f4f",
+													}}
+													onClick={() => setOpenAdd(true)}>
+													<AddCircle />
+												</IconButton>
+											</Tooltip>
+										</Box>
+									</Box>
 
 									{/* ITEM LIST */}
 									<Grid container spacing={2}>
@@ -409,10 +362,7 @@ function ManageKategori(
 											setRefreshPage((status) => !status);
 										}}
 									/>
-									<DialogDeleteCourse 
-									selectedCat={selectedCou} 
-									logState={openDelete} 
-									onClose={handleCloseDelete} />
+									<DialogDeleteCourse selectedCat={selectedCou} logState={openDelete} onClose={handleCloseDelete} />
 								</Paper>
 							</Grid>
 						</Grid>
