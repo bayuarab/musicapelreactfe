@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
@@ -93,7 +93,7 @@ export default function CategoryCourse() {
 					console.log("res data", res.data);
 				}
 			})
-			.catch((err) => {});
+			.catch((err) => { });
 	};
 
 	// useEffect(() => {
@@ -101,45 +101,65 @@ export default function CategoryCourse() {
 	// }, []);
 	/* useStates untuk keperluan GET detail jadwal dari sebuah kelas */
 
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACourseCat, setDetailOfACourseCat] = useState([]);
-  
+	const [detailOfACategory, setDetailOfACategory] = useState([]);
+	const getdetailOfACategory = async (url) => {
+		console.log("params", url);
+		await axios
+			.get(`https://localhost:7132/api/CourseCategory/${url}`, {
+				url,
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					setDetailOfACategory(res.data);
+				}
+			})
+			.catch((err) => { });
+		console.log(params);
+	};
+	useEffect(() => {
+		getdetailOfACategory(3);
+	}, []);
+
+	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+	const [detailOfACourseCat, setDetailOfACourseCat] = useState([]);
+
 	const getdetailOfACourseCat = async (category, course) => {
 		console.log("paramss", course);
 		console.log("paramss lah yah", category);
 		await axios
-		  .get(`https://localhost:7132/api/Course/categoryId/${category}/${course}`, {
-			category, course
-		  })
-		  .then((res) => {
-			if (res.status === 200) {
-			  setDetailOfACourseCat(res.data);
-			  console.log(res.data);
-			}
-		  })
-		  .catch((err) => { });
+			.get(`https://localhost:7132/api/Course/categoryId/${category}/${course}`, {
+				category, course
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					setDetailOfACourseCat(res.data);
+					console.log(res.data);
+				}
+			})
+			.catch((err) => { });
 		console.log(paramss);
-	  };
-	  useEffect(() => {
+	};
+	useEffect(() => {
 		getdetailOfACourseCat(detailOfACourse.courseCategoryId, params.courseid);
-	  }, []);
-	  
-  const [detailOfACourse, setDetailOfACourse] = useState([]);
-  const getdetailOfACourse = async (url) => {
-    await axios
-      .get(`https://localhost:7132/api/Course/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACourse(res.data);
-          getcekJadwal(url);
-		  getdetailOfACourseCat(res.data.courseCategoryId, res.data.id)
-        }
-      })
-      .catch((err) => { });
-    console.log(params);
-  };
+	}, []);
+
+	const [detailOfACourse, setDetailOfACourse] = useState([]);
+	const getdetailOfACourse = async (url) => {
+		await axios
+			.get(`https://localhost:7132/api/Course/${url}`, {
+				url,
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					setDetailOfACourse(res.data);
+					getcekJadwal(url);
+					getdetailOfACourseCat(res.data.courseCategoryId, res.data.id);
+					getdetailOfACategory(res.data.courseCategoryId)
+				}
+			})
+			.catch((err) => { });
+		console.log(params);
+	};
 
 	useEffect(() => {
 		getdetailOfACourse(params.courseid);
@@ -148,35 +168,18 @@ export default function CategoryCourse() {
 		console.log(params.courseid);
 	}, [params]);
 
-	
+
 
 
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
-  const [detailOfACategory, setDetailOfACategory] = useState([]);
-  const getdetailOfACategory = async (url) => {
-    console.log("params", url);
-    await axios
-      .get(`https://localhost:7132/api/CourseCategory/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACategory(res.data);
-        }
-      })
-      .catch((err) => { });
-    console.log(params);
-  };
-  useEffect(() => {
-    getdetailOfACategory(3);
-  }, []);
 
-  let paramss = useParams();
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
- 
-  //console.log("categoryid",detailOfACourse.categoryId)
-  /* useStates untuk keperluan GET detail dari sebuah produk */
+
+	let paramss = useParams();
+	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+
+	//console.log("categoryid",detailOfACourse.categoryId)
+	/* useStates untuk keperluan GET detail dari sebuah produk */
 
 	const handleChange = (event) => {
 		setAge(event.target.value);
@@ -313,98 +316,125 @@ export default function CategoryCourse() {
 		setCheckoutDialogState(true);
 	};
 
-  return (
-    <Grid>
-      <Box display="flex">
-        <Grid
-          width="45%"
-          sx={{
-            margin: "1% 0 0 5%",
-          }}
-        >
-          <Box
-            bottom="0px"
-            style={{
-              height: "400px",
-            }}
-          >
-            <img
-              src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
-              width="75%"
-              alt={detailOfACourse.courseImage}
-              style={{
-                right: "0px",
-                borderRadius: "20px",
-              }}
-            ></img>
-          </Box>
-        </Grid>
-        <Grid
-          width="65%"
-          sx={{
-            margin: "1% 0 0 0",
-          }}
-          
-        >
-          <Typography color="text.secondary">{detailOfACategory.category}</Typography>
-          <Typography variant="body2" fontWeight="bold">
-            <h1>{detailOfACourse.courseTitle}</h1>
-          </Typography>
-          <Typography color="blue">
-            <h1>IDR {numberFormat(detailOfACourse.price)}</h1>
-          </Typography>
-          {claimedCourse ? (
-            <Button variant="contained" component={Link} to={`/my-course`}>
-              Ke Kelasku
-            </Button>
-          ) : claimedCart ? (
-            <>
-              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
-                  <Select
-                    label="Pilih Jadwal Kelas"
-                    value={scheduleCourse}
-                    onChange={(e) => setScheduleCourse(e.target.value)}
-                    size="medium"
-                  >
-                    {cekJadwal.map((jadwal, i) => (
-                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box
-                display="flex"
-                sx={{
-                  margin: "3% 0 0 0",
-                }}
-              >
-                <Button variant="contained" component={Link} to={`/cart`}>
-                  Ke Cart
-                </Button>
-                <Button variant="contained" onClick={() => checkout()}>
-                  Beli Sekarang
-                </Button>
-              </Box>
-            </>
-          ) : (
-            <>
-              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
-                  <Select
-                    label="Pilih Jadwal Kelas"
-                    value={scheduleCourse}
-                    onChange={(e) => setScheduleCourse(e.target.value)}
-                    size="medium"
-                  >
-                    {cekJadwal.map((jadwal, i) => (
-                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
+	return (
+		<Grid>
+			<Box className="Cc" fullwidth>
+				<Grid
+					width="45%"
+					sx={{
+						margin: "1% 0 0 5%",
+					}}
+				>
+					<Box
+						className="Cc1"
+
+					>
+						<img
+							src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
+							alt={detailOfACourse.courseImage}
+							className="CcImg"
+						></img>
+					</Box>
+				</Grid>
+				<Grid
+					width="65%"
+					sx={{
+						margin: "1% 0 0 0",
+					}}
+
+				>
+					<Typography color="text.secondary" sx={{
+										fontSize: {
+											lg: "16px",
+											xs: "12px",
+										},fontFamily:"Poppins"
+										,paddingBottom:{
+											lg: "10px",
+											xs: "4px",
+										},
+									}}>{detailOfACategory.category}</Typography>
+					<Typography fontWeight="bold" className="cc2" sx={{
+										fontSize: {
+											lg: "24px",
+											xs: "16px",
+										},fontFamily:"Poppins",
+										paddingBottom:{
+											lg: "10px",
+											xs: "4px",
+										},
+									}}>
+					{detailOfACourse.courseTitle}
+					</Typography>
+					<Typography color="blue" sx={{
+										fontSize: {
+											lg: "22px",
+											xs: "16px",
+										},paddingBottom:{
+											lg: "10px",
+											xs: "4px",
+										},
+									}}>
+						IDR {numberFormat(detailOfACourse.price)}
+					</Typography>
+					{claimedCourse ? (
+						<Button variant="contained" component={Link} to={`/my-course`}>
+							Ke Kelasku
+						</Button>
+					) : claimedCart ? (
+						<>
+							<Box sx={{ minWidth: 240, maxWidth: 358 }}>
+								<FormControl fullWidth>
+									<InputLabel>Pilih Jadwal Kelas</InputLabel>
+									<Select
+										label="Pilih Jadwal Kelas"
+										value={scheduleCourse}
+										onChange={(e) => setScheduleCourse(e.target.value)}
+										size="medium"
+										sx={{
+											fontSize: {
+												lg: "16px",
+												xs: "12px",
+											}
+										}}
+									>
+										{cekJadwal.map((jadwal, i) => (
+											<MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</Box>
+							<Box
+								display="flex"
+								sx={{
+									margin: "3% 0 0 0",
+								}}
+							>
+								<Button variant="contained" component={Link} to={`/cart`}>
+									Ke Cart
+								</Button>
+								<Button variant="contained" onClick={() => checkout()}>
+									Beli Sekarang
+								</Button>
+							</Box>
+						</>
+					) : (
+						<>
+							<Box sx={{ minWidth: 240, maxWidth: 358 }}>
+								<FormControl fullWidth>
+									<InputLabel>Pilih Jadwal Kelas</InputLabel>
+									<Select
+										label="Pilih Jadwal Kelas"
+										value={scheduleCourse}
+										onChange={(e) => setScheduleCourse(e.target.value)}
+										size="medium"
+										
+									>
+										{cekJadwal.map((jadwal, i) => (
+											<MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</Box>
 
 							<Box
 								display="flex"
@@ -416,8 +446,8 @@ export default function CategoryCourse() {
 									sx={{
 										margin: "0 3% 0 0",
 										fontSize: {
-											lg: "18px",
-											xs: "12px",
+											lg: "16px",
+											xs: "10px",
 										},
 									}}
 									onClick={async (e) => {
@@ -431,8 +461,8 @@ export default function CategoryCourse() {
 									onClick={() => checkout()}
 									sx={{
 										fontSize: {
-											lg: "18px",
-											xs: "12px",
+											lg: "16px",
+											xs: "10px",
 										},
 									}}>
 									Beli Sekarang
@@ -447,98 +477,108 @@ export default function CategoryCourse() {
 					<Typography mb="1.5vh" mt="4vh" sx={{ textAlign: "left", fontWeight: "5semi bold", fontSize: "20px" }}>
 						Deskripsi
 					</Typography>
-					<Typography sx={{ textAlign: "left" }}>{detailOfACourse.courseDesc}</Typography>
+					<Typography sx={{paddingBottom:{
+					md: "40px",
+					xs: "14px",
+				}, textAlign: "left" }}>{detailOfACourse.courseDesc}</Typography>
 				</Box>
 			</center>
 
 			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
 			{openAlertSucces === true ? (
+				<Snackbar>
 				<Alert className="success-alert" variant="filled" severity="success">
 					kelas berhasil ditambahkan ke keranjang!
 				</Alert>
+				</Snackbar>
 			) : (
 				<></>
 			)}
 			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
 			{openAlertWarning === true ? (
+				<Snackbar>
 				<Alert className="success-alert" variant="filled" severity="warning">
 					Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
 				</Alert>
-			) : (
-				<></>
-			)}
-			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-			{openAlertError === true ? (
-				<Alert className="success-alert" variant="filled" severity="error">
-					isilah dulu jadwalnya!
-				</Alert>
+				</Snackbar>
 			) : (
 				<></>
 			)}
 
-      <div style={{ height: "0px", border: "1px solid grey" }} />
-      <Typography color="blue" sx={{ textAlign: "center" }}>
-        <h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
-      </Typography>
-      <center>
-					<Box mt="6vh" sx={{ width: "90%" }}>
-						<Grid container spacing={3}>
-							{detailOfACourseCat.map((item, index) => (
-								<Grid key={item.id} item xs={6} md={4}>
-									<Card sx={{ margin: "auto auto auto auto" }}>
-										<CardMedia
-											component="img"
-											sx={{
-												maxWidth: "100%",
-												maxHeight: "100%",
-												objectFit: "cover",
-											}}
-											image={`data:image/jpeg;base64,${item.courseImage}`}
-											alt="kategori kelas"
-											style={{
-												borderRadius: "10px",
-											}}
-										/>
-										<CardActionArea component={Link} to={`/course/${item.id}`}>
-											<CardContent>
-												<Typography
-													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															md: "18px",
-															xs: "14px",
-														},
-													}}>
-													{item.courseTitle}
-												</Typography>
-											</CardContent>
-											<CardContent>
-												<Typography
-													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															md: "18px",
-															xs: "14px",
-														},
-													}}
-													color="blue">
-													IDR {numberFormat(item.price)}
-												</Typography>
-											</CardContent>
-										</CardActionArea>
-									</Card>
-								</Grid>
-							))}
-						</Grid>
-					</Box>
-				</center>
-      <CheckoutDialogs
-        checkoutDialogState={checkoutDialogState}
-        onClose={handleCheckoutClose}
-        selectedOp={selectedOp}
-      />
-    </Grid>
-  );
+			<div style={{
+				paddingTop: {
+					md: "40px",
+					xs: "14px",
+				}, height: "0px", border: "1px solid grey"
+			}} />
+			<Typography color="blue" sx={{paddingTop: {
+					md: "30px",
+					xs: "10px",
+				},paddingBottom: {
+					md: "30px",
+					xs: "10px",
+				}, textAlign: "center" }}>
+				<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
+			</Typography>
+			<center>
+				<Box mt="6vh" sx={{ width: "90%" }}>
+					<Grid container spacing={3}>
+						{detailOfACourseCat.map((item, index) => (
+							<Grid key={item.id} item xs={6} md={4}>
+								<Card sx={{ margin: "auto auto auto auto" }}>
+									<CardMedia
+										component="img"
+										sx={{
+											maxWidth: "100%",
+											maxHeight: "100%",
+											objectFit: "cover",
+										}}
+										image={`data:image/jpeg;base64,${item.courseImage}`}
+										alt="kategori kelas"
+										style={{
+											borderRadius: "10px",
+										}}
+									/>
+									<CardActionArea component={Link} to={`/course/${item.id}`}>
+										<CardContent>
+											<Typography
+												sx={{
+													fontWeight: "600",
+													textAlign: "left",
+													fontSize: {
+														md: "18px",
+														xs: "14px",
+													},
+												}}>
+												{item.courseTitle}
+											</Typography>
+										</CardContent>
+										<CardContent>
+											<Typography
+												sx={{
+													fontWeight: "600",
+													textAlign: "left",
+													fontSize: {
+														md: "18px",
+														xs: "14px",
+													},
+												}}
+												color="blue">
+												IDR {numberFormat(item.price)}
+											</Typography>
+										</CardContent>
+									</CardActionArea>
+								</Card>
+							</Grid>
+						))}
+					</Grid>
+				</Box>
+			</center>
+			<CheckoutDialogs
+				checkoutDialogState={checkoutDialogState}
+				onClose={handleCheckoutClose}
+				selectedOp={selectedOp}
+			/>
+		</Grid>
+	);
 }

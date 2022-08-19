@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input, Stack, Snackbar, Alert } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Dialog, TextField, Grid, DialogTitle, DialogContent, Input, Stack, Snackbar, Alert, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import axios from "axios";
 
 const DialogEditCourse = (props) => {
@@ -14,6 +14,7 @@ const DialogEditCourse = (props) => {
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = useState("");
+	const [severityType, setSeverityType] = useState("error");
 	
 	/* useStates untuk keperluan POST merk baru */
 
@@ -66,7 +67,7 @@ const DialogEditCourse = (props) => {
 
 	/* Method to POST new Brand Item */
 	const postKelas = () => {
-		const postDataa = { id: selectedCourse.id, courseTitle: courseTitle, courseCategoryId: courseCategoryId, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
+		const postDataa = { id: selectedCourse.id, courseTitle: courseTitle, courseCategoryId: kategori, courseDesc: courseDesc, price: coursePrice, courseimage: base64 };
 		console.log(postDataa);
 		axios
 			.put("https://localhost:7132/api/Course", postDataa)
@@ -74,15 +75,37 @@ const DialogEditCourse = (props) => {
 				if (res.status === 200) {
 					console.log(res.status);
 					console.log(res.data);
+					setSeverityType("success");
+					setErr("Berhasil menambahkan kategori");
 					props.onClose();
+					setOpen(true);
 				}
 			})
 			.catch((err) => {
 				console.log(err.response.data);
+				setSeverityType("error");
+				setErr("Error: Kelas Tidak Valid");
+				setOpen(true);
 			});
-		setOpen(true);
 	};
 	/* Method to POST new Brand Item */
+
+	const [cekKategori, setCekKategori] = useState([]);
+	const [kategori, setKategori] = useState('')
+	const getCekKategori = async (courseId) => {
+		await axios
+			.get(`https://localhost:7132/api/CourseCategory/Footer`)
+			.then((res) => {
+				if (res.status === 200) {
+					setCekKategori(res.data);
+					console.log("res data", res.data);
+				}
+			})
+			.catch((err) => {});
+	};
+	useEffect(() => {
+		getCekKategori();
+		}, []);
 
 	return (
 		<div>
@@ -106,11 +129,24 @@ const DialogEditCourse = (props) => {
 								<Grid>
 									<Box noValidate>
 										<TextField id="name" value={courseTitle} label="Nama Kelas" onChange={(e) => setCourseTitle(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+										<FormControl fullWidth>
+											<InputLabel>Pilih Kategori Kelas</InputLabel>
+											<Select
+												label="Pilih Kategori Kelas"
+												value={kategori}
+												onChange={(e) => setKategori(e.target.value)}
+												size="medium"
+											>
+												{cekKategori.map((kategori, i) => (
+													<MenuItem value={kategori.id}>{kategori.category}</MenuItem>
+												))}
+											</Select>
+										</FormControl>
 										<TextField id="description" value={courseDesc} label="Deskripsi Kelas" onChange={(e) => setCourseDesc(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
 										<TextField id="price" value={coursePrice} label="Harga Kelas" onChange={(e) => setCoursePrice(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
-										<TextField id="categoryid" value={courseCategoryId} label="Kategori ID" onChange={(e) => setCourseCategoryId(e.target.value)} style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }} />
+										
 
-										<Button disabled={courseTitle === "" || courseDesc === "" || coursePrice === "" || courseCategoryId === "" || base64 === "" ? true : false} type="submit" fullWidth variant="contained" style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }}>
+										<Button disabled={courseTitle === "" || courseDesc === "" || coursePrice === "" || kategori === "" || base64 === "" ? true : false} type="submit" fullWidth variant="contained" style={{ display: "flex", flexGrow: 1, marginTop: "20px", marginBottom: "20px" }}>
 											Edit Kelas
 										</Button>
 									</Box>
@@ -121,8 +157,8 @@ const DialogEditCourse = (props) => {
 				</div>
 			</Dialog>
 			<Stack spacing={2} sx={{ width: "100%" }}>
-				<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-					<Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+				<Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+					<Alerts onClose={handleClose} severity={severityType} sx={{ width: "100%" }}>
 						{err}
 					</Alerts>
 				</Snackbar>
