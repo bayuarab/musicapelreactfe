@@ -1,6 +1,6 @@
-import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField, Select, MenuItem, InputLabel } from "@mui/material";
 import api from "../../../api/baseApi";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function DialogAddJadwal(
 	props = {
@@ -10,13 +10,12 @@ function DialogAddJadwal(
 		onAdd: () => {},
 	}
 ) {
-	/* useStates untuk keperluan POST merk baru */
 	const [jadwal, setJadwal] = useState("");
 	const [courseId, setCourseId] = useState("");
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
+	const [listCourse, setListCourse] = useState([]);
 	const [severityType, setSeverityType] = useState("error");
-	/* useStates untuk keperluan POST merk baru */
 	const Alerts = React.forwardRef(function Alerts(props, ref) {
 		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
 	});
@@ -29,7 +28,6 @@ function DialogAddJadwal(
 		setOpen(false);
 	};
 
-	/* Method to POST new Brand Item */
 	const postJadwal = async () => {
 		const postDataa = {
 			jadwal: jadwal,
@@ -51,6 +49,21 @@ function DialogAddJadwal(
 			setOpen(true);
 		}
 	};
+
+	useEffect(() => {
+		const getCourse = async () => {
+			try {
+				const response = await api.get("Course/AdminDialog");
+				console.log(response.data);
+				setListCourse(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				if (err.response.data === "Not Found") console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		getCourse();
+	}, [setListCourse]);
 
 	return (
 		<div>
@@ -79,7 +92,7 @@ function DialogAddJadwal(
 												marginBottom: "20px",
 											}}
 										/>
-										<TextField
+										{/* <TextField
 											id="description"
 											value={courseId}
 											label="Id Kelas"
@@ -90,7 +103,13 @@ function DialogAddJadwal(
 												marginTop: "20px",
 												marginBottom: "20px",
 											}}
-										/>
+										/>*/}
+										<InputLabel>Pilih Kelas</InputLabel>
+										<Select label="Pilih Kelas" value={courseId} onChange={(e) => setCourseId(e.target.value)} size="medium">
+											{listCourse.map((course, i) => (
+												<MenuItem value={course.id}>{course.courseTitle}</MenuItem>
+											))}
+										</Select>
 
 										<Button
 											disabled={jadwal === "" || courseId === "" ? true : false}
