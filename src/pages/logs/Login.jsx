@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import userApi from "../../api/baseApi";
 import api from "../../api/userAPI";
 import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
@@ -81,12 +82,32 @@ export default function Login() {
 
     const fetchApi = async () => {
       try {
-        const response = await api.post("/Login", dataLogin);
+        const response = await userApi.post("/UserAuth/Login", dataLogin);
         console.log(response.data);
-        const roles = response?.data?.roles;
-        const userId = response?.data?.id;
-        const nama = response?.data?.nama;
-        setAuth({ ...auth, nama, roles, userId, email: dataLogin.email });
+        // const roles = response?.data?.roles;
+        // const userId = response?.data?.id;
+        // const nama = response?.data?.nama;
+        // setAuth({ ...auth, nama, roles, userId, email: dataLogin.email });
+        const roles = response?.data?.userData?.roles;
+        const userId = response?.data?.userData?.id;
+        const nama = response?.data?.userData?.nama;
+        const token = response?.data?.token;
+        console.table({
+          ...auth,
+          nama,
+          roles,
+          userId,
+          email: dataLogin.email,
+          token,
+        });
+        setAuth({
+          ...auth,
+          nama,
+          roles,
+          userId,
+          email: dataLogin.email,
+          token,
+        });
         if (roles === "student") fetchApiCart(userId);
         roles === "admin"
           ? // <Navigate to="/admin/kelas" replace={true} />

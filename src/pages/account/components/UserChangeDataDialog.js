@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { forwardRef, useState } from "react";
-import api from "../../../api/userAPI";
+import api from "../../../api/baseApi";
 import useAuth from "../../../hooks/useAuth";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -48,7 +48,7 @@ const UserChangeDataDialog = (props) => {
   const fetchPasswordValidation = async () => {
     try {
       console.table(postData);
-      const response = await api.post("/PasswordValidation", {
+      const response = await api.post("/UserAuth/PasswordValidation", {
         ...postData,
         id: auth.userId,
       });
@@ -86,7 +86,7 @@ const UserChangeDataDialog = (props) => {
         severity: "success",
         msg: `Berhasil, ${dialogOption} telah dirubah`,
       };
-      if (url === "ChangeName") setAuth({ ...auth, nama: postData.nama });
+      if (url === "User/ChangeName") setAuth({ ...auth, nama: postData.nama });
       setPostData({ ...postData, password: "", nama: "" });
       setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
       handleClose(true, feedback);
@@ -161,7 +161,7 @@ const UserChangeDataDialog = (props) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                fetchApiPut("ChangePassword", {
+                fetchApiPut("UserAuth/ChangePassword", {
                   ...postData,
                   id: auth?.userId,
                   password: dialogState.newPassword,
@@ -247,7 +247,7 @@ const UserChangeDataDialog = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               console.table(postData);
-              fetchApiPut("ChangeName", {
+              fetchApiPut("User/ChangeName", {
                 ...postData,
                 id: auth?.userId,
               });

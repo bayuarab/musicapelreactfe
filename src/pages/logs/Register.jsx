@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import api from "../../api/userAPI";
+import api from "../../api/baseApi";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 const EMAIL_REGEX =
@@ -102,7 +102,7 @@ export default function Login() {
 
     const fetchApi = async () => {
       try {
-        const response = await api.post("/", dataClient);
+        const response = await api.post("/UserAuth/Register", dataClient);
         console.log(response.data);
         navigate("/Login", { replace: true });
         setRegisState(true);
