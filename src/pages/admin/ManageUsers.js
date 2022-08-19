@@ -25,7 +25,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
 import HeaderSet from "../../components/HeaderSet";
-import useAuth from "../../hooks/useAuth";
 import DeleteDialog from "./components/DeleteDialog";
 
 const theme = createTheme({
@@ -104,14 +103,12 @@ const Alerts = React.forwardRef(function Alerts(props, ref) {
 
 function ManageUser() {
   const [users, setUsers] = useState([]);
-  const { auth } = useAuth();
   const [searchUser, setSearchUser] = useState("");
   const [selectedUser, setSelectedUser] = useState({});
   const [openLogout, setOpenLogout] = useState(false);
   const [severityType, setSeverityType] = useState("error");
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = React.useState(false);
-  const token = auth?.token;
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -138,7 +135,7 @@ function ManageUser() {
           : console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
-        setSeverityType("danger");
+        setSeverityType("error");
         setMessage("Error: Gagal menghapus, terjadi kesalahan");
         setSnackbarState(true);
       }
@@ -153,22 +150,9 @@ function ManageUser() {
   };
 
   useEffect(() => {
-    const headers = {
-      Authorization: "Bearer " + token,
-    };
-
-    // const config = {
-    //   headers: {
-    //     Authorization:
-    //       "Bearer " +
-    //       token,
-    //   },
-    // };
-    console.log(headers);
-
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/AllUser`, { headers });
+        const response = await api.get(`/AllUser`);
         console.log(response.data);
         setUsers(response.data);
       } catch (err) {
@@ -181,7 +165,7 @@ function ManageUser() {
     };
 
     fetchApi();
-  }, [setUsers, token]);
+  }, [setUsers]);
 
   const userFilter = () => {
     return searchUser?.length > 0

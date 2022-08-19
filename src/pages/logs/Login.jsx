@@ -92,14 +92,16 @@ export default function Login() {
         const userId = response?.data?.userData?.id;
         const nama = response?.data?.userData?.nama;
         const token = response?.data?.token;
-        console.table({
-          ...auth,
-          nama,
-          roles,
-          userId,
-          email: dataLogin.email,
-          token,
-        });
+        const userAuth = { roles, userId, nama, token, email: dataLogin.email };
+        localStorage.setItem("userAuth", JSON.stringify(userAuth));
+        // console.table({
+        //   ...auth,
+        //   nama,
+        //   roles,
+        //   userId,
+        //   email: dataLogin.email,
+        //   token,
+        // });
         setAuth({
           ...auth,
           nama,

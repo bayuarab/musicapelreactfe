@@ -102,6 +102,7 @@ function HeaderBarAdmin() {
 
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
+    localStorage.clear();
     setAuth({});
     setCart([]);
     navigate("/", { replace: true });
