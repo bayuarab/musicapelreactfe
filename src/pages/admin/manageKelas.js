@@ -39,6 +39,22 @@ const Alerts = React.forwardRef(function Alerts(props, ref) {
 	return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+const ReadMore = ({ children }) => {
+	const text = children;
+	const [isReadMore, setIsReadMore] = useState(true);
+	const toggleReadMore = () => {
+		setIsReadMore(!isReadMore);
+	};
+	return (
+		<Typography className="text">
+			{isReadMore ? text.slice(0, 150) : text}
+			<span style={{ color: "blue", fontWeight: "500" }} onClick={toggleReadMore} className="read-or-hide">
+				{isReadMore ? "...read more" : " show less"}
+			</span>
+		</Typography>
+	);
+};
+
 function ManageKelas() {
 	const [refreshPage, setRefreshPage] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -186,7 +202,7 @@ function ManageKelas() {
 																Id {item.id}
 															</Typography>
 															<Typography variant="body2" color="text.secondary">
-																{item.desc}
+																<ReadMore>{item.desc}</ReadMore>
 															</Typography>
 														</CardContent>
 													</Grid>
