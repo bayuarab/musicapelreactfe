@@ -138,7 +138,7 @@ const InvoiceDetails = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: { md: "8px", xs: "1px" },
+          gap: { md: "8px", xs: "2px" },
           marginBottom: "32px",
         }}
       >
@@ -147,7 +147,7 @@ const InvoiceDetails = () => {
             fontFamily: "Poppins",
             color: "#4F4F4F",
             fontWeight: "500",
-            fontSize: { md: "18px", xs: "14px" },
+            fontSize: { md: "18px", xs: "12px" },
           }}
         >
           No. Invoice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {invoiceID}
@@ -164,7 +164,7 @@ const InvoiceDetails = () => {
               fontFamily: "Poppins",
               color: "#4F4F4F",
               fontWeight: "500",
-              fontSize: { md: "18px", xs: "14px" },
+              fontSize: { md: "18px", xs: "12px" },
             }}
           >
             Tanggal Beli&nbsp;&nbsp;:{" "}
@@ -175,7 +175,7 @@ const InvoiceDetails = () => {
               fontFamily: "Poppins",
               color: "#4F4F4F",
               fontWeight: "700",
-              fontSize: { md: "18px", xs: "14px" },
+              fontSize: { md: "18px", xs: "12px" },
               display: { md: "block", xs: "none" },
             }}
           >
@@ -191,7 +191,8 @@ const InvoiceDetails = () => {
             fontFamily: "Poppins",
             color: "#4F4F4F",
             fontWeight: "700",
-            fontSize: { md: "18px", xs: "14px" },
+            mt: "2px",
+            fontSize: { md: "18px", xs: "12px" },
             display: { md: "none", xs: "block" },
           }}
         >

@@ -1,6 +1,6 @@
-import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField } from "@mui/material";
-import axios from "axios";
-import React, { useState } from "react";
+import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField, Select, MenuItem, InputLabel } from "@mui/material";
+import api from "../../../api/baseApi";
+import React, { useState, useEffect } from "react";
 
 const DialogEditJadwal = (props) => {
 	const { onClose, openDialog, selectedSchedule } = props;
@@ -9,6 +9,7 @@ const DialogEditJadwal = (props) => {
 	const [courseId, setCourseId] = useState("");
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
+	const [listCourse, setListCourse] = useState([]);
 	const [severityType, setSeverityType] = useState("error");
 	const Alerts = React.forwardRef(function Alerts(props, ref) {
 		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -23,31 +24,44 @@ const DialogEditJadwal = (props) => {
 	};
 
 	/* Method to POST new Brand Item */
-	const postJadwal = () => {
+	const postJadwal = async () => {
 		const postDataa = {
 			id: selectedSchedule.id,
 			jadwal: jadwal,
 			courseId: courseId,
 		};
 		console.log(postDataa);
-		axios
-			.put("https://localhost:7132/api/Schedule", postDataa)
-			.then((res) => {
-				if (res.status === 200) {
-					console.log(res.data);
-					setSeverityType("success");
-					setErr("Berhasil merubah jadwal kelas");
-					setOpen(true);
-					onClose();
-				}
-			})
-			.catch((err) => {
-				console.log(err.response.data);
-				setSeverityType("error");
-				setErr("Error : Jadwal Tidak Valid");
+		try {
+			const res = await api.put("/Schedule", postDataa);
+			if (res.status === 200) {
+				console.log(res.data);
+				setSeverityType("success");
+				setErr("Berhasil merubah jadwal kelas");
 				setOpen(true);
-			});
+				onClose();
+			}
+		} catch (err) {
+			console.log(err.response.data);
+			setSeverityType("error");
+			setErr("Error : Jadwal Tidak Valid");
+			setOpen(true);
+		}
 	};
+
+	useEffect(() => {
+		const getCourse = async () => {
+			try {
+				const response = await api.get("Course/AdminDialog");
+				console.log(response.data);
+				setListCourse(response.data);
+			} catch (err) {
+				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+				if (err.response.data === "Not Found") console.log(err.response.status);
+				console.log(err.response.headers);
+			}
+		};
+		getCourse();
+	}, [setListCourse]);
 
 	return (
 		<div>
@@ -76,18 +90,12 @@ const DialogEditJadwal = (props) => {
 												marginBottom: "20px",
 											}}
 										/>
-										<TextField
-											id="description"
-											value={courseId}
-											label="Id Kelas"
-											onChange={(e) => setCourseId(e.target.value)}
-											style={{
-												display: "flex",
-												flexGrow: 1,
-												marginTop: "20px",
-												marginBottom: "20px",
-											}}
-										/>
+										<InputLabel>Pilih Kelas</InputLabel>
+										<Select label="Pilih Kelas" value={courseId} onChange={(e) => setCourseId(e.target.value)} size="medium">
+											{listCourse.map((course, i) => (
+												<MenuItem value={course.id}>{course.courseTitle}</MenuItem>
+											))}
+										</Select>
 
 										<Button
 											disabled={jadwal === "" || courseId === "" ? true : false}

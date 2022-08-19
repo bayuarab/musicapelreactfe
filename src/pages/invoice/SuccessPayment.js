@@ -155,6 +155,8 @@ const SuccessPayment = () => {
                 fontSize: "16px",
                 fontFamilyL: "Poppins",
                 fontWeight: "400",
+                paddingLeft: { md: "0", xs: "1%" },
+                paddingRight: { md: "0", xs: "1%" },
               }}
             >
               Yey! Kamu telah berhasil membeli kursus di Apel Music

@@ -35,7 +35,7 @@ const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
   backgroundColor: "#F2C94C",
-  height: "76px",
+  height: { md: "76px", xs: "40px" },
 });
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -267,7 +267,7 @@ function WebAppBar(props) {
         </Drawer>
         <LogoutDialog logState={openLogout} onClose={handleCloseLogout} />
       </Box>
-      <Toolbar sx={{ height: "76px" }} />
+      <StyledToolbar />
     </Box>
   );
 }

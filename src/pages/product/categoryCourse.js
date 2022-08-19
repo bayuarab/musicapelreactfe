@@ -128,7 +128,8 @@ export default function CategoryCourse() {
 		console.log("paramss lah yah", category);
 		await axios
 			.get(`https://localhost:7132/api/Course/categoryId/${category}/${course}`, {
-				category, course
+				category,
+				course,
 			})
 			.then((res) => {
 				if (res.status === 200) {
@@ -136,7 +137,7 @@ export default function CategoryCourse() {
 					console.log(res.data);
 				}
 			})
-			.catch((err) => { });
+			.catch((err) => {});
 		console.log(paramss);
 	};
 	useEffect(() => {

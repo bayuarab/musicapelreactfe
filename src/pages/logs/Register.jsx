@@ -1,4 +1,4 @@
-import { Box, Button, Container, CssBaseline, FormControl, Grid, TextField, Typography, Stack, Snackbar, Alert } from "@mui/material";
+import { Alert, Box, Button, Container, CssBaseline, FormControl, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
@@ -145,7 +145,7 @@ export default function Login() {
 							<form>
 								<FormControl sx={{ width: "100%" }}>
 									<TextField id="txtNama" margin="normal" required fullWidth label="Nama" name="nama" autoComplete="nama" autoFocus value={nama} onChange={(event) => addNama(event)} />
-									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
+									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" value={email} onChange={(event) => addEmail(event)} />
 									<TextField margin="normal" required fullWidth name="password" label="Password" type="password" autoComplete="current-password" value={password} id="txtPassword" onChange={(event) => addPassword(event)} />
 									<TextField margin="normal" required fullWidth name="rePassword" label="Konfirmasi Password" type="password" autoComplete="current-password" id="txtRePassword" value={rePassword} onChange={(event) => addRePassword(event)} />
 									<Box mt="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
@@ -155,6 +155,8 @@ export default function Login() {
 													disabled={nama === "" || email === "" || password === "" || rePassword === "" ? true : false}
 													sx={{
 														borderRadius: "7px",
+														fontFamily: "Poppins",
+														backgroundColor: "#5D5FEF",
 														fontSize: {
 															lg: "16px",
 															md: "15px",

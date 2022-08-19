@@ -100,6 +100,8 @@ export default function Login() {
 										onClick={(event) => goLogin(event)}
 										sx={{
 											borderRadius: "7px",
+											fontFamily: "Poppins",
+											backgroundColor: "#5D5FEF",
 											fontSize: {
 												lg: "16px",
 												md: "15px",
