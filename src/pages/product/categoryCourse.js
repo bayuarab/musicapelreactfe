@@ -339,7 +339,7 @@ export default function CategoryCourse() {
 					sx={{
 						margin: "1% 0 0 0",
 					}}>
-					<Typography color="text.secondary">{detailOfACategory.category}</Typography>
+					{/* <Typography color="text.secondary">{detailOfACategory.category}</Typography> */}
 					<Typography variant="body2" fontWeight="bold">
 						<h1>{detailOfACourse.courseTitle}</h1>
 					</Typography>

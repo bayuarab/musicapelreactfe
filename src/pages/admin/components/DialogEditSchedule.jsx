@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField, Select, MenuItem, InputLabel } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Snackbar, Stack, TextField, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import api from "../../../api/baseApi";
 import React, { useState, useEffect } from "react";
 
@@ -68,7 +68,7 @@ const DialogEditJadwal = (props) => {
 			<Dialog open={openDialog} onClose={onClose}>
 				<div style={{ padding: "20px", width: "100%" }}>
 					{/* TITLE */}
-					<DialogTitle>Edit Jadwal Kelas - {selectedSchedule?.jadwal}</DialogTitle>
+					<DialogTitle>Edit Jadwal Kelas</DialogTitle>
 					<DialogContent>
 						<form
 							onSubmit={(e) => {
@@ -90,12 +90,14 @@ const DialogEditJadwal = (props) => {
 												marginBottom: "20px",
 											}}
 										/>
-										<InputLabel>Pilih Kelas</InputLabel>
-										<Select label="Pilih Kelas" value={courseId} onChange={(e) => setCourseId(e.target.value)} size="medium">
-											{listCourse.map((course, i) => (
-												<MenuItem value={course.id}>{course.courseTitle}</MenuItem>
-											))}
-										</Select>
+										<FormControl fullWidth>
+											<InputLabel>Pilih Kelas</InputLabel>
+											<Select label="Pilih Kelas" value={courseId} onChange={(e) => setCourseId(e.target.value)} size="medium">
+												{listCourse.map((course, i) => (
+													<MenuItem value={course.id}>{course.courseTitle}</MenuItem>
+												))}
+											</Select>
+										</FormControl>
 
 										<Button
 											disabled={jadwal === "" || courseId === "" ? true : false}
