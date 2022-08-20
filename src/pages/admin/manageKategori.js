@@ -223,8 +223,9 @@ function ManageKategori(
 										display: "-webkit-box",
 										WebkitLineClamp: 1,
 										WebkitBoxOrient: "vertical",
-									}}>
-									{item.id} - {item.courseTitle}
+									}}
+								>
+									{item.courseTitle}
 								</Typography>
 
 								{/* Brand Name */}

@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
@@ -313,7 +313,7 @@ export default function CategoryCourse() {
 
 	return (
 		<Grid>
-			<Box display="flex">
+			<Box className="Cc" fullwidth>
 				<Grid
 					width="45%"
 					sx={{
@@ -334,12 +334,13 @@ export default function CategoryCourse() {
 							}}></img>
 					</Box>
 				</Grid>
-				<Grid
-					width="65%"
-					sx={{
+				<Grid width="65%" sx={{ margin: "1% 0 0 0" }}>
+					<Typography
+						color="text.secondary"
+						sx={{
 						margin: "1% 0 0 0",
 					}}>
-					{/* <Typography color="text.secondary">{detailOfACategory.category}</Typography> */}
+					<Typography color="text.secondary">{detailOfACategory.category}</Typography>
 					<Typography variant="body2" fontWeight="bold">
 						<h1>{detailOfACourse.courseTitle}</h1>
 					</Typography>
@@ -398,8 +399,8 @@ export default function CategoryCourse() {
 									sx={{
 										margin: "0 3% 0 0",
 										fontSize: {
-											lg: "18px",
-											xs: "12px",
+											lg: "16px",
+											xs: "10px",
 										},
 									}}
 									onClick={async (e) => {
@@ -413,8 +414,8 @@ export default function CategoryCourse() {
 									onClick={() => checkout()}
 									sx={{
 										fontSize: {
-											lg: "18px",
-											xs: "12px",
+											lg: "16px",
+											xs: "10px",
 										},
 									}}>
 									Beli Sekarang
@@ -435,25 +436,21 @@ export default function CategoryCourse() {
 
 			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
 			{openAlertSucces === true ? (
-				<Alert className="success-alert" variant="filled" severity="success">
-					kelas berhasil ditambahkan ke keranjang!
-				</Alert>
+				<Snackbar>
+					<Alert className="success-alert" variant="filled" severity="success">
+						kelas berhasil ditambahkan ke keranjang!
+					</Alert>
+				</Snackbar>
 			) : (
 				<></>
 			)}
 			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
 			{openAlertWarning === true ? (
-				<Alert className="success-alert" variant="filled" severity="warning">
-					Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
-				</Alert>
-			) : (
-				<></>
-			)}
-			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-			{openAlertError === true ? (
-				<Alert className="success-alert" variant="filled" severity="error">
-					isilah dulu jadwalnya!
-				</Alert>
+				<Snackbar>
+					<Alert className="success-alert" variant="filled" severity="warning">
+						Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
+					</Alert>
+				</Snackbar>
 			) : (
 				<></>
 			)}
