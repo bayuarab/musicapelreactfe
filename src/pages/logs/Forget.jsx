@@ -75,6 +75,7 @@ export default function Login() {
 										md: "23px",
 										xs: "18px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Lupa password kamu?
 							</Typography>
@@ -85,6 +86,7 @@ export default function Login() {
 										md: "15px",
 										xs: "13px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Silahkan isi email dulu
 							</Typography>

@@ -6,35 +6,27 @@ import drum from "../../../assets/drum.jpg";
 
 const gridClassItemsDef = [
 	{
-		categories: "Drum",
 		image: drum,
 	},
 	{
-		categories: "Piano",
 		image: drum,
 	},
 	{
-		categories: "Gitar",
 		image: drum,
 	},
 	{
-		categories: "Bass",
 		image: drum,
 	},
 	{
-		categories: "Biola",
 		image: drum,
 	},
 	{
-		categories: "Menyanyi",
 		image: drum,
 	},
 	{
-		categories: "Flute",
 		image: drum,
 	},
 	{
-		categories: "Sexophone",
 		image: drum,
 	},
 ];
@@ -110,6 +102,7 @@ export default function GridClassCat() {
 											sm: "16px",
 											xs: "10px",
 										},
+										fontFamily: "Poppins",
 									}}>
 									{item.category}
 								</Typography>

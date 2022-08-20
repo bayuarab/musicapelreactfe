@@ -29,6 +29,7 @@ const Class = () => {
 						},
 						color: "#5D5FEF",
 						fontWeight: "600",
+						fontFamily: "Poppins",
 					}}>
 					Explore kelas favorit
 				</Typography>

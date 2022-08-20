@@ -127,6 +127,7 @@ export default function Login() {
 										md: "23px",
 										xs: "18px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Selamat Datang Musikers!
 							</Typography>
@@ -137,6 +138,7 @@ export default function Login() {
 										md: "15px",
 										xs: "13px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Yuk daftar terlebih dahulu akun kamu
 							</Typography>
@@ -150,7 +152,7 @@ export default function Login() {
 									<TextField margin="normal" required fullWidth name="rePassword" label="Konfirmasi Password" type="password" autoComplete="current-password" id="txtRePassword" value={rePassword} onChange={(event) => addRePassword(event)} />
 									<Box mt="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
 										<Grid container>
-											<Grid item xs={3}>
+											<Grid item xs={3.5} md={3}>
 												<Button
 													disabled={nama === "" || email === "" || password === "" || rePassword === "" ? true : false}
 													sx={{
@@ -171,8 +173,16 @@ export default function Login() {
 													Daftar
 												</Button>
 											</Grid>
-											<Grid item>
-												<Typography>
+											<Grid item xs={8.5}>
+												<Typography
+													sx={{
+														fontFamily: "Poppins",
+														fontSize: {
+															lg: "16px",
+															md: "15px",
+															xs: "13px",
+														},
+													}}>
 													Sudah punya akun?
 													<Link
 														to="/Login"
@@ -184,6 +194,7 @@ export default function Login() {
 																md: "15px",
 																xs: "13px",
 															},
+															fontFamily: "Poppins",
 														}}>
 														Login disini
 													</Link>

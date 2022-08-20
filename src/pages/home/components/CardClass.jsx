@@ -213,7 +213,7 @@ export default function CardClass() {
 					}}>
 					{expMore ? (
 						<Box>
-							<Typography mb="-7px" sx={{ fontSize: "12px", fontWeight: "bold" }}>
+							<Typography mb="-7px" sx={{ fontSize: "12px", fontWeight: "600", fontFamily: "Poppins" }}>
 								Lainnya
 							</Typography>
 
@@ -222,7 +222,7 @@ export default function CardClass() {
 					) : (
 						<Box>
 							<ExpandLess />
-							<Typography mt="-10px" sx={{ fontSize: "12px", fontWeight: "bold" }}>
+							<Typography mt="-13px" sx={{ fontSize: "12px", fontWeight: "600", fontFamily: "Poppins" }}>
 								Sembunyikan
 							</Typography>
 						</Box>
