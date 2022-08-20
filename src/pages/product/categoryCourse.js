@@ -1,3 +1,4 @@
+import { Grid3x3Rounded } from "@mui/icons-material";
 import {
   Alert,
   Box,
@@ -12,8 +13,11 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
+  Stack,
   Typography,
 } from "@mui/material";
+import { blue } from "@mui/material/colors";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
@@ -37,7 +41,6 @@ const calculateTotalCost = (carts) => {
 };
 
 export default function CategoryCourse() {
-  const [age, setAge] = React.useState("");
   const [err, setErr] = useState("");
   const { setCart } = useCart();
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
@@ -46,12 +49,13 @@ export default function CategoryCourse() {
   const [claimedCourse, setClaimedCourse] = useState(false);
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const [openAlertSucces, setOpenAlertSucces] = useState(false);
-  const [openAlertError, setOpenAlertError] = useState(false);
-  const [openAlertWarning, setOpenAlertWarning] = useState(false);
+  // const [openAlertError, setOpenAlertError] = useState(false);
+  // const [openAlertWarning, setOpenAlertWarning] = useState(false);
   const [scheduleCourse, setScheduleCourse] = useState("");
   const [claimedCart, setClaimedCart] = useState(false);
+  const [severityType, setSeverityType] = useState("error");
   const UserID = auth?.userId;
+  const [open, setOpen] = React.useState(false);
   const token = auth?.token;
   const config = {
     headers: {
@@ -221,10 +225,6 @@ export default function CategoryCourse() {
   //console.log("categoryid",detailOfACourse.categoryId)
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
   /* Method to POST new Brand Item */
   const postCart = () => {
     if (!auth?.roles) navigate("/login", { replace: true });
@@ -243,23 +243,23 @@ export default function CategoryCourse() {
       .post("https://localhost:7132/api/Cart", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
-          setOpenAlertSucces(true);
-          setTimeout(() => setOpenAlertSucces(false), 2000);
           console.log(res.status);
           console.log(res.data);
+          setSeverityType("success");
           setErr("Berhasil menambahkan cart");
           fetchApiCart(UserID);
+          setOpen(true);
         }
       })
       .catch((err) => {
         if (err.status !== 200) {
-          setOpenAlertWarning(true);
-          setTimeout(() => setOpenAlertWarning(false), 2000);
+          // setOpenAlertWarning(true);
+          // setTimeout(() => setOpenAlertWarning(false), 2000);
           console.log("status eror", err.status);
-          setErr(err.response.data);
+          setErr("Jadwal Tidak Valid");
+          setSeverityType("error");
+          setOpen(true);
         } else if (err.status === "undefined") {
-          setOpenAlertError(true);
-          setTimeout(() => setOpenAlertError(false), 2000);
           console.log(err.response.data);
           console.log("status eror", err.status);
           setErr(err.response.data);
@@ -345,13 +345,10 @@ export default function CategoryCourse() {
 
   const checkout = () => {
     if (!auth?.roles) navigate("/login", { replace: true });
-    if (claimedCourse) {
-      setErr("Course sudah dibeli");
-      return;
-    }
     if (!scheduleCourse) {
-      setOpenAlertError(true);
-      setTimeout(() => setOpenAlertError(false), 2000);
+      setErr("Jadwal Tidak Valid");
+      setSeverityType("error");
+      setOpen(true);
       return;
     }
 
@@ -362,16 +359,38 @@ export default function CategoryCourse() {
     setCheckoutDialogState(true);
   };
 
+  const Alerts = React.forwardRef(function Alerts(props, ref) {
+    return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <Grid>
       <Box className="Cc" fullwidth>
         <Grid
-          width="45%"
           sx={{
-            margin: "1% 0 0 5%",
+            width: {
+              lg: "45%",
+            },
+            margin: {
+              lg: "1% 0 0 0",
+            },
           }}
         >
-          <Box className="Cc1">
+          <Box
+            sx={{
+              width: { lg: "90%", sm: "75%" },
+              marginLeft: { lg: "13%" },
+              marginTop: "3%",
+            }}
+          >
             <img
               src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
               alt={detailOfACourse.courseImage}
@@ -380,8 +399,11 @@ export default function CategoryCourse() {
           </Box>
         </Grid>
         <Grid
-          width="65%"
           sx={{
+            width: {
+              lg: "55%",
+              sm: "100%",
+            },
             margin: "1% 0 0 0",
           }}
         >
@@ -477,8 +499,24 @@ export default function CategoryCourse() {
           ) : (
             <>
               <Box sx={{ minWidth: 240, maxWidth: 358 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
+                <FormControl
+                  fullWidth
+                  size={{
+                    lg: "medium",
+                    sm: "small",
+                  }}
+                >
+                  <InputLabel
+                    sx={{
+                      fontSize: {
+                        lg: "16px",
+                        xs: "14px",
+                      },
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Pilih Jadwal Kelas
+                  </InputLabel>
                   <Select
                     label="Pilih Jadwal Kelas"
                     value={scheduleCourse}
@@ -504,8 +542,9 @@ export default function CategoryCourse() {
                     margin: "0 3% 0 0",
                     fontSize: {
                       lg: "16px",
-                      xs: "10px",
+                      sm: "10px",
                     },
+                    fontFamily: "Poppins",
                   }}
                   onClick={async (e) => {
                     await e.preventDefault();
@@ -522,6 +561,7 @@ export default function CategoryCourse() {
                       lg: "16px",
                       xs: "10px",
                     },
+                    fontFamily: "Poppins",
                   }}
                 >
                   Beli Sekarang
@@ -539,7 +579,11 @@ export default function CategoryCourse() {
             sx={{
               textAlign: "left",
               fontWeight: "5semi bold",
-              fontSize: "20px",
+              fontSize: {
+                lg: "24px",
+                xs: "14px",
+              },
+              fontFamily: "Poppins",
             }}
           >
             Deskripsi
@@ -551,37 +595,17 @@ export default function CategoryCourse() {
                 xs: "14px",
               },
               textAlign: "left",
+              fontSize: {
+                lg: "20px",
+                xs: "12px",
+              },
+              fontFamily: "Poppins",
             }}
           >
             {detailOfACourse.courseDesc}
           </Typography>
         </Box>
       </center>
-
-      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertSucces === true ? (
-        <Alert className="success-alert" variant="filled" severity="success">
-          kelas berhasil ditambahkan ke keranjang!
-        </Alert>
-      ) : (
-        <></>
-      )}
-      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertWarning === true ? (
-        <Alert className="success-alert" variant="filled" severity="warning">
-          Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
-        </Alert>
-      ) : (
-        <></>
-      )}
-      {/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-      {openAlertError === true ? (
-        <Alert className="success-alert" variant="filled" severity="error">
-          isilah dulu jadwalnya!
-        </Alert>
-      ) : (
-        <></>
-      )}
 
       <div
         style={{
@@ -625,11 +649,29 @@ export default function CategoryCourse() {
                     image={`data:image/jpeg;base64,${item.courseImage}`}
                     alt="kategori kelas"
                     style={{
-                      borderRadius: "10px",
+                      borderRadius: "16px",
                     }}
                   />
                   <CardActionArea component={Link} to={`/course/${item.id}`}>
                     <CardContent>
+                      <Typography
+                        color="text.secondary"
+                        sx={{
+                          fontWeight: "600",
+                          textAlign: "left",
+                          fontSize: {
+                            lg: "16px",
+                            xs: "12px",
+                          },
+                          fontFamily: "Poppins",
+                          paddingBottom: {
+                            lg: "10px",
+                            xs: "4px",
+                          },
+                        }}
+                      >
+                        {detailOfACategory.category}
+                      </Typography>
                       <Typography
                         sx={{
                           fontWeight: "600",
@@ -638,6 +680,7 @@ export default function CategoryCourse() {
                             md: "18px",
                             xs: "14px",
                           },
+                          fontFamily: "Poppins",
                         }}
                       >
                         {item.courseTitle}
@@ -670,6 +713,17 @@ export default function CategoryCourse() {
         onClose={handleCheckoutClose}
         selectedOp={selectedOp}
       />
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alerts
+            onClose={handleClose}
+            severity={severityType}
+            sx={{ width: "100%" }}
+          >
+            {err}
+          </Alerts>
+        </Snackbar>
+      </Stack>
     </Grid>
   );
 }
