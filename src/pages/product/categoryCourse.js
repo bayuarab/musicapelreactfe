@@ -1,5 +1,5 @@
 import { Grid3x3Rounded } from "@mui/icons-material";
-import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -22,7 +22,6 @@ const calculateTotalCost = (carts) => {
 };
 
 export default function CategoryCourse() {
-	const [age, setAge] = React.useState("");
 	const [err, setErr] = useState("");
 	const { setCart } = useCart();
 	const [checkoutDialogState, setCheckoutDialogState] = useState(false);
@@ -31,13 +30,13 @@ export default function CategoryCourse() {
 	const [claimedCourse, setClaimedCourse] = useState(false);
 	const { auth } = useAuth();
 	const navigate = useNavigate();
-	const [openAlertSucces, setOpenAlertSucces] = useState(false);
 	const [openAlertError, setOpenAlertError] = useState(false);
 	const [openAlertWarning, setOpenAlertWarning] = useState(false);
 	const [scheduleCourse, setScheduleCourse] = useState("");
 	const [claimedCart, setClaimedCart] = useState(false);
-
+	const [severityType, setSeverityType] = useState("error");
 	const UserID = auth?.userId;
+	const [open, setOpen] = React.useState(false);
 
 	let params = useParams();
 
@@ -179,10 +178,6 @@ export default function CategoryCourse() {
 	//console.log("categoryid",detailOfACourse.categoryId)
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
-	const handleChange = (event) => {
-		setAge(event.target.value);
-	};
-
 	/* Method to POST new Brand Item */
 	const postCart = () => {
 		if (!auth?.roles) navigate("/login", { replace: true });
@@ -201,12 +196,12 @@ export default function CategoryCourse() {
 			.post("https://localhost:7132/api/Cart", postDataa)
 			.then((res) => {
 				if (res.status === 200) {
-					setOpenAlertSucces(true);
-					setTimeout(() => setOpenAlertSucces(false), 2000);
 					console.log(res.status);
 					console.log(res.data);
+					setSeverityType("success");
 					setErr("Berhasil menambahkan cart");
 					fetchApiCart(UserID);
+					setOpen(true);
 				}
 			})
 			.catch((err) => {
@@ -214,10 +209,11 @@ export default function CategoryCourse() {
 					setOpenAlertWarning(true);
 					setTimeout(() => setOpenAlertWarning(false), 2000);
 					console.log("status eror", err.status);
-					setErr(err.response.data);
+					setErr("Jadwal Tidak Valid");
+					setSeverityType("error");
+					setOpen(true);
 				} else if (err.status === "undefined") {
-					setOpenAlertError(true);
-					setTimeout(() => setOpenAlertError(false), 2000);
+					
 					console.log(err.response.data);
 					console.log("status eror", err.status);
 					setErr(err.response.data);
@@ -313,13 +309,23 @@ export default function CategoryCourse() {
 		console.log(`Total cost: ${detailOfACourse.price}`);
 		setCheckoutDialogState(true);
 	};
+	const Alerts = React.forwardRef(function Alerts(props, ref) {
+		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+	});
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
 
 	return (
 		<Grid>
 			<Box className="Cc" fullwidth>
 				<Grid
 					sx={{
-<<<<<<< HEAD
 						width: {
 							lg: "45%"
 						},
@@ -340,12 +346,6 @@ export default function CategoryCourse() {
 							alt={detailOfACourse.courseImage}
 							className="CcImg"
 						></img>
-=======
-						margin: "1% 0 0 5%",
-					}}>
-					<Box className="Cc1">
-						<img src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`} alt={detailOfACourse.courseImage} className="CcImg"></img>
->>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 					</Box>
 				</Grid>
 				<Grid
@@ -355,7 +355,6 @@ export default function CategoryCourse() {
 							sm: "100%"
 						},
 						margin: "1% 0 0 0",
-<<<<<<< HEAD
 					}}
 
 				>
@@ -390,52 +389,6 @@ export default function CategoryCourse() {
 							xs: "4px",
 						},
 					}}>
-=======
-					}}>
-					<Typography
-						color="text.secondary"
-						sx={{
-							fontSize: {
-								lg: "16px",
-								xs: "12px",
-							},
-							fontFamily: "Poppins",
-							paddingBottom: {
-								lg: "10px",
-								xs: "4px",
-							},
-						}}>
-						{detailOfACategory.category}
-					</Typography>
-					<Typography
-						fontWeight="bold"
-						className="cc2"
-						sx={{
-							fontSize: {
-								lg: "24px",
-								xs: "16px",
-							},
-							fontFamily: "Poppins",
-							paddingBottom: {
-								lg: "10px",
-								xs: "4px",
-							},
-						}}>
-						{detailOfACourse.courseTitle}
-					</Typography>
-					<Typography
-						color="blue"
-						sx={{
-							fontSize: {
-								lg: "22px",
-								xs: "16px",
-							},
-							paddingBottom: {
-								lg: "10px",
-								xs: "4px",
-							},
-						}}>
->>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 						IDR {numberFormat(detailOfACourse.price)}
 					</Typography>
 					{claimedCourse ? (
@@ -480,7 +433,6 @@ export default function CategoryCourse() {
 					) : (
 						<>
 							<Box sx={{ minWidth: 240, maxWidth: 358 }}>
-<<<<<<< HEAD
 								<FormControl fullWidth size={{
 									lg:"medium",
 									sm:"small"
@@ -499,11 +451,6 @@ export default function CategoryCourse() {
 										
 
 									>
-=======
-								<FormControl fullWidth>
-									<InputLabel>Pilih Jadwal Kelas</InputLabel>
-									<Select label="Pilih Jadwal Kelas" value={scheduleCourse} onChange={(e) => setScheduleCourse(e.target.value)} size="medium">
->>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 										{cekJadwal.map((jadwal, i) => (
 											<MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
 										))}
@@ -555,7 +502,6 @@ export default function CategoryCourse() {
 											},fontFamily:"Poppins" }}>
 						Deskripsi
 					</Typography>
-<<<<<<< HEAD
 					<Typography sx={{
 						paddingBottom: {
 							md: "40px",
@@ -565,43 +511,10 @@ export default function CategoryCourse() {
 							xs: "12px",
 						},fontFamily:"Poppins"
 					}}>{detailOfACourse.courseDesc}</Typography>
-=======
-					<Typography
-						sx={{
-							paddingBottom: {
-								md: "40px",
-								xs: "14px",
-							},
-							textAlign: "left",
-						}}>
-						{detailOfACourse.courseDesc}
-					</Typography>
->>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 				</Box>
 			</center>
 
-			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-			{openAlertSucces === true ? (
-				<Snackbar>
-					<Alert className="success-alert" variant="filled" severity="success">
-						kelas berhasil ditambahkan ke keranjang!
-					</Alert>
-				</Snackbar>
-			) : (
-				<></>
-			)}
-			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
-			{openAlertWarning === true ? (
-				<Snackbar>
-					<Alert className="success-alert" variant="filled" severity="warning">
-						Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
-					</Alert>
-				</Snackbar>
-			) : (
-				<></>
-			)}
-
-<<<<<<< HEAD
+			
 			<div style={{
 				paddingTop: {
 					md: "40px",
@@ -617,31 +530,6 @@ export default function CategoryCourse() {
 					xs: "10px",
 				}, textAlign: "center"
 			}}>
-=======
-			<div
-				style={{
-					paddingTop: {
-						md: "40px",
-						xs: "14px",
-					},
-					height: "0px",
-					border: "1px solid grey",
-				}}
-			/>
-			<Typography
-				color="blue"
-				sx={{
-					paddingTop: {
-						md: "30px",
-						xs: "10px",
-					},
-					paddingBottom: {
-						md: "30px",
-						xs: "10px",
-					},
-					textAlign: "center",
-				}}>
->>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 				<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
 			</Typography>
 			<center>
@@ -711,6 +599,13 @@ export default function CategoryCourse() {
 				</Box>
 			</center>
 			<CheckoutDialogs checkoutDialogState={checkoutDialogState} onClose={handleCheckoutClose} selectedOp={selectedOp} />
+			<Stack spacing={2} sx={{ width: "100%" }}>
+				<Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+					<Alerts onClose={handleClose} severity={severityType} sx={{ width: "100%" }}>
+						{err}
+					</Alerts>
+				</Snackbar>
+			</Stack>
 		</Grid>
 	);
 }
