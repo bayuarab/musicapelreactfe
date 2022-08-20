@@ -2,42 +2,6 @@ import { Box, CardMedia, Grid, Typography } from "@mui/material/";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../api/courseCatAPI";
-// import drum from "../../../assets/drum.jpg";
-
-// const gridClassItemsDef = [
-// 	{
-// 		categories: "Drum",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Piano",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Gitar",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Bass",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Biola",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Menyanyi",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Flute",
-// 		image: drum,
-// 	},
-// 	{
-// 		categories: "Sexophone",
-// 		image: drum,
-// 	},
-// ];
 
 export default function GridClassCat() {
   const [dataClass, setDataClass] = useState([]);

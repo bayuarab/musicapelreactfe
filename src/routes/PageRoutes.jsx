@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "../components/Layout";
 import RequiredAuth from "../components/RequiredAuth";
 import MyAccount from "../pages/account/MyAccount";
-// import ManageInvoices from "../pages/admin/manageInvoices";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
 import ManagePaymentMethod from "../pages/admin/ManagePaymentMethod";
@@ -70,20 +69,6 @@ const PageRoutes = () => {
       </Route>
     </Routes>
   );
-
-  /* Admin route */
-  //         <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
-  //           <Route path="/admin">
-  //             <Route index element={<ManageKelas />} />
-  //             <Route path="/admin/kelas" element={<ManageKelas />} />
-  //             <Route path="/admin/category" element={<ManageKategori />} />
-  //             <Route path="/admin/invoices" element={<UserInvoices />} />
-  //             <Route path="/admin/users" element={<ManageUser />} />
-  //           </Route>
-  //         </Route>
-  //       </Route>
-  //     </Routes>
-  //   );
 };
 
 export default PageRoutes;

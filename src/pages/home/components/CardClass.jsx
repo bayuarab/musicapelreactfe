@@ -2,50 +2,10 @@ import { Box, CardMedia, Grid, Typography } from "@mui/material/";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../api/courseAPI";
-import drum from "../../../assets/drum.jpg";
 import numberFormat from "../../../utilities/NumbeFormat";
 
-const gridItemsDef = [
-  {
-    categories: "Drum",
-    class: "Kursus Drummer Special Coach (Eno Netral)",
-    price: "IDR 8.500.000",
-    image: drum,
-  },
-  {
-    categories: "Gitar",
-    class: "[Beginner] Guitar class for kids",
-    price: "IDR 1.600.000",
-    image: drum,
-  },
-  {
-    categories: "Biola",
-    class: "Biola Mid-Level Course",
-    price: "IDR 3.000.000",
-    image: drum,
-  },
-  {
-    categories: "Drum",
-    class: "Drummer for kids (Level Basic/1)",
-    price: "IDR 2.200.000",
-    image: drum,
-  },
-  {
-    categories: "Piano",
-    class: "Kursu Piano : From Zero to Pro (Full Package)",
-    price: "IDR 11.650.000",
-    image: drum,
-  },
-  {
-    categories: "Sexophone",
-    class: "Expert Level Saxophone",
-    price: "IDR 7.350.000",
-    image: drum,
-  },
-];
-
 export default function CardClass() {
-  const [dataClass, setDataClass] = useState(gridItemsDef);
+  const [dataClass, setDataClass] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
