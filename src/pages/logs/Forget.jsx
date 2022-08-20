@@ -75,6 +75,7 @@ export default function Login() {
 										md: "23px",
 										xs: "18px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Lupa password kamu?
 							</Typography>
@@ -85,6 +86,7 @@ export default function Login() {
 										md: "15px",
 										xs: "13px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Silahkan isi email dulu
 							</Typography>
@@ -100,6 +102,8 @@ export default function Login() {
 										onClick={(event) => goLogin(event)}
 										sx={{
 											borderRadius: "7px",
+											fontFamily: "Poppins",
+											backgroundColor: "#5D5FEF",
 											fontSize: {
 												lg: "16px",
 												md: "15px",

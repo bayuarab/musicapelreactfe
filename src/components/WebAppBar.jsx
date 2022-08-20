@@ -128,8 +128,18 @@ function WebAppBar(props) {
     </SideIcons>
   );
 
+  const cartIcon = () => {
+    return (
+      <IconButton sx={{ color: "black" }}>
+        <StyledBadge badgeContent={cart?.length || 0} color="secondary">
+          <ShoppingCart />
+        </StyledBadge>
+      </IconButton>
+    );
+  };
+
   const navItems = [
-    { link: "/cart", mobile: "Cart" },
+    { link: "/cart", mobile: cartIcon() },
     { link: "/my-course", mobile: "Kelasku" },
     { link: "/my-invoice", mobile: "Pembelian" },
     {

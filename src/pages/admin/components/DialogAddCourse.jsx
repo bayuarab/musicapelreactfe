@@ -5,14 +5,19 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   Input,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import courseApi from "../../../api/courseAPI";
+import courseCategoryApi from "../../../api/courseCatAPI";
 import useAuth from "../../../hooks/useAuth";
 
 function DialogAddCourse(
@@ -33,6 +38,8 @@ function DialogAddCourse(
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
   const [refreshPage, setRefreshPage] = useState(false);
+  const [scheduleCourse, setScheduleCourse] = useState("");
+  const [severityType, setSeverityType] = useState("error");
   const { auth } = useAuth();
   const token = auth?.token;
   const config = {
@@ -106,20 +113,40 @@ function DialogAddCourse(
           console.log(res.data);
           props.onClose();
           setRefreshPage((status) => !status);
+          setSeverityType("success");
+          setErr("Berhasil menambahkan kategori");
+          setOpen(true);
         }
       })
       .catch((err) => {
         console.log(err.response.data);
+        setSeverityType("error");
         setErr("Error : Kategori Tidak Valid");
         if (err.response.status === 401 || err.response.status === 403)
           setErr("Otoritas tidak berlaku silahkan login kembali");
+        setOpen(true);
       });
-    setOpen(true);
   };
   // useEffect(() => {
   // 	postKelas();
   // }, [refreshPage]);
   /* Method to POST new Brand Item */
+
+  const [cekKategori, setCekKategori] = useState([]);
+  const getCekKategori = async () => {
+    await courseCategoryApi
+      .get(`/Footer`)
+      .then((res) => {
+        if (res.status === 200) {
+          setCekKategori(res.data);
+          console.log("res data", res.data);
+        }
+      })
+      .catch((err) => {});
+  };
+  useEffect(() => {
+    getCekKategori();
+  }, []);
 
   return (
     <div>
@@ -177,6 +204,21 @@ function DialogAddCourse(
                         marginBottom: "20px",
                       }}
                     />
+                    <FormControl fullWidth>
+                      <InputLabel>Pilih Kategori Kelas</InputLabel>
+                      <Select
+                        label="Pilih Kategori Kelas"
+                        value={scheduleCourse}
+                        onChange={(e) => setScheduleCourse(e.target.value)}
+                        size="medium"
+                      >
+                        {cekKategori.map((kategori, i) => (
+                          <MenuItem value={kategori.id}>
+                            {kategori.category}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                     <TextField
                       id="description"
                       value={courseDesc}
@@ -194,18 +236,6 @@ function DialogAddCourse(
                       value={coursePrice}
                       label="Harga Kelas"
                       onChange={(e) => setCoursePrice(e.target.value)}
-                      style={{
-                        display: "flex",
-                        flexGrow: 1,
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    />
-                    <TextField
-                      id="categoryid"
-                      value={courseCategoryId}
-                      label="Kategori ID"
-                      onChange={(e) => setCourseCategoryId(e.target.value)}
                       style={{
                         display: "flex",
                         flexGrow: 1,

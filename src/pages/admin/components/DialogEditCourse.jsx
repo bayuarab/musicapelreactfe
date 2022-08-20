@@ -5,14 +5,18 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   Input,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import courseApi from "../../../api/courseAPI";
 import useAuth from "../../../hooks/useAuth";
 
@@ -35,6 +39,7 @@ const DialogEditCourse = (props) => {
       Authorization: "Bearer " + token,
     },
   };
+  const [severityType, setSeverityType] = useState("error");
 
   /* useStates untuk keperluan POST merk baru */
 
@@ -89,7 +94,7 @@ const DialogEditCourse = (props) => {
     const postDataa = {
       id: selectedCourse.id,
       courseTitle: courseTitle,
-      courseCategoryId: courseCategoryId,
+      courseCategoryId: kategori,
       courseDesc: courseDesc,
       price: coursePrice,
       courseimage: base64,
@@ -101,17 +106,39 @@ const DialogEditCourse = (props) => {
         if (res.status === 200) {
           console.log(res.status);
           console.log(res.data);
+          setSeverityType("success");
+          setErr("Berhasil menambahkan kategori");
           props.onClose();
+          setOpen(true);
         }
       })
       .catch((err) => {
         console.log(err.response.data);
+        setSeverityType("error");
+        setErr("Error: Kelas Tidak Valid");
         if (err.response.status === 401 || err.response.status === 403)
           setErr("Otoritas tidak berlaku silahkan login kembali");
+        setOpen(true);
       });
-    setOpen(true);
   };
   /* Method to POST new Brand Item */
+
+  const [cekKategori, setCekKategori] = useState([]);
+  const [kategori, setKategori] = useState("");
+  const getCekKategori = async (courseId) => {
+    await axios
+      .get(`https://localhost:7132/api/CourseCategory/Footer`)
+      .then((res) => {
+        if (res.status === 200) {
+          setCekKategori(res.data);
+          console.log("res data", res.data);
+        }
+      })
+      .catch((err) => {});
+  };
+  useEffect(() => {
+    getCekKategori();
+  }, []);
 
   return (
     <div>
@@ -169,6 +196,21 @@ const DialogEditCourse = (props) => {
                         marginBottom: "20px",
                       }}
                     />
+                    <FormControl fullWidth>
+                      <InputLabel>Pilih Kategori Kelas</InputLabel>
+                      <Select
+                        label="Pilih Kategori Kelas"
+                        value={kategori}
+                        onChange={(e) => setKategori(e.target.value)}
+                        size="medium"
+                      >
+                        {cekKategori.map((kategori, i) => (
+                          <MenuItem value={kategori.id}>
+                            {kategori.category}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                     <TextField
                       id="description"
                       value={courseDesc}
@@ -193,25 +235,13 @@ const DialogEditCourse = (props) => {
                         marginBottom: "20px",
                       }}
                     />
-                    <TextField
-                      id="categoryid"
-                      value={courseCategoryId}
-                      label="Kategori ID"
-                      onChange={(e) => setCourseCategoryId(e.target.value)}
-                      style={{
-                        display: "flex",
-                        flexGrow: 1,
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    />
 
                     <Button
                       disabled={
                         courseTitle === "" ||
                         courseDesc === "" ||
                         coursePrice === "" ||
-                        courseCategoryId === "" ||
+                        kategori === "" ||
                         base64 === ""
                           ? true
                           : false
@@ -236,8 +266,12 @@ const DialogEditCourse = (props) => {
         </div>
       </Dialog>
       <Stack spacing={2} sx={{ width: "100%" }}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alerts
+            onClose={handleClose}
+            severity={severityType}
+            sx={{ width: "100%" }}
+          >
             {err}
           </Alerts>
         </Snackbar>

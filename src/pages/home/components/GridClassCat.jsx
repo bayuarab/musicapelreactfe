@@ -29,7 +29,7 @@ export default function GridClassCat() {
     <Box
       mt={{
         md: "6vh",
-        xs: "4vh",
+        xs: "3vh",
       }}
       sx={{ flexGrow: 1 }}
     >
@@ -46,9 +46,9 @@ export default function GridClassCat() {
                   },
                   maxHeight: {
                     lg: "120px",
-                    xs: "50%",
+                    xs: "65%",
                   },
-                  maxWidth: "50%",
+                  maxWidth: "65%",
                   borderRadius: {
                     md: "20px",
                     xs: "5px",
@@ -77,8 +77,9 @@ export default function GridClassCat() {
                       lg: "24px",
                       md: "22px",
                       sm: "16px",
-                      xs: "10px",
+                      xs: "11px",
                     },
+                    fontFamily: "Poppins",
                   }}
                 >
                   {item.category}

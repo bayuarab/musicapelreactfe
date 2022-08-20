@@ -33,7 +33,7 @@ const DeleteDialog = (props) => {
 			// sx={{ padding: "30px" }}
 		>
 			<Box sx={{ padding: "10px" }}>
-				<DialogTitle mb={1}>{"Apakah anda yakin untuk menghapus kategori ini?"}</DialogTitle>
+				<DialogTitle mb={1}>{"Apakah anda yakin untuk menghapus Kelas ini?"}</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-slide-description">
 						<Typography
@@ -43,7 +43,7 @@ const DeleteDialog = (props) => {
 								fontWeight: "400",
 								fontFamily: "Poppins",
 							}}>
-							Category : {selectedCat?.category} Id : {selectedCat?.id}
+							Category : {selectedCat?.category} 
 						</Typography>
 					</DialogContentText>
 				</DialogContent>

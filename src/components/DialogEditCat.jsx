@@ -45,7 +45,6 @@ const DialogEditCat = (props) => {
     setOpen(false);
   };
 
-  /* Methods to convert image input into base64 */
   const onFileSubmit = (e) => {
     e.preventDefault();
     console.log(base64);
@@ -115,7 +114,7 @@ const DialogEditCat = (props) => {
       <Dialog open={openDialog} onClose={onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
           {/* TITLE */}
-          <DialogTitle>Edit Kategori Id {selectedCat?.id}</DialogTitle>
+          <DialogTitle>Edit Kategori</DialogTitle>
           <DialogContent>
             {/* FORM INPUT */}
             <form

@@ -145,6 +145,7 @@ export default function Login() {
                     md: "23px",
                     xs: "18px",
                   },
+                  fontFamily: "Poppins",
                 }}
               >
                 Selamat Datang Musikers!
@@ -156,6 +157,7 @@ export default function Login() {
                     md: "15px",
                     xs: "13px",
                   },
+                  fontFamily: "Poppins",
                 }}
               >
                 Yuk daftar terlebih dahulu akun kamu
@@ -213,7 +215,7 @@ export default function Login() {
                   />
                   <Box mt="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
                     <Grid container>
-                      <Grid item xs={3}>
+                      <Grid item xs={3.5} md={3}>
                         <Button
                           disabled={
                             nama === "" ||
@@ -225,6 +227,8 @@ export default function Login() {
                           }
                           sx={{
                             borderRadius: "7px",
+                            fontFamily: "Poppins",
+                            backgroundColor: "#5D5FEF",
                             fontSize: {
                               lg: "16px",
                               md: "15px",
@@ -240,8 +244,17 @@ export default function Login() {
                           Daftar
                         </Button>
                       </Grid>
-                      <Grid item>
-                        <Typography>
+                      <Grid item xs={8.5}>
+                        <Typography
+                          sx={{
+                            fontFamily: "Poppins",
+                            fontSize: {
+                              lg: "16px",
+                              md: "15px",
+                              xs: "13px",
+                            },
+                          }}
+                        >
                           Sudah punya akun?
                           <Link
                             to="/Login"
@@ -253,6 +266,7 @@ export default function Login() {
                                 md: "15px",
                                 xs: "13px",
                               },
+                              fontFamily: "Poppins",
                             }}
                           >
                             Login disini

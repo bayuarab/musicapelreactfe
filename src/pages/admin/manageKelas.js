@@ -57,11 +57,47 @@ const theme = createTheme({
       main: "#ffffff",
     },
   },
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "outlined" },
+          style: {
+            fontFamily: "Poppins",
+            fontSize: "16px",
+            fontWeight: "600",
+            textTransform: "Capitalize",
+            borderRadius: "5px",
+          },
+        },
+      ],
+    },
+  },
 });
 
 const Alerts = React.forwardRef(function Alerts(props, ref) {
   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+
+const ReadMore = ({ children }) => {
+  const text = children;
+  const [isReadMore, setIsReadMore] = useState(true);
+  const toggleReadMore = () => {
+    setIsReadMore(!isReadMore);
+  };
+  return (
+    <Typography className="text">
+      {isReadMore ? text.slice(0, 120) : text}
+      <span
+        style={{ color: "blue", fontWeight: "500", fontSize: "15px" }}
+        onClick={toggleReadMore}
+        className="read-or-hide"
+      >
+        {isReadMore ? "...lebih lanjut" : "sembunyikan"}
+      </span>
+    </Typography>
+  );
+};
 
 function ManageKelas() {
   const [refreshPage, setRefreshPage] = useState(false);
@@ -260,14 +296,11 @@ function ManageKelas() {
                               >
                                 {item.category}
                               </Typography>
-                              <Typography variant="h7" color="div">
-                                Id {item.id}
-                              </Typography>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                {item.desc}
+                                <ReadMore>{item.desc}</ReadMore>
                               </Typography>
                             </CardContent>
                           </Grid>

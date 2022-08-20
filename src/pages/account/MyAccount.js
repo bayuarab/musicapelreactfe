@@ -12,7 +12,8 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 import UserChangeDataDialog from "./components/UserChangeDataDialog";
 
@@ -39,6 +40,11 @@ const MyAccount = () => {
   const [severityType, setSeverityType] = useState("error");
   const [message, setMessage] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
+  const { setComponentState } = useComponentBarState();
+
+  useEffect(() => {
+    setComponentState({ paymentPageState: false, footerState: true });
+  }, [setComponentState]);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -127,7 +133,7 @@ const MyAccount = () => {
                     marginTop: "12px",
                   }}
                 >
-                  Email : {auth.email}
+                  {auth.email}
                 </Typography>
                 {/* <Typography
                   textAlign={"left"}
@@ -141,7 +147,7 @@ const MyAccount = () => {
                 >
                   {auth.nama}
                 </Typography> */}
-                <Typography
+                {/* <Typography
                   textAlign={"left"}
                   sx={{
                     fontSize: "16px",
@@ -152,7 +158,7 @@ const MyAccount = () => {
                   }}
                 >
                   Email :
-                </Typography>
+                </Typography> */}
                 <Typography
                   textAlign={"left"}
                   sx={{

@@ -5,12 +5,16 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../../api/baseApi";
 import useAuth from "../../../hooks/useAuth";
 
@@ -27,6 +31,7 @@ function DialogAddJadwal(
   const [courseId, setCourseId] = useState("");
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [listCourse, setListCourse] = useState([]);
   const [severityType, setSeverityType] = useState("error");
   const { auth } = useAuth();
   const token = auth?.token;
@@ -71,6 +76,23 @@ function DialogAddJadwal(
     }
   };
 
+  useEffect(() => {
+    const getCourse = async () => {
+      try {
+        const response = await api.get("Course/AdminDialog");
+        console.log(response.data);
+        setListCourse(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        if (err.response.data === "Not Found") console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+    getCourse();
+  }, [setListCourse]);
+
   return (
     <div>
       <Dialog open={props.open} onClose={props.onClose}>
@@ -103,18 +125,33 @@ function DialogAddJadwal(
                         marginBottom: "20px",
                       }}
                     />
-                    <TextField
-                      id="description"
-                      value={courseId}
-                      label="Id Kelas"
-                      onChange={(e) => setCourseId(e.target.value)}
-                      style={{
-                        display: "flex",
-                        flexGrow: 1,
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    />
+                    {/* <TextField
+											id="description"
+											value={courseId}
+											label="Id Kelas"
+											onChange={(e) => setCourseId(e.target.value)}
+											style={{
+												display: "flex",
+												flexGrow: 1,
+												marginTop: "20px",
+												marginBottom: "20px",
+											}}
+										/>*/}
+                    <FormControl fullWidth>
+                      <InputLabel>Pilih Kelas</InputLabel>
+                      <Select
+                        label="Pilih Kelas"
+                        value={courseId}
+                        onChange={(e) => setCourseId(e.target.value)}
+                        size="medium"
+                      >
+                        {listCourse.map((course, i) => (
+                          <MenuItem value={course.id}>
+                            {course.courseTitle}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
 
                     <Button
                       disabled={jadwal === "" || courseId === "" ? true : false}

@@ -26,6 +26,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ClassIcon from "@mui/icons-material/Class";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import Logo from "../../components/Logo";
 import LogoutDialog from "../../components/LogoutDialog";
 import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
@@ -136,13 +137,11 @@ function HeaderBarAdmin() {
               <MenuIcon />
             </IconButton>
             <Typography
-              component="h1"
-              variant="h6"
               color="black"
               noWrap
               sx={{ flexGrow: 1, ...(open && { display: "none" }) }}
             >
-              Apel Music
+              <Logo />
             </Typography>
             {/* <IconButton color="inherit" style={{ paddingRight: '20px'}}>
                             <Badge badgeContent={4} color="secondary">
@@ -172,14 +171,12 @@ function HeaderBarAdmin() {
             }}
           >
             <Typography
-              component="h1"
-              variant="h6"
               color="primary"
               align="center"
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Apel Music
+              <Logo />
             </Typography>
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon color="primary" />
@@ -204,7 +201,7 @@ function HeaderBarAdmin() {
               <ListItemIcon>
                 <CalendarMonthIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Manage Schedule" />
+              <ListItemText primary="Manage Jadwal" />
             </ListItemButton>
             <ListItemButton component={Link} to={"/admin/payment"}>
               <ListItemIcon>

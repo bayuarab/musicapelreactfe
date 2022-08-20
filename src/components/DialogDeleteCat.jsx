@@ -18,7 +18,7 @@ const DialogButton = styled(Button)(({ theme }) => ({
 }));
 
 const DeleteDialog = (props) => {
-	const { onClose, logState, selectedCou } = props;
+	const { onClose, logState, selectedCat } = props;
 	const handleClose = (state) => {
 		onClose(state);
 	};
@@ -43,7 +43,7 @@ const DeleteDialog = (props) => {
 								fontWeight: "400",
 								fontFamily: "Poppins",
 							}}>
-							Kelas : {selectedCou?.category} Id : {selectedCou?.id}
+							Kelas : {selectedCat?.category} Id : {selectedCat?.id}
 						</Typography>
 					</DialogContentText>
 				</DialogContent>

@@ -5,12 +5,16 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../../api/baseApi";
 import useAuth from "../../../hooks/useAuth";
 
@@ -20,6 +24,7 @@ const DialogEditJadwal = (props) => {
   const [courseId, setCourseId] = useState("");
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [listCourse, setListCourse] = useState([]);
   const [severityType, setSeverityType] = useState("error");
   const { auth } = useAuth();
   const token = auth?.token;
@@ -42,40 +47,53 @@ const DialogEditJadwal = (props) => {
   };
 
   /* Method to POST new Brand Item */
-  const postJadwal = () => {
+  const postJadwal = async () => {
     const postDataa = {
       id: selectedSchedule.id,
       jadwal: jadwal,
       courseId: courseId,
     };
     console.log(postDataa);
-    api
-      .put("/Schedule", postDataa, config)
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data);
-          setSeverityType("success");
-          setErr("Berhasil merubah jadwal kelas");
-          setOpen(true);
-          onClose();
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        setSeverityType("error");
-        setErr("Error : Jadwal Tidak Valid");
+    try {
+      const res = await api.put("/Schedule", postDataa, config);
+      if (res.status === 200) {
+        console.log(res.data);
+        setSeverityType("success");
+        setErr("Berhasil merubah jadwal kelas");
         setOpen(true);
-      });
+        onClose();
+      }
+    } catch (err) {
+      console.log(err.response.data);
+      setSeverityType("error");
+      setErr("Error : Jadwal Tidak Valid");
+      setOpen(true);
+    }
   };
+
+  useEffect(() => {
+    const getCourse = async () => {
+      try {
+        const response = await api.get("Course/AdminDialog");
+        console.log(response.data);
+        setListCourse(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        if (err.response.data === "Not Found") console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+    getCourse();
+  }, [setListCourse]);
 
   return (
     <div>
       <Dialog open={openDialog} onClose={onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
           {/* TITLE */}
-          <DialogTitle>
-            Edit Jadwal Kelas - {selectedSchedule?.jadwal}
-          </DialogTitle>
+          <DialogTitle>Edit Jadwal Kelas</DialogTitle>
           <DialogContent>
             <form
               onSubmit={(e) => {
@@ -102,18 +120,21 @@ const DialogEditJadwal = (props) => {
                         marginBottom: "20px",
                       }}
                     />
-                    <TextField
-                      id="description"
-                      value={courseId}
-                      label="Id Kelas"
-                      onChange={(e) => setCourseId(e.target.value)}
-                      style={{
-                        display: "flex",
-                        flexGrow: 1,
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    />
+                    <FormControl fullWidth>
+                      <InputLabel>Pilih Kelas</InputLabel>
+                      <Select
+                        label="Pilih Kelas"
+                        value={courseId}
+                        onChange={(e) => setCourseId(e.target.value)}
+                        size="medium"
+                      >
+                        {listCourse.map((course, i) => (
+                          <MenuItem value={course.id}>
+                            {course.courseTitle}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
 
                     <Button
                       disabled={jadwal === "" || courseId === "" ? true : false}
