@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import { Link, useParams } from "react-router-dom";
 import numberFormat from "../../utilities/NumbeFormat";
+import baseApi from "../../api/baseApi";
 
 //#F2C94C
 export default function DetailCourse() {
@@ -38,8 +39,8 @@ export default function DetailCourse() {
 	const [detailOfACategory, setDetailOfACategory] = useState([]);
 	const getdetailOfACategory = async (url) => {
 		console.log("params", url);
-		await axios
-			.get(`https://localhost:7132/api/CourseCategory/${url}`, {
+		await baseApi
+			.get(`CourseCategory/${url}`, {
 				url,
 			})
 			.then((res) => {
@@ -61,8 +62,8 @@ export default function DetailCourse() {
 	const [detailOfACourse, setDetailOfACourse] = useState([]);
 	const getdetailOfACourse = async (url) => {
 		console.log("paramss", url);
-		await axios
-			.get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+		await baseApi
+			.get(`Course/categoryId/${url}`, {
 				url,
 			})
 			.then((res) => {

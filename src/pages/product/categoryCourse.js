@@ -1,12 +1,9 @@
-import { Grid3x3Rounded } from "@mui/icons-material";
-import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack, Typography } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { Alert, Box, Button, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Carousel from "react-multi-carousel";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import baseApi from "../../api/baseApi";
 import api from "../../api/userAPI";
-import { getClaimedCourses } from "../../components/GetClaimedCourse";
 import { useCart } from "../../context/CartProvider";
 import useAuth from "../../hooks/useAuth";
 import numberFormat from "../../utilities/NumbeFormat";
@@ -86,8 +83,8 @@ export default function CategoryCourse() {
 	/* useStates untuk keperluan GET detail jadwal dari sebuah kelas*/
 	const [cekJadwal, setcekJadwal] = useState([]);
 	const getcekJadwal = async (courseId) => {
-		await axios
-			.get(`https://localhost:7132/api/Schedule/ByCourseId/${courseId}`)
+		await baseApi
+			.get(`Schedule/ByCourseId/${courseId}`)
 			.then((res) => {
 				if (res.status === 200) {
 					setcekJadwal(res.data);
@@ -106,7 +103,7 @@ export default function CategoryCourse() {
 	const getdetailOfACategory = async (url) => {
 		console.log("params", url);
 		await axios
-			.get(`https://localhost:7132/api/CourseCategory/${url}`, {
+			.get(`CourseCategory/${url}`, {
 				url,
 			})
 			.then((res) => {

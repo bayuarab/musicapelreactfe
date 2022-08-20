@@ -112,7 +112,7 @@ const DialogEditCourse = (props) => {
 			<Dialog open={openDialog} onClose={onClose}>
 				<div style={{ padding: "20px", width: "100%" }}>
 					{/* TITLE */}
-					<DialogTitle>Edit Kelas Baru {selectedCourse?.id}</DialogTitle>
+					<DialogTitle>Edit Kelas Baru</DialogTitle>
 					<DialogContent>
 						{/* FORM INPUT */}
 						<form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
