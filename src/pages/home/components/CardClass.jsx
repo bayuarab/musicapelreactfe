@@ -61,7 +61,7 @@ export default function CardClass() {
 									justifyContent: "space-between",
 								}}>
 								<Box textAlign={"left"}>
-									<Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
+									<Link to={`/course/${item.id}`}>
 										<CardMedia
 											component="img"
 											sx={{
@@ -149,25 +149,26 @@ export default function CardClass() {
 					display: { sm: "none", xs: "flex" },
 					flexDirection: "column",
 				}}>
-				<Grid container spacing={1.5}>
+				<Grid container spacing={1} sx={{ maxWidth: "110%" }}>
 					{gridItems.slice(0, itemCount).map((item) => (
 						<Grid key={item.id} item lg={4} xs={6}>
 							<Box
 								sx={{
 									maxWidth: "88%",
-									marginBottom: "35px",
+									marginBottom: "10px",
 									flexDirection: "column",
 									justifyContent: "space-between",
+									height: "35vh",
 								}}>
-								<Box textAlign={"left"}>
-									<Link to={`/course/${item.id}`} sx={{ border: "solid black" }}>
+								<Box textAlign={"left"} sx={{ height: "100%" }}>
+									<Link to={`/course/${item.id}`}>
 										<CardMedia
 											component="img"
 											sx={{
 												objectFit: "cover",
 												maxWidth: "100%",
-												maxHeight: "280px",
-												borderRadius: "20px",
+												maxHeight: "40%",
+												borderRadius: "10px",
 											}}
 											image={`data:image/jpeg;base64,${item.courseImage}`}
 										/>
@@ -180,26 +181,24 @@ export default function CardClass() {
 										}}>
 										<Typography sx={{ fontSize: "10px", fontFamily: "Poppins" }}>{item.category}</Typography>
 									</Box>
-									<Box sx={{ width: "90%", height: "hug", paddingLeft: "8px" }}>
-										<Typography sx={{ fontSize: "12px", fontWeight: "600", fontFamily: "Poppins" }}>{item.courseTitle}</Typography>
+									<Box sx={{ width: "100%", height: "37%", paddingLeft: "8px" }}>
+										<Typography sx={{ fontSize: "11px", fontWeight: "600", fontFamily: "Poppins" }}>{item.courseTitle}</Typography>
 									</Box>
-								</Box>
-								<Box
-									sx={{
-										textAlign: "left",
-										paddingLeft: "8px",
-										paddingBottom: "7px",
-									}}>
-									<Typography
-										mt="4vh"
+									<Box
 										sx={{
-											fontSize: "12px",
-											fontWeight: "600",
-											color: "#5D5FEF",
-											fontFamily: "Poppins",
+											textAlign: "left",
+											paddingLeft: "8px",
 										}}>
-										IDR {numberFormat(item.price)}
-									</Typography>
+										<Typography
+											sx={{
+												fontSize: "11px",
+												fontWeight: "600",
+												color: "#5D5FEF",
+												fontFamily: "Poppins",
+											}}>
+											IDR {numberFormat(item.price)}
+										</Typography>
+									</Box>
 								</Box>
 							</Box>
 						</Grid>

@@ -18,14 +18,14 @@ const Class = () => {
 					mt={{
 						md: "6vh",
 						sm: "4vh",
-						xs: "3.5vh",
+						xs: "2.5vh",
 					}}
 					sx={{
 						fontSize: {
 							lg: "24px",
 							md: "22px",
 							sm: "18px",
-							xs: "14px",
+							xs: "16px",
 						},
 						color: "#5D5FEF",
 						fontWeight: "600",
@@ -36,7 +36,7 @@ const Class = () => {
 			</Box>
 			<center>
 				<Box
-					mt="6vh"
+					mt={{ md: "6vh", xs: "3vh" }}
 					sx={{
 						width: "88%",
 					}}>

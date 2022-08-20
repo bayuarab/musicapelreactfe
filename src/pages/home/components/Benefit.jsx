@@ -8,9 +8,10 @@ import benefit from "../../../assets/Benefit.svg";
 
 const Img = styled("img")({
 	margin: "auto",
-	display: "block",
+	display: "flex",
 	maxWidth: "100%",
 	maxHeight: "100%",
+	marginTop: "3.5vh",
 });
 
 const Benefit = () => {
@@ -25,13 +26,13 @@ const Benefit = () => {
 					flexDirection: "column",
 				}}>
 				<Grid container>
-					<Grid item xs={4}>
+					<Grid item xs={4.5} md={4}>
 						<Box>
 							<Img alt="complex" src={benefit} />
 						</Box>
 					</Grid>
-					<Grid item xs={8}>
-						<Box>
+					<Grid item xs={7.5} md={8}>
+						<Box sx={{ width: "100%" }}>
 							<Box>
 								<Typography
 									sx={{
@@ -43,9 +44,9 @@ const Benefit = () => {
 										},
 										fontSize: {
 											lg: "24px",
-											md: "20px",
-											sm: "16px",
-											xs: "10px",
+											md: "22px",
+											sm: "18px",
+											xs: "16px",
 										},
 										color: "#5D5FEF",
 										fontWeight: "600",
@@ -64,8 +65,9 @@ const Benefit = () => {
 											xs: "8px",
 										},
 										fontFamily: "Poppins",
-										width: "90%",
+										width: "100%",
 										textAlign: "justify",
+										marginLeft: "5px",
 									}}>
 									Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
 								</Typography>
