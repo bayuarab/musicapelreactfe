@@ -81,7 +81,6 @@ const DialogEditCourse = (props) => {
       };
       reader.readAsDataURL(file);
     }
-    setOpen(true);
   };
   /* Methods to convert image input into base64 */
 
@@ -107,6 +106,8 @@ const DialogEditCourse = (props) => {
       })
       .catch((err) => {
         console.log(err.response.data);
+        if (err.response.status === 401 || err.response.status === 403)
+          setErr("Otoritas tidak berlaku silahkan login kembali");
       });
     setOpen(true);
   };

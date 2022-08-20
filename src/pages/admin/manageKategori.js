@@ -91,6 +91,9 @@ function ManageKategori(
   const [openDelete, setOpenDelete] = useState(false);
   const [severityType, setSeverityType] = useState("error");
   const [selectedCou, setSelectedCou] = useState({});
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
   const { auth } = useAuth();
   const token = auth?.token;
   const config = {
@@ -105,9 +108,12 @@ function ManageKategori(
       .then((res) => {
         if (res.status === 200) {
           setListOfBrands(res.data);
+          setLoadMessage(null);
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setLoadMessage("Terjadi kesalahan");
+      });
   };
 
   useEffect(() => {
@@ -183,6 +189,8 @@ function ManageKategori(
         console.log(err.response.headers);
         setSeverityType("error");
         setErr("Error: Gagal menghapus, terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setErr("Otoritas tidak berlaku silahkan login kembali");
         setOpen(true);
       }
     };
@@ -399,6 +407,18 @@ function ManageKategori(
                       </Tooltip>
                     </Box>
                   </Box>
+                  {loadMessage ? (
+                    <Typography
+                      sx={{
+                        paddingTop: "5px",
+                        paddingBottom: "15px",
+                      }}
+                    >
+                      {loadMessage}
+                    </Typography>
+                  ) : (
+                    <></>
+                  )}
 
                   {/* ITEM LIST */}
                   <Grid container spacing={2}>

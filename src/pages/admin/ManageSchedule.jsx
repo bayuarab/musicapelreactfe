@@ -127,6 +127,9 @@ function ManageSchedule() {
   const [openEdit, setOpenEdit] = useState(false);
   const [refreshPage, setRefreshPage] = useState(false);
   const [editItemData, setEditItemData] = useState();
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
   const { auth } = useAuth();
   const token = auth?.token;
   const config = {
@@ -182,6 +185,7 @@ function ManageSchedule() {
       try {
         const response = await api.get("/Schedule/Admin", config);
         console.log(response.data);
+        setLoadMessage(null);
         setSchedules(response.data);
       } catch (err) {
         !err.response
@@ -189,6 +193,9 @@ function ManageSchedule() {
           : console.log(err.response.data);
         if (err.response.data === "Not Found") console.log(err.response.status);
         console.log(err.response.headers);
+        setLoadMessage("Terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
       }
     };
 
@@ -287,93 +294,112 @@ function ManageSchedule() {
                         </Tooltip>
                       </Box>
                     </Box>
-                    <TableContainer component={StyledPaper}>
-                      <Table sx={{}} aria-label="customized table">
-                        <TableHead>
-                          <TableRow>
-                            <StyledTableCell align="left" size="small">
-                              No
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              Kelas
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              Id Kelas
-                            </StyledTableCell>
-                            <StyledTableCell align="left">
-                              Jadwal
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Action
-                            </StyledTableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {userFilter()?.map((row, index) => (
-                            <StyledTableRow key={index}>
-                              <StyledTableCell
-                                component="th"
-                                scope="row"
-                                size="small"
-                              >
-                                {index + 1}
+                    {loadMessage ? (
+                      <Typography
+                        sx={{
+                          paddingTop: "5px",
+                          paddingBottom: "15px",
+                        }}
+                      >
+                        {loadMessage}
+                      </Typography>
+                    ) : (
+                      <TableContainer component={StyledPaper}>
+                        <Table sx={{}} aria-label="customized table">
+                          <TableHead>
+                            <TableRow>
+                              <StyledTableCell align="left" size="small">
+                                No
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                {row.courseTitle}
+                                Kelas
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                {row.courseId}
+                                Id Kelas
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                {row.jadwal}
+                                Jadwal
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <Grid container>
-                                  <Grid item mb="0.5vh" xs={10} md={6}>
-                                    <Button
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        setOpenEdit(true);
-                                        setEditItemData(row);
-                                      }}
-                                      variant="outlined"
-                                      color="secondary"
-                                      startIcon={<ModeEdit />}
-                                      aria-label="delete"
-                                    >
-                                      <Typography
-                                        sx={{
-                                          display: { md: "block", xs: "none" },
-                                        }}
-                                      >
-                                        Edit
-                                      </Typography>
-                                    </Button>
-                                  </Grid>
-                                  <Grid item mb="0.5vh" xs={10} md={6}>
-                                    <Button
-                                      onClick={() => handleClickOpenLogout(row)}
-                                      variant="outlined"
-                                      color="remove"
-                                      startIcon={<DeleteForever />}
-                                      aria-label="delete"
-                                    >
-                                      <Typography
-                                        sx={{
-                                          display: { md: "block", xs: "none" },
-                                        }}
-                                      >
-                                        Hapus
-                                      </Typography>
-                                    </Button>
-                                  </Grid>
-                                </Grid>
+                                Action
                               </StyledTableCell>
-                            </StyledTableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {userFilter()?.map((row, index) => (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell
+                                  component="th"
+                                  scope="row"
+                                  size="small"
+                                >
+                                  {index + 1}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.courseTitle}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.courseId}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.jadwal}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <Grid container>
+                                    <Grid item mb="0.5vh" xs={10} md={6}>
+                                      <Button
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          setOpenEdit(true);
+                                          setEditItemData(row);
+                                        }}
+                                        variant="outlined"
+                                        color="secondary"
+                                        startIcon={<ModeEdit />}
+                                        aria-label="delete"
+                                      >
+                                        <Typography
+                                          sx={{
+                                            display: {
+                                              md: "block",
+                                              xs: "none",
+                                            },
+                                          }}
+                                        >
+                                          Edit
+                                        </Typography>
+                                      </Button>
+                                    </Grid>
+                                    <Grid item mb="0.5vh" xs={10} md={6}>
+                                      <Button
+                                        onClick={() =>
+                                          handleClickOpenLogout(row)
+                                        }
+                                        variant="outlined"
+                                        color="remove"
+                                        startIcon={<DeleteForever />}
+                                        aria-label="delete"
+                                      >
+                                        <Typography
+                                          sx={{
+                                            display: {
+                                              md: "block",
+                                              xs: "none",
+                                            },
+                                          }}
+                                        >
+                                          Hapus
+                                        </Typography>
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    )}
                   </Paper>
                 </Grid>
               </Grid>

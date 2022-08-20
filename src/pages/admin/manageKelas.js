@@ -76,6 +76,9 @@ function ManageKelas() {
   const [openAdd, setOpenAdd] = useState(false);
   const [editItemData, setEditItemData] = useState();
   const [openEdit, setOpenEdit] = useState(false);
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
   const { auth } = useAuth();
   const token = auth?.token;
   const config = {
@@ -110,6 +113,8 @@ function ManageKelas() {
         console.log(err.response.headers);
         setSeverityType("error");
         setErr("Error: Gagal menghapus, terjadi kesalahan");
+        if (err.status === 401 || err.status === 403)
+          setErr("Otoritas tidak berlaku silahkan login kembali");
         setOpen(true);
       }
     };
@@ -128,9 +133,14 @@ function ManageKelas() {
       .then((res) => {
         if (res.status === 200) {
           setListOfBrands(res.data);
+          setLoadMessage(null);
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setLoadMessage("Terjadi kesalahan");
+        if (err.status === 401 || err.status === 403)
+          setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
+      });
   };
 
   useEffect(() => {
@@ -228,7 +238,7 @@ function ManageKelas() {
                         </Tooltip>
                       </Box>
                     </Box>
-
+                    <Typography>{loadMessage}</Typography>
                     {kategoriFilter().map((item) => (
                       <Grid key={item.id} style={{ margin: "2% 0" }}>
                         <Grid container mb="2vh">

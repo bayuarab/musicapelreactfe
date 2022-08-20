@@ -98,6 +98,10 @@ function UserInvoices() {
   const [searchState, setSearchState] = useState("");
   const [masterInvoice, setMasterInvoice] = useState({});
   const [openDetail, setOpenDetail] = useState(false);
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
+
   const { auth } = useAuth();
   const token = auth?.token;
   const config = {
@@ -120,13 +124,17 @@ function UserInvoices() {
       try {
         const response = await api.get(`/AllInvoices`, config);
         console.log(response.data);
+        setLoadMessage(null);
         setInvoices(response.data);
       } catch (err) {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
-        if (err.response.data === "Not Found") console.log(err.response.status);
+        console.log(err.response.status);
         console.log(err.response.headers);
+        setLoadMessage("Terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
       }
     };
 
@@ -180,7 +188,13 @@ function UserInvoices() {
                   </Typography>
 
                   {/* BOX PENCARIAN DATA */}
-                  <div style={{ display: "flex", padding: "20px 0" }}>
+                  <Box
+                    component={"div"}
+                    sx={{
+                      display: "flex",
+                      padding: "20px 0",
+                    }}
+                  >
                     <TextField
                       value={searchState}
                       onChange={(e) => setSearchState(e.target.value)}
@@ -195,87 +209,98 @@ function UserInvoices() {
                         flexGrow: 1,
                       }}
                     />
-                  </div>
-                  <TableContainer component={StyledPaper}>
-                    <Table stickyHeader aria-label="sticky table">
-                      <TableHead>
-                        <TableRow>
-                          <StyledTableCell align="center" size="small">
-                            Nama Pembeli
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            No. Invoice
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            Metode Pembayaran
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            Waktu Pembelian
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            Detail Invoice
-                          </StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {invoicesFilter()?.map((row, index) => (
-                          <StyledTableRow key={index}>
-                            <StyledTableCell align="center">
-                              {row.nama}
+                  </Box>
+                  {loadMessage ? (
+                    <Typography
+                      sx={{
+                        paddingTop: "5px",
+                        paddingBottom: "15px",
+                      }}
+                    >
+                      {loadMessage}
+                    </Typography>
+                  ) : (
+                    <TableContainer component={StyledPaper}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell align="center" size="small">
+                              Nama Pembeli
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {row.noInvoice}
+                              No. Invoice
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {row.method}
+                              Metode Pembayaran
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {row.purchasedDate}
+                              Waktu Pembelian
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              <Box
-                                sx={{
-                                  display: { md: "block", xs: "none" },
-                                }}
-                              >
-                                <Button
-                                  onClick={() =>
-                                    handleClickOpenDetail(row.masterInvoiceId)
-                                  }
-                                  variant="outlined"
-                                  startIcon={<ArrowForward />}
-                                  aria-label="delete"
+                              Detail Invoice
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {invoicesFilter()?.map((row, index) => (
+                            <StyledTableRow key={index}>
+                              <StyledTableCell align="center">
+                                {row.nama}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {row.noInvoice}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {row.method}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {row.purchasedDate}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <Box
+                                  sx={{
+                                    display: { md: "block", xs: "none" },
+                                  }}
                                 >
-                                  Rincian
-                                </Button>
-                              </Box>
-                              <Box
-                                sx={{
-                                  display: { md: "none", xs: "block" },
-                                }}
-                              >
-                                <Button
-                                  onClick={() =>
-                                    handleClickOpenDetail(row.masterInvoiceId)
-                                  }
-                                  variant="outlined"
-                                  startIcon={
-                                    <ArrowForward
-                                      sx={{
-                                        marginLeft: "12px",
-                                        height: "18px",
-                                      }}
-                                    />
-                                  }
-                                  aria-label="delete"
-                                ></Button>
-                              </Box>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                                  <Button
+                                    onClick={() =>
+                                      handleClickOpenDetail(row.masterInvoiceId)
+                                    }
+                                    variant="outlined"
+                                    startIcon={<ArrowForward />}
+                                    aria-label="delete"
+                                  >
+                                    Rincian
+                                  </Button>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: { md: "none", xs: "block" },
+                                  }}
+                                >
+                                  <Button
+                                    onClick={() =>
+                                      handleClickOpenDetail(row.masterInvoiceId)
+                                    }
+                                    variant="outlined"
+                                    startIcon={
+                                      <ArrowForward
+                                        sx={{
+                                          marginLeft: "12px",
+                                          height: "18px",
+                                        }}
+                                      />
+                                    }
+                                    aria-label="delete"
+                                  ></Button>
+                                </Box>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
                 </Paper>
               </Grid>
             </Grid>

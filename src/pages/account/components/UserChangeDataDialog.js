@@ -54,10 +54,14 @@ const UserChangeDataDialog = (props) => {
   const fetchPasswordValidation = async () => {
     try {
       console.table(postData);
-      const response = await api.post("/UserAuth/PasswordValidation", {
-        ...postData,
-        id: auth.userId,
-      });
+      const response = await api.post(
+        "/UserAuth/PasswordValidation",
+        {
+          ...postData,
+          id: auth.userId,
+        },
+        config
+      );
       console.log(response.data);
       setDialogState({
         ...dialogState,
@@ -86,7 +90,7 @@ const UserChangeDataDialog = (props) => {
 
   const fetchApiPut = async (url, data) => {
     try {
-      const response = await api.put(`/${url}`, data, config);
+      const response = await api.post(`/${url}`, data, config);
       console.log(response.data);
       const feedback = {
         severity: "success",

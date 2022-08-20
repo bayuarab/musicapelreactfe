@@ -110,6 +110,9 @@ function ManageUser() {
   const [severityType, setSeverityType] = useState("error");
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = React.useState(false);
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
   const { auth } = useAuth();
   const token = auth?.token;
   const config = {
@@ -145,6 +148,8 @@ function ManageUser() {
         console.log(err.response.headers);
         setSeverityType("error");
         setMessage("Error: Gagal menghapus, terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setMessage("Otoritas tidak berlaku silahkan login kembali");
         setSnackbarState(true);
       }
     };
@@ -162,6 +167,7 @@ function ManageUser() {
       try {
         const response = await api.get(`/AllUser`, config);
         console.log(response.data);
+        setLoadMessage(null);
         setUsers(response.data);
       } catch (err) {
         !err.response
@@ -169,6 +175,9 @@ function ManageUser() {
           : console.log(err.response.data);
         if (err.response.data === "Not Found") console.log(err.response.status);
         console.log(err.response.headers);
+        setLoadMessage("Terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
       }
     };
 
@@ -240,76 +249,93 @@ function ManageUser() {
                         }}
                       />
                     </div>
-                    <TableContainer component={StyledPaper}>
-                      <Table sx={{}} aria-label="customized table">
-                        <TableHead>
-                          <TableRow>
-                            <StyledTableCell align="left" size="small">
-                              No
-                            </StyledTableCell>
-                            <StyledTableCell align="left">Nama</StyledTableCell>
-                            <StyledTableCell align="left">
-                              Email
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Action
-                            </StyledTableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {userFilter()?.map((row, index) => (
-                            <StyledTableRow key={index}>
-                              <StyledTableCell
-                                component="th"
-                                scope="row"
-                                size="small"
-                              >
-                                {index + 1}
+                    {loadMessage ? (
+                      <Typography
+                        sx={{
+                          paddingTop: "5px",
+                          paddingBottom: "15px",
+                        }}
+                      >
+                        {loadMessage}
+                      </Typography>
+                    ) : (
+                      <TableContainer component={StyledPaper}>
+                        <Table sx={{}} aria-label="customized table">
+                          <TableHead>
+                            <TableRow>
+                              <StyledTableCell align="left" size="small">
+                                No
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                {row.nama}
+                                Nama
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                {row.email}
+                                Email
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <Box
-                                  sx={{ display: { md: "block", xs: "none" } }}
-                                >
-                                  <Button
-                                    onClick={() => handleClickOpenLogout(row)}
-                                    variant="outlined"
-                                    color="remove"
-                                    startIcon={<DeleteForever />}
-                                    aria-label="delete"
-                                  >
-                                    Hapus
-                                  </Button>
-                                </Box>
-                                <Box
-                                  sx={{ display: { md: "none", xs: "block" } }}
-                                >
-                                  <Button
-                                    onClick={() => handleClickOpenLogout(row)}
-                                    variant="outlined"
-                                    color="remove"
-                                    startIcon={
-                                      <DeleteForever
-                                        sx={{
-                                          marginLeft: "12px",
-                                          height: "18px",
-                                        }}
-                                      />
-                                    }
-                                    aria-label="delete"
-                                  ></Button>
-                                </Box>
+                                Action
                               </StyledTableCell>
-                            </StyledTableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {userFilter()?.map((row, index) => (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell
+                                  component="th"
+                                  scope="row"
+                                  size="small"
+                                >
+                                  {index + 1}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.nama}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.email}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <Box
+                                    sx={{
+                                      display: { md: "block", xs: "none" },
+                                    }}
+                                  >
+                                    <Button
+                                      onClick={() => handleClickOpenLogout(row)}
+                                      variant="outlined"
+                                      color="remove"
+                                      startIcon={<DeleteForever />}
+                                      aria-label="delete"
+                                    >
+                                      Hapus
+                                    </Button>
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      display: { md: "none", xs: "block" },
+                                    }}
+                                  >
+                                    <Button
+                                      onClick={() => handleClickOpenLogout(row)}
+                                      variant="outlined"
+                                      color="remove"
+                                      startIcon={
+                                        <DeleteForever
+                                          sx={{
+                                            marginLeft: "12px",
+                                            height: "18px",
+                                          }}
+                                        />
+                                      }
+                                      aria-label="delete"
+                                    ></Button>
+                                  </Box>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    )}
                   </Paper>
                 </Grid>
               </Grid>

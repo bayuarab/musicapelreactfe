@@ -111,6 +111,9 @@ function DialogAddKelas(
         console.log(err.response.data);
         setSeverityType("error");
         setErr("Error : Kategori Tidak Valid");
+        if (err.status === 401 || err.status === 403)
+          setErr("Otoritas tidak berlaku silahkan login kembali");
+
         setOpen(true);
       });
   };

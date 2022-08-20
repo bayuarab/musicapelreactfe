@@ -85,7 +85,6 @@ function DialogAddCourse(
       };
       reader.readAsDataURL(file);
     }
-    setOpen(true);
   };
   /* Methods to convert image input into base64 */
 
@@ -112,6 +111,8 @@ function DialogAddCourse(
       .catch((err) => {
         console.log(err.response.data);
         setErr("Error : Kategori Tidak Valid");
+        if (err.response.status === 401 || err.response.status === 403)
+          setErr("Otoritas tidak berlaku silahkan login kembali");
       });
     setOpen(true);
   };
