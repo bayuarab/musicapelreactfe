@@ -84,24 +84,12 @@ export default function Login() {
       try {
         const response = await userApi.post("/UserAuth/Login", dataLogin);
         console.log(response.data);
-        // const roles = response?.data?.roles;
-        // const userId = response?.data?.id;
-        // const nama = response?.data?.nama;
-        // setAuth({ ...auth, nama, roles, userId, email: dataLogin.email });
         const roles = response?.data?.userData?.roles;
         const userId = response?.data?.userData?.id;
         const nama = response?.data?.userData?.nama;
         const token = response?.data?.token;
         const userAuth = { roles, userId, nama, token, email: dataLogin.email };
         localStorage.setItem("userAuth", JSON.stringify(userAuth));
-        // console.table({
-        //   ...auth,
-        //   nama,
-        //   roles,
-        //   userId,
-        //   email: dataLogin.email,
-        //   token,
-        // });
         setAuth({
           ...auth,
           nama,
@@ -112,10 +100,8 @@ export default function Login() {
         });
         if (roles === "student") fetchApiCart(userId);
         roles === "admin"
-          ? // <Navigate to="/admin/kelas" replace={true} />
-            navigate("/admin", { replace: true })
+          ? navigate("/admin", { replace: true })
           : navigate(from, { replace: true });
-        //navigate(from, { replace: true });
       } catch (err) {
         !err.response
           ? console.log(`Error: ${err.message}`)
