@@ -34,11 +34,6 @@ const DetailInvoiceDialog = (props) => {
 
   const { auth } = useAuth();
   const token = auth?.token;
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
 
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
 
@@ -48,6 +43,11 @@ const DetailInvoiceDialog = (props) => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
         const response = await api.get(
           `/DetailsByMasterId/${masterInvoiceId}`,
@@ -65,7 +65,7 @@ const DetailInvoiceDialog = (props) => {
     };
 
     if (logState) fetchApi();
-  }, [setInvoiceDetailData, logState, masterInvoiceId]);
+  }, [setInvoiceDetailData, logState, masterInvoiceId, token]);
 
   return (
     <div>

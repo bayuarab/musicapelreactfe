@@ -5,8 +5,6 @@ import numberFormat from "../../utilities/NumbeFormat";
 
 import {
   Box,
-  Paper,
-  styled,
   Table,
   TableBody,
   TableContainer,
@@ -14,56 +12,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
+import {
+  StyledNavLink,
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 
 //--
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "12px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-const StyledNavLink = styled(Typography)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontWeight: "600",
-  fontSize: "16px",
-  [theme.breakpoints.down("sm")]: {
-    display: "block",
-    fontSize: "12px",
-  },
-}));
-
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);

@@ -28,6 +28,7 @@ import {
 import { useCart } from "../context/CartProvider";
 import { useComponentBarState } from "../context/ComponentStateProvider";
 import useAuth from "../hooks/useAuth";
+import { StyledPurpleButton } from "../styles/PurpleContainedButton";
 import LogoutDialog from "./LogoutDialog";
 //------------------------------------------------------------------------
 
@@ -110,18 +111,19 @@ function WebAppBar(props) {
         <BlackButton>Daftar Sekarang</BlackButton>
       </Link>
       <Link style={{ textDecoration: "none" }} to="/login">
-        <Button
+        <StyledPurpleButton
           variant="contained"
-          sx={{
-            fontFamily: "Poppins",
-            fontSize: "16px",
-            backgroundColor: "#5D5FEF",
-            borderRadius: "8px",
-            textTransform: "Capitalize",
-          }}
+          // variant="contained"
+          // sx={{
+          //   fontFamily: "Poppins",
+          //   fontSize: "16px",
+          //   backgroundColor: "#5D5FEF",
+          //   borderRadius: "8px",
+          //   textTransform: "Capitalize",
+          // }}
         >
           Masuk
-        </Button>
+        </StyledPurpleButton>
       </Link>
     </SideIcons>
   );

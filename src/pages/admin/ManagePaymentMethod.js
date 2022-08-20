@@ -9,11 +9,8 @@ import {
   Paper,
   Snackbar,
   Stack,
-  styled,
   Table,
   TableBody,
-  TableCell,
-  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
@@ -29,6 +26,11 @@ import React, { useEffect, useState } from "react";
 import api from "../../api/baseApi";
 import HeaderSet from "../../components/HeaderSet";
 import useAuth from "../../hooks/useAuth";
+import {
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 import PaymentMethodDialog from "./components/PaymentMethodDialog";
 
 const theme = createTheme({
@@ -61,59 +63,10 @@ const theme = createTheme({
             borderRadius: "8px",
           },
         },
-        // {
-        //   props: { variant: "contained" },
-        //   style: {
-        //     fontFamily: "Poppins",
-        //     fontSize: "16px",
-        //     fontWeight: "600",
-        //     paddingTop: "10px",
-        //     paddingBottom: "10px",
-        //     textTransform: "Capitalize",
-        //     borderRadius: "8px",
-        //     backgroundColor: "#4F4F4F",
-        //     color: "white",
-        //   },
-        // },
       ],
     },
   },
 });
-
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "12px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
 
 const Alerts = React.forwardRef(function Alerts(props, ref) {
   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;

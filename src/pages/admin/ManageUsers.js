@@ -8,11 +8,8 @@ import {
   Paper,
   Snackbar,
   Stack,
-  styled,
   Table,
   TableBody,
-  TableCell,
-  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
@@ -26,6 +23,11 @@ import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
 import HeaderSet from "../../components/HeaderSet";
 import useAuth from "../../hooks/useAuth";
+import {
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 import DeleteDialog from "./components/DeleteDialog";
 
 const theme = createTheme({
@@ -63,41 +65,6 @@ const theme = createTheme({
   },
 });
 
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "12px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
 const Alerts = React.forwardRef(function Alerts(props, ref) {
   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -115,11 +82,6 @@ function ManageUser() {
   );
   const { auth } = useAuth();
   const token = auth?.token;
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -130,6 +92,11 @@ function ManageUser() {
 
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
+    const config = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
     const fetchDelete = async () => {
       try {
         const response = await api.delete(`/${selectedUser.email}`, config);
@@ -164,6 +131,11 @@ function ManageUser() {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
         const response = await api.get(`/AllUser`, config);
         console.log(response.data);
@@ -182,7 +154,7 @@ function ManageUser() {
     };
 
     fetchApi();
-  }, [setUsers]);
+  }, [setUsers, token]);
 
   const userFilter = () => {
     return searchUser?.length > 0

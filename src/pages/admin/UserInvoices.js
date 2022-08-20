@@ -5,11 +5,8 @@ import {
   Container,
   Grid,
   Paper,
-  styled,
   Table,
   TableBody,
-  TableCell,
-  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
@@ -23,6 +20,11 @@ import React, { useEffect, useState } from "react";
 import api from "../../api/Invoices";
 import HeaderSet from "../../components/HeaderSet";
 import useAuth from "../../hooks/useAuth";
+import {
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 import DetailInvoiceDialog from "./components/DetailInvoiceDialog";
 
 const theme = createTheme({
@@ -58,41 +60,6 @@ const theme = createTheme({
   },
 });
 
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "12px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
 function UserInvoices() {
   const [invoices, setInvoices] = useState([]);
   const [searchState, setSearchState] = useState("");
@@ -104,11 +71,6 @@ function UserInvoices() {
 
   const { auth } = useAuth();
   const token = auth?.token;
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
 
   const handleCloseDialog = () => {
     setOpenDetail(false);
@@ -121,6 +83,11 @@ function UserInvoices() {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
         const response = await api.get(`/AllInvoices`, config);
         console.log(response.data);
@@ -139,7 +106,7 @@ function UserInvoices() {
     };
 
     fetchApi();
-  }, [setInvoices]);
+  }, [setInvoices, token]);
 
   const invoicesFilter = () => {
     return searchState?.length >= 0
