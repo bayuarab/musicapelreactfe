@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Paper,
-  styled,
   Table,
   TableBody,
   TableContainer,
@@ -10,66 +8,28 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
+import {
+  StyledNavLink,
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 import numberFormat from "../../utilities/NumbeFormat";
 //==================================================
-
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "12px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-const StyledNavLink = styled(Typography)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontWeight: "600",
-  fontSize: "16px",
-  [theme.breakpoints.down("sm")]: {
-    display: "block",
-    fontSize: "12px",
-  },
-}));
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
   const { setComponentState } = useComponentBarState();
   const { auth } = useAuth();
   const UserID = auth?.userId;
+  const token = auth?.token;
+
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -80,8 +40,13 @@ const InvoiceMaster = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Invoices/${UserID}`);
+        const response = await api.get(`/Invoices/${UserID}`, config);
         console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
@@ -96,7 +61,7 @@ const InvoiceMaster = () => {
     };
 
     fetchApi();
-  }, [UserID]);
+  }, [UserID, token]);
 
   return masterInvoiceData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>

@@ -86,14 +86,19 @@ const CartPage = () => {
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
-
   const navigate = useNavigate();
   const { auth } = useAuth();
   const userID = auth?.userId;
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const fetchDelete = async (id) => {
     try {
-      const response = await api.delete(`/Cart/${userID}/${id}`);
+      const response = await api.delete(`/Cart/${userID}/${id}`, config);
       console.log(response.data);
       setCart(
         response.data.filter((item) => item.userId === userID && item.id !== id)
@@ -107,30 +112,19 @@ const CartPage = () => {
     }
   };
 
-  const fetchApiCart = async () => {
-    try {
-      const response = await api.get(`/Cart/${userID}`);
-      console.log(response.data);
-      setCart(response.data);
-    } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      if (err.response.data === "Not Found")
-        setApiDataMessage("Masih kosong, silahkan belanja");
-      console.log(err.response.status);
-      console.log(err.response.headers);
-    }
-  };
-
   useEffect(() => {
     setComponentState({ paymentPageState: false, footerState: false });
   }, [setComponentState]);
 
   useEffect(() => {
     const fetchApiInvoices = async () => {
+      const reqConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Invoices/${userID}`);
+        const response = await api.get(`/Invoices/${userID}`, reqConfig);
         console.log(response?.data);
         setRegisteredInvoice(
           response?.data?.map((rawData) => rawData.noInvoice)
@@ -144,11 +138,31 @@ const CartPage = () => {
       }
     };
     fetchApiInvoices();
-  }, [userID]);
+  }, [userID, token]);
 
   useEffect(() => {
+    const fetchApiCart = async () => {
+      const reqConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      try {
+        const response = await api.get(`/Cart/${userID}`, reqConfig);
+        console.log(response.data);
+        setCart(response.data);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        if (err.response.data === "Not Found")
+          setApiDataMessage("Masih kosong, silahkan belanja");
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
     fetchApiCart();
-  }, [setCart, userID, cart?.length]);
+  }, [setCart, userID, cart?.length, token]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
@@ -156,7 +170,7 @@ const CartPage = () => {
 
   const fetchApiPostInvoice = async (url, data) => {
     try {
-      const response = await api.post(`/${url}`, data);
+      const response = await api.post(`/${url}`, data, config);
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];

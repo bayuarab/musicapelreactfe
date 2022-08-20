@@ -23,6 +23,8 @@ const MyCourses = () => {
   const { setComponentState } = useComponentBarState();
   const { auth } = useAuth();
   const UserId = auth?.userId;
+  const token = auth?.token;
+
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -33,8 +35,13 @@ const MyCourses = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Courses/${UserId}`);
+        const response = await api.get(`/Courses/${UserId}`, config);
         console.log(response.data);
         setMyCourseData(response.data);
       } catch (err) {
@@ -49,7 +56,7 @@ const MyCourses = () => {
     };
 
     fetchApi();
-  }, [UserId]);
+  }, [UserId, token]);
 
   return myCourseData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
@@ -118,7 +125,7 @@ const MyCourses = () => {
                     sx={{
                       marginTop: "-6px",
                       fontFamily: "Poppins",
-                      fontSize: { md: "24px", xs: "18px" },
+                      fontSize: { md: "24px", xs: "14px" },
                       fontWeight: "600",
                       color: "#333333",
                     }}

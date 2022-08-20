@@ -9,6 +9,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
+import useAuth from "../../../hooks/useAuth";
 
 const DialogButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
@@ -45,11 +46,18 @@ const CheckoutDialogs = (props) => {
   const { onClose, selectedOp, checkoutDialogState } = props;
   const [optionState, setOptionState] = useState([]);
   const [options, setOptions] = useState(null);
+  const { auth } = useAuth();
+  const token = auth?.token;
 
   useEffect(() => {
     const fetchApiPayment = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await paymentApi.get(`/Payment`);
+        const response = await paymentApi.get(`/Payment`, config);
         console.log(response.data);
         setCheckoutOp(response.data);
         setOptionState(response.data.map(() => false));
@@ -63,7 +71,7 @@ const CheckoutDialogs = (props) => {
     };
 
     fetchApiPayment();
-  }, [setCheckoutOp]);
+  }, [setCheckoutOp, token]);
 
   const handleClose = () => {
     onClose({ paymentOption: selectedOp, paymentState: false });

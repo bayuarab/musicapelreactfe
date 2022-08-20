@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { forwardRef, useState } from "react";
-import api from "../../../api/userAPI";
+import api from "../../../api/baseApi";
 import useAuth from "../../../hooks/useAuth";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -37,6 +37,12 @@ const DialogButton = styled(Button)(({ theme }) => ({
 const UserChangeDataDialog = (props) => {
   const { onClose, logState, dialogOption } = props;
   const { auth, setAuth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
   const [postData, setPostData] = useState({ ...auth, nama: "" });
   const [dialogState, setDialogState] = useState({ oldPass: false });
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -48,10 +54,14 @@ const UserChangeDataDialog = (props) => {
   const fetchPasswordValidation = async () => {
     try {
       console.table(postData);
-      const response = await api.post("/PasswordValidation", {
-        ...postData,
-        id: auth.userId,
-      });
+      const response = await api.post(
+        "/UserAuth/PasswordValidation",
+        {
+          ...postData,
+          id: auth.userId,
+        },
+        config
+      );
       console.log(response.data);
       setDialogState({
         ...dialogState,
@@ -80,13 +90,18 @@ const UserChangeDataDialog = (props) => {
 
   const fetchApiPut = async (url, data) => {
     try {
-      const response = await api.put(`/${url}`, data);
+      const response = await api.post(`/${url}`, data, config);
       console.log(response.data);
       const feedback = {
         severity: "success",
         msg: `Berhasil, ${dialogOption} telah dirubah`,
       };
-      if (url === "ChangeName") setAuth({ ...auth, nama: postData.nama });
+      if (url === "UserAuth/ChangeName") {
+        localStorage.clear();
+        const newAuth = { ...auth, nama: postData.nama, token: response.data };
+        setAuth({ ...newAuth });
+        localStorage.setItem("userAuth", JSON.stringify(newAuth));
+      }
       setPostData({ ...postData, password: "", nama: "" });
       setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
       handleClose(true, feedback);
@@ -161,7 +176,7 @@ const UserChangeDataDialog = (props) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                fetchApiPut("ChangePassword", {
+                fetchApiPut("UserAuth/ChangePassword", {
                   ...postData,
                   id: auth?.userId,
                   password: dialogState.newPassword,
@@ -247,7 +262,7 @@ const UserChangeDataDialog = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               console.table(postData);
-              fetchApiPut("ChangeName", {
+              fetchApiPut("UserAuth/ChangeName", {
                 ...postData,
                 id: auth?.userId,
               });

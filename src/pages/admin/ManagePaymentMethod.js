@@ -9,11 +9,8 @@ import {
   Paper,
   Snackbar,
   Stack,
-  styled,
   Table,
   TableBody,
-  TableCell,
-  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
@@ -28,6 +25,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/baseApi";
 import HeaderSet from "../../components/HeaderSet";
+import useAuth from "../../hooks/useAuth";
+import {
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 import PaymentMethodDialog from "./components/PaymentMethodDialog";
 
 const theme = createTheme({
@@ -60,59 +63,10 @@ const theme = createTheme({
             borderRadius: "8px",
           },
         },
-        // {
-        //   props: { variant: "contained" },
-        //   style: {
-        //     fontFamily: "Poppins",
-        //     fontSize: "16px",
-        //     fontWeight: "600",
-        //     paddingTop: "10px",
-        //     paddingBottom: "10px",
-        //     textTransform: "Capitalize",
-        //     borderRadius: "8px",
-        //     backgroundColor: "#4F4F4F",
-        //     color: "white",
-        //   },
-        // },
       ],
     },
   },
 });
-
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "12px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
 
 const Alerts = React.forwardRef(function Alerts(props, ref) {
   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -127,24 +81,41 @@ function ManagePaymentMethod() {
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = useState(false);
   const [dialogOption, setDialogOption] = useState("delete");
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const fetchApiGet = async () => {
     try {
-      const response = await api.get(`/Payment`);
+      const response = await api.get(`/Payment`, config);
       console.log(response.data);
+      setLoadMessage(null);
       setOptions(response.data);
     } catch (err) {
       !err.response
         ? console.log(`Error: ${err.message}`)
         : console.log(err.response.data);
       if (err.response.data === "Not Found") console.log(err.response.status);
+      setLoadMessage("Terjadi kesalahan");
+      if (err.response.status === 401 || err.response.status === 403)
+        setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
       console.log(err.response.headers);
     }
   };
 
   const fetchDelete = async () => {
     try {
-      const response = await api.delete(`/Payment/${selectedOption.id}`);
+      const response = await api.delete(
+        `/Payment/${selectedOption.id}`,
+        config
+      );
       console.log(response.data);
       setOptions((item) =>
         item.filter((item) => item.id !== selectedOption.id)
@@ -284,122 +255,133 @@ function ManagePaymentMethod() {
                         </Tooltip>
                       </Box>
                     </Box>
-                    <TableContainer component={StyledPaper}>
-                      <Table sx={{}} aria-label="customized table">
-                        <TableHead>
-                          <TableRow>
-                            <StyledTableCell align="center">
-                              Opsi Pembayaran
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Action
-                            </StyledTableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {optionFilter()?.map((row, index) => (
-                            <StyledTableRow key={index}>
+                    {loadMessage ? (
+                      <Typography
+                        sx={{
+                          paddingTop: "5px",
+                          paddingBottom: "15px",
+                        }}
+                      >
+                        {loadMessage}
+                      </Typography>
+                    ) : (
+                      <TableContainer component={StyledPaper}>
+                        <Table sx={{}} aria-label="customized table">
+                          <TableHead>
+                            <TableRow>
                               <StyledTableCell align="center">
-                                <Box
-                                  sx={{
-                                    marginLeft: { md: "30%", xs: "10%" },
-                                    paddingLeft: "10px",
-                                    paddingRight: "15px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: { md: "30px", xs: "10px" },
-                                  }}
-                                >
+                                Opsi Pembayaran
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                Action
+                              </StyledTableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {optionFilter()?.map((row, index) => (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell align="center">
                                   <Box
-                                    component={"img"}
-                                    style={{ alignSelf: "center" }}
-                                    src={`data:image/jpeg;base64,${row.icon}`}
-                                    alt={row.method}
-                                    loading="lazy"
                                     sx={{
-                                      width: { md: "37px", xs: "28px" },
-                                      height: { md: "37px", xs: "28px" },
-                                      display: { md: "block", xs: "block" },
+                                      marginLeft: { md: "30%", xs: "10%" },
+                                      paddingLeft: "10px",
+                                      paddingRight: "15px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: { md: "30px", xs: "10px" },
                                     }}
-                                  />
-                                  <Box>{row.method}</Box>
-                                </Box>
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                <Box
-                                  sx={{
-                                    display: { md: "flex", xs: "none" },
-                                    gap: "30px",
-                                    justifyContent: "center",
-                                  }}
-                                >
-                                  <Button
-                                    onClick={() =>
-                                      // setSelectedOption(row)
-                                      handleClickOpenDialog("edit", row)
-                                    }
-                                    color="secondary"
-                                    variant="outlined"
-                                    startIcon={<Edit />}
                                   >
-                                    Ubah
-                                  </Button>
-                                  <Button
-                                    onClick={() =>
-                                      handleClickOpenDialog("delete", row)
-                                    }
-                                    color="remove"
-                                    variant="outlined"
-                                    startIcon={<DeleteForever />}
+                                    <Box
+                                      component={"img"}
+                                      style={{ alignSelf: "center" }}
+                                      src={`data:image/jpeg;base64,${row.icon}`}
+                                      alt={row.method}
+                                      loading="lazy"
+                                      sx={{
+                                        width: { md: "37px", xs: "28px" },
+                                        height: { md: "37px", xs: "28px" },
+                                        display: { md: "block", xs: "block" },
+                                      }}
+                                    />
+                                    <Box>{row.method}</Box>
+                                  </Box>
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <Box
+                                    sx={{
+                                      display: { md: "flex", xs: "none" },
+                                      gap: "30px",
+                                      justifyContent: "center",
+                                    }}
                                   >
-                                    Hapus
-                                  </Button>
-                                </Box>
-                                <Box
-                                  sx={{
-                                    display: { md: "none", xs: "flex" },
-                                    gap: "20px",
-                                    justifyContent: "center",
-                                  }}
-                                >
-                                  <Button
-                                    onClick={() =>
-                                      // setSelectedOption(row)
-                                      handleClickOpenDialog("edit", row)
-                                    }
-                                    color="secondary"
-                                    variant="outlined"
-                                    startIcon={
-                                      <Edit
-                                        sx={{
-                                          marginLeft: "12px",
-                                          height: "18px",
-                                        }}
-                                      />
-                                    }
-                                  ></Button>
-                                  <Button
-                                    onClick={() =>
-                                      handleClickOpenDialog("delete", row)
-                                    }
-                                    color="remove"
-                                    variant="outlined"
-                                    startIcon={
-                                      <DeleteForever
-                                        sx={{
-                                          marginLeft: "12px",
-                                          height: "18px",
-                                        }}
-                                      />
-                                    }
-                                  ></Button>
-                                </Box>
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                                    <Button
+                                      onClick={() =>
+                                        // setSelectedOption(row)
+                                        handleClickOpenDialog("edit", row)
+                                      }
+                                      color="secondary"
+                                      variant="outlined"
+                                      startIcon={<Edit />}
+                                    >
+                                      Ubah
+                                    </Button>
+                                    <Button
+                                      onClick={() =>
+                                        handleClickOpenDialog("delete", row)
+                                      }
+                                      color="remove"
+                                      variant="outlined"
+                                      startIcon={<DeleteForever />}
+                                    >
+                                      Hapus
+                                    </Button>
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      display: { md: "none", xs: "flex" },
+                                      gap: "20px",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <Button
+                                      onClick={() =>
+                                        // setSelectedOption(row)
+                                        handleClickOpenDialog("edit", row)
+                                      }
+                                      color="secondary"
+                                      variant="outlined"
+                                      startIcon={
+                                        <Edit
+                                          sx={{
+                                            marginLeft: "12px",
+                                            height: "18px",
+                                          }}
+                                        />
+                                      }
+                                    ></Button>
+                                    <Button
+                                      onClick={() =>
+                                        handleClickOpenDialog("delete", row)
+                                      }
+                                      color="remove"
+                                      variant="outlined"
+                                      startIcon={
+                                        <DeleteForever
+                                          sx={{
+                                            marginLeft: "12px",
+                                            height: "18px",
+                                          }}
+                                        />
+                                      }
+                                    ></Button>
+                                  </Box>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    )}
                   </Paper>
                 </Grid>
               </Grid>

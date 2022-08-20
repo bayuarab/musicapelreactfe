@@ -49,7 +49,7 @@ export default function Footer() {
       }
     };
     fetchApi();
-  }, [setDataClass]);
+  }, [setDataClass, auth?.roles]);
 
   // const classCat = dataClass;
 
