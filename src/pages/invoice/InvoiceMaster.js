@@ -70,6 +70,8 @@ const InvoiceMaster = () => {
   const { setComponentState } = useComponentBarState();
   const { auth } = useAuth();
   const UserID = auth?.userId;
+  const token = auth?.token;
+
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -80,8 +82,13 @@ const InvoiceMaster = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Invoices/${UserID}`);
+        const response = await api.get(`/Invoices/${UserID}`, config);
         console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
@@ -96,7 +103,7 @@ const InvoiceMaster = () => {
     };
 
     fetchApi();
-  }, [UserID]);
+  }, [UserID, token]);
 
   return masterInvoiceData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import courseCatApi from "../api/courseCatAPI";
+import useAuth from "../hooks/useAuth";
 
 const DialogEditCat = (props) => {
   const { onClose, openDialog, selectedCat } = props;
@@ -24,6 +25,13 @@ const DialogEditCat = (props) => {
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
   const [severityType, setSeverityType] = useState("error");
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const Alerts = React.forwardRef(function Alerts(props, ref) {
     return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -80,7 +88,7 @@ const DialogEditCat = (props) => {
     };
     console.log(postDataa);
     courseCatApi
-      .put("/", postDataa)
+      .put("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.status);

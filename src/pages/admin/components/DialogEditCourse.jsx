@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import courseApi from "../../../api/courseAPI";
+import useAuth from "../../../hooks/useAuth";
 
 const DialogEditCourse = (props) => {
   const { onClose, openDialog, selectedCourse } = props;
@@ -27,6 +28,13 @@ const DialogEditCourse = (props) => {
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
   const [id, setId] = useState("");
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   /* useStates untuk keperluan POST merk baru */
 
@@ -89,7 +97,7 @@ const DialogEditCourse = (props) => {
     };
     console.log(postDataa);
     courseApi
-      .put("/", postDataa)
+      .put("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.status);

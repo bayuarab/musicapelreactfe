@@ -15,6 +15,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React, { forwardRef, useEffect, useState } from "react";
 import api from "../../../api/Invoices";
+import useAuth from "../../../hooks/useAuth";
 import numberFormat from "../../../utilities/NumbeFormat";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -31,6 +32,14 @@ const DetailInvoiceDialog = (props) => {
     masterInvoiceId,
   } = props;
 
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
 
   const handleClose = () => {
@@ -40,7 +49,10 @@ const DetailInvoiceDialog = (props) => {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/DetailsByMasterId/${masterInvoiceId}`);
+        const response = await api.get(
+          `/DetailsByMasterId/${masterInvoiceId}`,
+          config
+        );
         console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {

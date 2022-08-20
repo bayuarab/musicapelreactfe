@@ -72,6 +72,8 @@ const InvoiceDetails = () => {
     "Mengambil data ke server, harap tunggu"
   );
   const { auth } = useAuth();
+  const UserId = auth?.userId;
+  const token = auth?.token;
 
   useEffect(() => {
     setComponentState({ paymentPageState: false, footerState: true });
@@ -79,9 +81,15 @@ const InvoiceDetails = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
         const response = await api.get(
-          `/InvoicesDetails/${auth.userId}/${invoiceID}`
+          `/InvoicesDetails/${UserId}/${invoiceID}`,
+          config
         );
         console.log(response.data);
         setInvoiceDetailData(response.data);
@@ -96,7 +104,7 @@ const InvoiceDetails = () => {
     };
 
     fetchApi();
-  }, [invoiceID]);
+  }, [invoiceID, token, UserId]);
 
   return invoiceDetailData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>

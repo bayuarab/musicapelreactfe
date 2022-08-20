@@ -15,6 +15,7 @@ import {
 import { forwardRef, useState } from "react";
 import styled from "styled-components";
 import api from "../../../api/baseApi";
+import useAuth from "../../../hooks/useAuth";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -36,6 +37,13 @@ const PaymentMethodDialog = (props) => {
   const { onClose, logState, selectedOption, dialogOption } = props;
   const [imagePreview, setImagePreview] = useState("");
   const [postData, setPostData] = useState(selectedOption);
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const handleClose = (state, data = null) => {
     onClose(state, data);
@@ -43,7 +51,7 @@ const PaymentMethodDialog = (props) => {
 
   const fetchApiPost = async (data) => {
     try {
-      const response = await api.post(`/Payment`, data);
+      const response = await api.post(`/Payment`, data, config);
       console.log(response.data);
       const feedback = {
         severity: "success",
@@ -68,7 +76,7 @@ const PaymentMethodDialog = (props) => {
     data = { ...postData, id: selectedOption.id };
     console.log("put", data);
     try {
-      const response = await api.put(`/Payment`, data);
+      const response = await api.put(`/Payment`, data, config);
       console.log(response.data);
       const feedback = {
         severity: "success",

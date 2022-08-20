@@ -28,6 +28,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/baseApi";
 import HeaderSet from "../../components/HeaderSet";
+import useAuth from "../../hooks/useAuth";
 import PaymentMethodDialog from "./components/PaymentMethodDialog";
 
 const theme = createTheme({
@@ -127,10 +128,17 @@ function ManagePaymentMethod() {
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = useState(false);
   const [dialogOption, setDialogOption] = useState("delete");
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const fetchApiGet = async () => {
     try {
-      const response = await api.get(`/Payment`);
+      const response = await api.get(`/Payment`, config);
       console.log(response.data);
       setOptions(response.data);
     } catch (err) {
@@ -144,7 +152,10 @@ function ManagePaymentMethod() {
 
   const fetchDelete = async () => {
     try {
-      const response = await api.delete(`/Payment/${selectedOption.id}`);
+      const response = await api.delete(
+        `/Payment/${selectedOption.id}`,
+        config
+      );
       console.log(response.data);
       setOptions((item) =>
         item.filter((item) => item.id !== selectedOption.id)

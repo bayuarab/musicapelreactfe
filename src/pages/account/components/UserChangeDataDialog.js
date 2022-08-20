@@ -37,6 +37,12 @@ const DialogButton = styled(Button)(({ theme }) => ({
 const UserChangeDataDialog = (props) => {
   const { onClose, logState, dialogOption } = props;
   const { auth, setAuth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
   const [postData, setPostData] = useState({ ...auth, nama: "" });
   const [dialogState, setDialogState] = useState({ oldPass: false });
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -80,13 +86,18 @@ const UserChangeDataDialog = (props) => {
 
   const fetchApiPut = async (url, data) => {
     try {
-      const response = await api.put(`/${url}`, data);
+      const response = await api.put(`/${url}`, data, config);
       console.log(response.data);
       const feedback = {
         severity: "success",
         msg: `Berhasil, ${dialogOption} telah dirubah`,
       };
-      if (url === "User/ChangeName") setAuth({ ...auth, nama: postData.nama });
+      if (url === "UserAuth/ChangeName") {
+        localStorage.clear();
+        const newAuth = { ...auth, nama: postData.nama, token: response.data };
+        setAuth({ ...newAuth });
+        localStorage.setItem("userAuth", JSON.stringify(newAuth));
+      }
       setPostData({ ...postData, password: "", nama: "" });
       setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
       handleClose(true, feedback);
@@ -247,7 +258,7 @@ const UserChangeDataDialog = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               console.table(postData);
-              fetchApiPut("User/ChangeName", {
+              fetchApiPut("UserAuth/ChangeName", {
                 ...postData,
                 id: auth?.userId,
               });

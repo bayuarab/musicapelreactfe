@@ -25,6 +25,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
 import HeaderSet from "../../components/HeaderSet";
+import useAuth from "../../hooks/useAuth";
 import DeleteDialog from "./components/DeleteDialog";
 
 const theme = createTheme({
@@ -109,6 +110,13 @@ function ManageUser() {
   const [severityType, setSeverityType] = useState("error");
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = React.useState(false);
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -121,7 +129,7 @@ function ManageUser() {
     if (!state) return setOpenLogout(false);
     const fetchDelete = async () => {
       try {
-        const response = await api.delete(`/${selectedUser.email}`);
+        const response = await api.delete(`/${selectedUser.email}`, config);
         console.log(response.data);
         setUsers((item) =>
           item.filter((item) => item.email !== selectedUser.email)
@@ -152,7 +160,7 @@ function ManageUser() {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/AllUser`);
+        const response = await api.get(`/AllUser`, config);
         console.log(response.data);
         setUsers(response.data);
       } catch (err) {

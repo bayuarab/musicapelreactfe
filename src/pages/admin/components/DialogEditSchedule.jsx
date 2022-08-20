@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import api from "../../../api/baseApi";
+import useAuth from "../../../hooks/useAuth";
 
 const DialogEditJadwal = (props) => {
   const { onClose, openDialog, selectedSchedule } = props;
@@ -20,6 +21,14 @@ const DialogEditJadwal = (props) => {
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
   const [severityType, setSeverityType] = useState("error");
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+
   const Alerts = React.forwardRef(function Alerts(props, ref) {
     return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -41,7 +50,7 @@ const DialogEditJadwal = (props) => {
     };
     console.log(postDataa);
     api
-      .put("/Schedule", postDataa)
+      .put("/Schedule", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data);

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import courseApi from "../../../api/courseAPI";
+import useAuth from "../../../hooks/useAuth";
 
 function DialogAddCourse(
   props = {
@@ -32,6 +33,13 @@ function DialogAddCourse(
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
   const [refreshPage, setRefreshPage] = useState(false);
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
   /* useStates untuk keperluan POST merk baru */
 
   const Alerts = React.forwardRef(function Alerts(props, ref) {
@@ -92,7 +100,7 @@ function DialogAddCourse(
     };
     console.log(postDataa);
     courseApi
-      .post("/", postDataa)
+      .post("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.status);

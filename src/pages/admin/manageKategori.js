@@ -91,6 +91,13 @@ function ManageKategori(
   const [openDelete, setOpenDelete] = useState(false);
   const [severityType, setSeverityType] = useState("error");
   const [selectedCou, setSelectedCou] = useState({});
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const getListOfBrands = async () => {
     await courseApi
@@ -162,7 +169,7 @@ function ManageKategori(
     if (!state) return setOpenDelete(false);
     const fetchDelete = async () => {
       try {
-        const response = await courseApi.delete(`/${selectedCou.id}`);
+        const response = await courseApi.delete(`/${selectedCou.id}`, config);
         console.log(response.data);
         getListOfBrands();
         setSeverityType("warning");

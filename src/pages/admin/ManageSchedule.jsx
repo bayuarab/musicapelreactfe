@@ -33,6 +33,7 @@ import Zoom from "@mui/material/Zoom";
 import React, { useEffect, useState } from "react";
 import api from "../../api/baseApi";
 import HeaderSet from "../../components/HeaderSet";
+import useAuth from "../../hooks/useAuth";
 import AddDialog from "./components/DialogAddSchedule";
 import DeleteDialog from "./components/DialogDeleteSchedule";
 import EditDialog from "./components/DialogEditSchedule";
@@ -126,6 +127,13 @@ function ManageSchedule() {
   const [openEdit, setOpenEdit] = useState(false);
   const [refreshPage, setRefreshPage] = useState(false);
   const [editItemData, setEditItemData] = useState();
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -138,7 +146,10 @@ function ManageSchedule() {
     if (!state) return setOpenDialog(false);
     const fetchDelete = async () => {
       try {
-        const response = await api.delete(`/Schedule/${selectedSchedule.id}`);
+        const response = await api.delete(
+          `/Schedule/${selectedSchedule.id}`,
+          config
+        );
         console.log(response.data);
         setSchedules((item) =>
           item.filter((item) => item.id !== selectedSchedule.id)
@@ -169,7 +180,7 @@ function ManageSchedule() {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get("/Schedule/Admin");
+        const response = await api.get("/Schedule/Admin", config);
         console.log(response.data);
         setSchedules(response.data);
       } catch (err) {

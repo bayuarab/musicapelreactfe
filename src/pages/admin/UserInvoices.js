@@ -22,6 +22,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/Invoices";
 import HeaderSet from "../../components/HeaderSet";
+import useAuth from "../../hooks/useAuth";
 import DetailInvoiceDialog from "./components/DetailInvoiceDialog";
 
 const theme = createTheme({
@@ -97,6 +98,13 @@ function UserInvoices() {
   const [searchState, setSearchState] = useState("");
   const [masterInvoice, setMasterInvoice] = useState({});
   const [openDetail, setOpenDetail] = useState(false);
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const handleCloseDialog = () => {
     setOpenDetail(false);
@@ -110,7 +118,7 @@ function UserInvoices() {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await api.get(`/AllInvoices`);
+        const response = await api.get(`/AllInvoices`, config);
         console.log(response.data);
         setInvoices(response.data);
       } catch (err) {

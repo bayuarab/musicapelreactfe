@@ -37,6 +37,7 @@ import api from "../../api/courseCatAPI";
 import DialogAddKelas from "../../components/DialogAddKelas";
 import DialogDeleteCat from "../../components/DialogDeleteCat";
 import DialogEditCat from "../../components/DialogEditCat";
+import useAuth from "../../hooks/useAuth";
 // import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 // let kategoris = getKategoriKelas();
 // let musics = getMusic();
@@ -75,6 +76,13 @@ function ManageKelas() {
   const [openAdd, setOpenAdd] = useState(false);
   const [editItemData, setEditItemData] = useState();
   const [openEdit, setOpenEdit] = useState(false);
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -88,7 +96,7 @@ function ManageKelas() {
     if (!state) return setOpenDelete(false);
     const fetchDelete = async () => {
       try {
-        const response = await api.delete(`/${selectedCat.id}`);
+        const response = await api.delete(`/${selectedCat.id}`, config);
         console.log(response.data);
         getListOfBrands();
         setSeverityType("warning");

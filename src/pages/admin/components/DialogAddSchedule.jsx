@@ -30,6 +30,11 @@ function DialogAddJadwal(
   const [severityType, setSeverityType] = useState("error");
   const { auth } = useAuth();
   const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
   /* useStates untuk keperluan POST merk baru */
   const Alerts = React.forwardRef(function Alerts(props, ref) {
     return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -49,11 +54,8 @@ function DialogAddJadwal(
       jadwal: jadwal,
       courseId: courseId,
     };
-    const headers = {
-      Authorization: "Bearer " + token,
-    };
     try {
-      const res = await api.post("/Schedule", postDataa, { headers });
+      const res = await api.post("/Schedule", postDataa, config);
       if (res.status === 200) {
         console.log(res.data);
         setSeverityType("success");

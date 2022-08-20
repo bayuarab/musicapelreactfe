@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import courseCatApi from "../api/courseCatAPI";
+import useAuth from "../hooks/useAuth";
 
 function DialogAddKelas(
   props = {
@@ -30,6 +31,14 @@ function DialogAddKelas(
   const [err, setErr] = useState("");
   const [open, setOpen] = React.useState(false);
   const [severityType, setSeverityType] = useState("error");
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+
   /* useStates untuk keperluan POST merk baru */
 
   const Alerts = React.forwardRef(function Alerts(props, ref) {
@@ -87,7 +96,7 @@ function DialogAddKelas(
     };
     console.log(postDataa);
     courseCatApi
-      .post("/", postDataa)
+      .post("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.status);
