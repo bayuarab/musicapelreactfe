@@ -45,7 +45,6 @@ export default function DetailCourse() {
     },
   };
 
-<<<<<<< HEAD
 	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
 	const [detailOfACategory, setDetailOfACategory] = useState([]);
 	const getdetailOfACategory = async (url) => {
@@ -65,31 +64,9 @@ export default function DetailCourse() {
 	useEffect(() => {
 		getdetailOfACategory(params.categoryid);
 	}, [params]);
-=======
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACategory, setDetailOfACategory] = useState([]);
-  const getdetailOfACategory = async (url) => {
-    console.log("params", url);
-    await axios
-      .get(`https://localhost:7132/api/CourseCategory/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACategory(res.data);
-        }
-      })
-      .catch((err) => {});
-    console.log(params);
-  };
-  useEffect(() => {
-    getdetailOfACategory(params.categoryid);
-  }, [params]);
->>>>>>> 0f6cfd4f777a81b9efa1c789c8259b0902388276
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
-<<<<<<< HEAD
 	let paramss = useParams();
 	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
 	const [detailOfACourse, setDetailOfACourse] = useState([]);
@@ -111,29 +88,6 @@ export default function DetailCourse() {
 	useEffect(() => {
 		getdetailOfACourse(paramss.categoryid);
 	}, [paramss]);
-=======
-  let paramss = useParams();
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACourse, setDetailOfACourse] = useState([]);
-  const getdetailOfACourse = async (url) => {
-    console.log("paramss", url);
-    await axios
-      .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACourse(res.data);
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {});
-    console.log(paramss);
-  };
-  useEffect(() => {
-    getdetailOfACourse(paramss.categoryid);
-  }, [paramss]);
->>>>>>> 0f6cfd4f777a81b9efa1c789c8259b0902388276
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
