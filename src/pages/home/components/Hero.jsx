@@ -3,7 +3,7 @@ import {
   default as Typography,
 } from "@mui/material/Typography";
 import React from "react";
-import herobg from "../../../assets/herobg.jpg";
+import herobg from "../../../assets/rm383-14.png";
 import Fact from "./Fact";
 
 const LandingPage = () => {
@@ -37,8 +37,11 @@ const LandingPage = () => {
               md: "28px",
               sm: "24px",
               xs: "17px",
-              textAlign: "center",
             },
+            textAlign: "center",
+            fontFamily: "Poppins",
+            color: "white",
+            fontWeight: "600",
           }}
         >
           Hi Musiker! Gabung yuk di Apel Music
@@ -55,6 +58,10 @@ const LandingPage = () => {
               sm: "18px",
               xs: "12px",
             },
+            textAlign: "center",
+            fontFamily: "Poppins",
+            color: "white",
+            fontWeight: "400",
           }}
         >
           Banyak kelas keren yang bisa menunjang bakat bermusik kamu

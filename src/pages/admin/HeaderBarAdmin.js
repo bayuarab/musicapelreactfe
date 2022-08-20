@@ -1,5 +1,7 @@
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   Avatar,
@@ -16,14 +18,18 @@ import {
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from "@mui/icons-material/Category";
 // import HomeIcon from "@mui/icons-material/Home";
-import ListIcon from "@mui/icons-material/List";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ClassIcon from "@mui/icons-material/Class";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import Logo from "../../components/Logo";
 import LogoutDialog from "../../components/LogoutDialog";
+import { useCart } from "../../context/CartProvider";
+import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme({
@@ -86,12 +92,20 @@ const Drawer = styled(MuiDrawer, {
 function HeaderBarAdmin() {
   const [open, setOpen] = useState(false);
   const { setAuth } = useAuth();
+  const { setCart } = useCart();
   const navigate = useNavigate();
   const [openLogout, setOpenLogout] = useState(false);
+  const { setComponentState } = useComponentBarState();
+
+  useEffect(() => {
+    setComponentState({ paymentPageState: true, footerState: false });
+  }, [setComponentState]);
 
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
+    localStorage.clear();
     setAuth({});
+    setCart([]);
     navigate("/", { replace: true });
     setOpenLogout(false);
   };
@@ -123,13 +137,11 @@ function HeaderBarAdmin() {
               <MenuIcon />
             </IconButton>
             <Typography
-              component="h1"
-              variant="h6"
               color="black"
               noWrap
               sx={{ flexGrow: 1, ...(open && { display: "none" }) }}
             >
-              Apel Music
+              <Logo />
             </Typography>
             {/* <IconButton color="inherit" style={{ paddingRight: '20px'}}>
                             <Badge badgeContent={4} color="secondary">
@@ -159,14 +171,12 @@ function HeaderBarAdmin() {
             }}
           >
             <Typography
-              component="h1"
-              variant="h6"
               color="primary"
               align="center"
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Apel Music
+              <Logo />
             </Typography>
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon color="primary" />
@@ -175,29 +185,41 @@ function HeaderBarAdmin() {
           {/* LIST ITEM MENU BAR */}
           <List component="nav">
             {/* {mainListItems} */}
-            {/* <ListItemButton component={Link} to={"/"}>
-              <ListItemIcon>
-                <HomeIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="Beranda" />
-            </ListItemButton> */}
             <ListItemButton component={Link} to={"/admin/kelas"}>
-              <ListItemIcon>
-                <ListIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="Manage Kelas" />
-            </ListItemButton>
-            <ListItemButton component={Link} to={"/admin/category"}>
               <ListItemIcon>
                 <CategoryIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Manage Kategori" />
             </ListItemButton>
+            <ListItemButton component={Link} to={"/admin/category"}>
+              <ListItemIcon>
+                <ClassIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Manage Kelas" />
+            </ListItemButton>
+            <ListItemButton component={Link} to={"/admin/schedule"}>
+              <ListItemIcon>
+                <CalendarMonthIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Manage Jadwal" />
+            </ListItemButton>
+            <ListItemButton component={Link} to={"/admin/payment"}>
+              <ListItemIcon>
+                <AccountBalanceWalletIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Manage Payment" />
+            </ListItemButton>
             <ListItemButton component={Link} to={"/admin/invoices"}>
               <ListItemIcon>
-                <LocalShippingIcon color="primary" />
+                <CreditScoreIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Manage Invoices" />
+            </ListItemButton>
+            <ListItemButton component={Link} to={"/admin/users"}>
+              <ListItemIcon>
+                <ManageAccountsIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Manage User" />
             </ListItemButton>
             <Divider />
             <ListItemButton onClick={() => handleClickOpenLogout()}>

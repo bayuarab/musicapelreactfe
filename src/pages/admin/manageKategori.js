@@ -1,4 +1,9 @@
-import AddIcon from "@mui/icons-material/Add";
+import {
+  AddCircle,
+  DeleteForever,
+  ModeEdit,
+  Search,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -8,7 +13,8 @@ import {
   CardContent,
   Container,
   Grid,
-  Icon,
+  IconButton,
+  Input,
   Paper,
   TextField,
   Toolbar,
@@ -19,12 +25,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import courseApi from "../../api/courseAPI";
 
 // import SearchIcon from '@mui/icons-material/Search';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import HideImageIcon from "@mui/icons-material/HideImage";
-import SearchIcon from "@mui/icons-material/Search";
 
 // import { getNewArrivals } from '../jsonData/Data';
 // import HeaderbarAdmin from "../component/HeaderBarAdmin";
@@ -32,14 +39,12 @@ import SearchIcon from "@mui/icons-material/Search";
 // import ManageProductDialogEditItem from '../components/ManageProductDialogEditItem'
 // // import ManageProductDialogDeleteItem from '../components/ManageProductDialogDeleteItem';
 // import { APIRequest } from '../components/APICalls';
-import StyledEngine from "@mui/styled-engine";
+import DialogDeleteCourse from "../../components/DialogDeleteCourse";
 import HeaderSet from "../../components/HeaderSet";
 import useAuth from "../../hooks/useAuth";
-import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
 import numberFormat from "../../utilities/NumbeFormat";
-
-let kategoris = getKategoriKelas();
-let musics = getMusic();
+import DialogAddCourse from "./components/DialogAddCourse";
+import DialogEditCourse from "./components/DialogEditCourse";
 
 const theme = createTheme({
   palette: {
@@ -47,7 +52,10 @@ const theme = createTheme({
       main: "#F2C94C",
     },
     secondary: {
-      main: "#F2C94C",
+      main: "#4F4F4F",
+    },
+    remove: {
+      main: "#9F290F",
     },
     white: {
       main: "#ffffff",
@@ -55,20 +63,154 @@ const theme = createTheme({
   },
 });
 
-function ManageKategori() {
-  const [refreshPage, setRefreshPage] = useState();
-  const [search, setSearch] = useState("");
+function ManageKategori(
+  props = {
+    open: false,
+    id: props.id,
+    onClose: () => {},
+    onAdd: () => {},
+  }
+) {
+  /* useStates untuk keperluan POST merk baru */
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseDesc, setCourseDesc] = useState("");
+  const [coursePrice, setCoursePrice] = useState("");
+  const [courseCategoryId, setCourseCategoryId] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [base64, setBase64] = useState("");
+  const [err, setErr] = useState("");
+  const location = useLocation();
+  const categoryFilter = location.state?.categoryFilter;
+  const [search, setSearch] = useState(categoryFilter ? categoryFilter : "");
+  const [refreshPage, setRefreshPage] = useState(false);
+  // const [searchQuery, setSearchQuery] = useState();
+  const [listOfBrands, setListOfBrands] = useState([]);
+  const [openAll, setOpenAll] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [editItemData, setEditItemData] = useState();
+  const [openDelete, setOpenDelete] = useState(false);
+  const [severityType, setSeverityType] = useState("error");
+  const [selectedCou, setSelectedCou] = useState({});
+  const [loadMessage, setLoadMessage] = useState(
+    "Sedang mengambil data ke server harap tunggu"
+  );
+  const { auth } = useAuth();
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
-  /* useStates dan metode-metode untuk keperluan POST Add Product */
+  const getListOfBrands = async () => {
+    await courseApi
+      .get("/LandingPage")
+      .then((res) => {
+        if (res.status === 200) {
+          setListOfBrands(res.data);
+          setLoadMessage(null);
+        }
+      })
+      .catch((err) => {
+        setLoadMessage("Terjadi kesalahan");
+      });
+  };
+
+  useEffect(() => {
+    getListOfBrands();
+  }, [refreshPage]);
+
+  const filterList = () => {
+    return search?.length > 0
+      ? listOfBrands?.filter(
+          (item) =>
+            item.category.includes(search) || item.courseTitle.includes(search)
+        )
+      : listOfBrands;
+  };
+
+  /* Methods to convert image input into base64 */
+  const onFileSubmit = (e) => {
+    e.preventDefault();
+    console.log(base64);
+  };
+  const onChange = (e) => {
+    console.log("file", e.target.files[0]);
+    let file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = _handleReaderLoaded;
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  const handleClickOpenAll = () => {
+    setOpenAll(true);
+  };
+
+  const handleCloseAll = () => {
+    setOpenAll(false);
+  };
+
+  const _handleReaderLoaded = (readerEvt) => {
+    let binaryString = readerEvt.target.result;
+    setBase64(btoa(binaryString));
+  };
+  const photoUpload = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    console.log("reader", reader);
+    console.log("file", file);
+    if (reader !== undefined && file !== undefined) {
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    setOpen(true);
+  };
+
+  const handleCloseDelete = (state) => {
+    if (!state) return setOpenDelete(false);
+    const fetchDelete = async () => {
+      try {
+        const response = await courseApi.delete(`/${selectedCou.id}`, config);
+        console.log(response.data);
+        getListOfBrands();
+        setSeverityType("warning");
+        setErr("Kelas telah dihapus dari daftar");
+        setOpen(true);
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+        setSeverityType("error");
+        setErr("Error: Gagal menghapus, terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setErr("Otoritas tidak berlaku silahkan login kembali");
+        setOpen(true);
+      }
+    };
+    fetchDelete();
+    setOpenDelete(false);
+  };
+
+  const handleClickOpenDelete = (course) => {
+    setSelectedCou(course);
+    setOpenDelete(true);
+  };
+
+  /* useStates dan metode-metode untuk keperluan Add kelas */
   const [openAdd, setOpenAdd] = useState(false);
   /* useStates untuk keperluan POST Add Product */
 
-  /* useStates dan metode-metode untuk keperluan POST Edit Product */
+  /* useStates dan metode-metode untuk keperluan Edit kelas */
   const [editItemProduct, setEditItemProduct] = useState();
   const [openEdit, setOpenEdit] = useState(false);
   /* useStates untuk keperluan POST Edit Product */
-
-  const { auth } = useAuth();
 
   const renderList = (item, index) => {
     return (
@@ -85,9 +227,9 @@ function ManageKategori() {
                   alignItems: "center",
                 }}
               >
-                {item.image ? (
+                {item.courseImage ? (
                   <img
-                    src={`${item.image}`}
+                    src={`data:image/jpeg;base64,${item.courseImage}`}
                     alt="No Image"
                     style={{
                       height: "100%",
@@ -121,7 +263,7 @@ function ManageKategori() {
                     WebkitBoxOrient: "vertical",
                   }}
                 >
-                  {item.name}
+                  {item.courseTitle}
                 </Typography>
 
                 {/* Brand Name */}
@@ -137,7 +279,7 @@ function ManageKategori() {
                     WebkitBoxOrient: "vertical",
                   }}
                 >
-                  {item.brand_name}
+                  {item.category}
                 </Typography>
 
                 {/* Price */}
@@ -151,13 +293,15 @@ function ManageKategori() {
             >
               {/* Edit button */}
               <Button
-                variant="contained"
+                startIcon={<ModeEdit />}
+                variant="outlined"
                 size="medium"
+                color="secondary"
                 style={{ backgroundColor: "F2C94C", color: "black" }}
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={async (e) => {
+                  await e.preventDefault();
                   setOpenEdit(true);
-                  setEditItemProduct(item);
+                  setEditItemData(item);
                 }}
               >
                 Edit
@@ -165,14 +309,12 @@ function ManageKategori() {
 
               {/* Delete button */}
               <Button
+                startIcon={<DeleteForever />}
                 variant="outlined"
                 size="medium"
-                style={{ backgroundColor: "F2C94C", color: "black" }}
-                // onClick={async (e) => {
-                //     await e.preventDefault();
-                //     await setIdToDelete(item.id);
-                //     await deleteProduct();
-                // }}
+                color="remove"
+                style={{ backgroundColor: "F2C94C" }}
+                onClick={() => handleClickOpenDelete(item)}
               >
                 Hapus
               </Button>
@@ -213,20 +355,32 @@ function ManageKategori() {
                   <Typography
                     variant="h5"
                     color="secondary"
-                    style={{ fontWeight: "bold", paddingTop: "10px" }}
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: { md: "24px", xs: "18px" },
+                    }}
                   >
-                    Manage Kategori
+                    Manage Kelas
                   </Typography>
 
                   {/* BOX PENCARIAN DATA */}
-                  <div style={{ display: "flex", padding: "20px 0" }}>
+                  <Box
+                    component={"div"}
+                    sx={{
+                      display: "flex",
+                      padding: "20px 0",
+                      gap: { md: "20px", xs: "10px" },
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <TextField
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       id="input-with-icon-textfield"
-                      label="Pencarian Berdasarkan Nama Kategori"
+                      label="Pencarian Berdasarkan Nama Kelas"
                       InputProps={{
-                        endAdornment: <SearchIcon color="primary" />,
+                        endAdornment: <Search color="primary" />,
                       }}
                       variant="outlined"
                       style={{
@@ -235,54 +389,65 @@ function ManageKategori() {
                         marginRight: "10px",
                       }}
                     />
-                    <Tooltip
-                      TransitionComponent={Zoom}
-                      title="Add Product Items"
-                      placement="top"
-                    >
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        display="none"
-                        onClick={() => {
-                          setOpenAdd(true);
-                        }}
-                        style={{
-                          width: "auto",
-                          backgroundColor: "#F2C94C",
-                          borderRadius: "",
-                          color: "white",
-                        }}
+                    <Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
+                      <Tooltip
+                        TransitionComponent={Zoom}
+                        title="Add Product Items"
+                        placement="top"
                       >
-                        Tambah Baru
-                      </Button>
-                    </Tooltip>
-                  </div>
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: "#4f4f4f",
+                          }}
+                          onClick={() => setOpenAdd(true)}
+                        >
+                          <AddCircle />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Box>
+                  {loadMessage ? (
+                    <Typography
+                      sx={{
+                        paddingTop: "5px",
+                        paddingBottom: "15px",
+                      }}
+                    >
+                      {loadMessage}
+                    </Typography>
+                  ) : (
+                    <></>
+                  )}
 
                   {/* ITEM LIST */}
                   <Grid container spacing={2}>
-                    {kategoris.map((item, index) => renderList(item, index))}
+                    {filterList().map((item, index) => renderList(item, index))}
                   </Grid>
 
                   {/* DIALOG ADD*/}
-                  {/* <ManageProductDialogAddItem
-                                        open={openAdd}
-                                        onClose={() => {
-                                            setOpenAdd(false);
-                                            setRefreshPage((status) => !status);
-                                        }}
-                                    /> */}
+                  <DialogAddCourse
+                    open={openAdd}
+                    onClose={() => {
+                      setOpenAdd(false);
+                      setRefreshPage((status) => !status);
+                    }}
+                  />
 
                   {/* DIALOG EDIT */}
-                  {/* <ManageProductDialogEditItem
-                                        open={openEdit}
-                                        editItemProduct={editItemProduct}
-                                        onClose={() => {
-                                            setOpenEdit(false);
-                                            setRefreshPage((status) => !status);
-                                        }
-                                        }
-                                    /> */}
+                  <DialogEditCourse
+                    selectedCourse={editItemData}
+                    openDialog={openEdit}
+                    onClose={() => {
+                      setOpenEdit(false);
+                      setRefreshPage((status) => !status);
+                    }}
+                  />
+                  <DialogDeleteCourse
+                    selectedCat={selectedCou}
+                    logState={openDelete}
+                    onClose={handleCloseDelete}
+                  />
                 </Paper>
               </Grid>
             </Grid>

@@ -29,6 +29,7 @@ import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 const StyledCheckbox = styled(Checkbox)({
@@ -75,7 +76,7 @@ const filterCartItems = (arr, filterValue, operator) => {
 
 const CartPage = () => {
   const { setComponentState } = useComponentBarState();
-  const [cart, setCart] = useState([]);
+  const { cart, setCart } = useCart();
   const [selectedCart, setSelectedCart] = useState([]);
   const [cost, setCost] = useState(calculateTotalCost(cart));
   const [selectedOp, setSelectedOp] = useState(null);
@@ -85,14 +86,19 @@ const CartPage = () => {
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
-
   const navigate = useNavigate();
   const { auth } = useAuth();
   const userID = auth?.userId;
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   const fetchDelete = async (id) => {
     try {
-      const response = await api.delete(`/Cart/${userID}/${id}`);
+      const response = await api.delete(`/Cart/${userID}/${id}`, config);
       console.log(response.data);
       setCart(
         response.data.filter((item) => item.userId === userID && item.id !== id)
@@ -112,8 +118,13 @@ const CartPage = () => {
 
   useEffect(() => {
     const fetchApiInvoices = async () => {
+      const reqConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Invoices/${userID}`);
+        const response = await api.get(`/Invoices/${userID}`, reqConfig);
         console.log(response?.data);
         setRegisteredInvoice(
           response?.data?.map((rawData) => rawData.noInvoice)
@@ -127,12 +138,17 @@ const CartPage = () => {
       }
     };
     fetchApiInvoices();
-  }, [userID]);
+  }, [userID, token]);
 
   useEffect(() => {
     const fetchApiCart = async () => {
+      const reqConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Cart/${userID}`);
+        const response = await api.get(`/Cart/${userID}`, reqConfig);
         console.log(response.data);
         setCart(response.data);
       } catch (err) {
@@ -146,7 +162,7 @@ const CartPage = () => {
       }
     };
     fetchApiCart();
-  }, [cart.length, userID]);
+  }, [setCart, userID, cart?.length, token]);
 
   useEffect(() => {
     setCost(calculateTotalCost(selectedCart));
@@ -154,7 +170,7 @@ const CartPage = () => {
 
   const fetchApiPostInvoice = async (url, data) => {
     try {
-      const response = await api.post(`/${url}`, data);
+      const response = await api.post(`/${url}`, data, config);
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
@@ -164,6 +180,7 @@ const CartPage = () => {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.courseId,
             masterInvoiceId: masterInvoicess,
+            scheduleId: items.scheduleId,
           };
         });
         console.log(details);
@@ -184,21 +201,21 @@ const CartPage = () => {
 
   const checkout = () => {
     console.log("Barang yang di checkout:");
-    console.log(selectedCart);
+    console.table(selectedCart);
     console.log(`Total cost: ${cost}`);
     setCheckoutDialogState(true);
   };
 
   const handleCheckoutClose = (value) => {
     const { paymentOption, paymentState } = value;
+    console.log("paymentOption", paymentOption);
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
-      userID,
-      selectedOp,
+      paymentOption,
       auth,
       calculateTotalCost,
     };
@@ -245,11 +262,11 @@ const CartPage = () => {
     </Box>
   ) : (
     <Box
-      style={{
-        paddingTop: "45px",
+      sx={{
+        paddingTop: { md: "45px", xs: "20px" },
         paddingLeft: "4%",
         paddingRight: "4%",
-        paddingBottom: "100px",
+        paddingBottom: "80px",
       }}
     >
       <Box>
@@ -307,6 +324,7 @@ const CartPage = () => {
             >
               <Typography
                 sx={{
+                  display: { xs: "none", sm: "none", md: "block" },
                   color: "#333333",
                   fontSize: "18px",
                   fontFamilyL: "Poppins",
@@ -318,7 +336,7 @@ const CartPage = () => {
               <Typography
                 sx={{
                   color: "#5D5FEF",
-                  fontSize: "24px",
+                  fontSize: { md: "24px", sm: "20px", xs: "18px" },
                   fontFamilyL: "Poppins",
                   fontWeight: "500",
                 }}
@@ -327,18 +345,30 @@ const CartPage = () => {
               </Typography>
             </Box>
             <Box sx={{ paddingRight: "2%" }}>
-              <CheckoutButton variant="contained" onClick={() => checkout()}>
+              <CheckoutButton
+                variant="contained"
+                disabled={selectedCart.length <= 0}
+                onClick={() => checkout()}
+              >
                 Bayar Sekarang
               </CheckoutButton>
               <IconButton
+                size="small"
                 sx={{ display: { md: "none" } }}
                 onClick={() => checkout()}
+                disabled={selectedCart.length <= 0}
               >
-                <Avatar sx={{ bgcolor: "#5D5FEF" }}>
+                <Avatar
+                  sizes="small"
+                  sx={{
+                    bgcolor: selectedCart.length <= 0 ? "#AfAfAf" : "#5D5FEF",
+                  }}
+                >
                   <ShoppingCartCheckout
+                    fontSize="inherit"
                     sx={{
                       color: "white",
-                      fontSize: 30,
+                      // fontSize: 30,
                     }}
                   />
                 </Avatar>

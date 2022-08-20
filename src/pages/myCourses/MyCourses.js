@@ -5,14 +5,16 @@ import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
 const ImgContainer = styled(Box)(({ theme }) => ({
-  display: "none",
-  marginRight: "15px",
-  width: "200px",
-  height: "133px",
-  borderRadius: "16px",
+  display: "block",
+  marginRight: "6px",
+  borderRadius: "12px",
   borderColor: "#828282",
   [theme.breakpoints.up("md")]: {
     display: "block",
+    borderRadius: "16px",
+    marginRight: "15px",
+    width: "200px",
+    height: "133px",
   },
 }));
 
@@ -21,6 +23,8 @@ const MyCourses = () => {
   const { setComponentState } = useComponentBarState();
   const { auth } = useAuth();
   const UserId = auth?.userId;
+  const token = auth?.token;
+
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -31,8 +35,13 @@ const MyCourses = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Courses/${UserId}`);
+        const response = await api.get(`/Courses/${UserId}`, config);
         console.log(response.data);
         setMyCourseData(response.data);
       } catch (err) {
@@ -47,7 +56,7 @@ const MyCourses = () => {
     };
 
     fetchApi();
-  }, [UserId]);
+  }, [UserId, token]);
 
   return myCourseData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
@@ -56,7 +65,7 @@ const MyCourses = () => {
       </Typography>
     </Box>
   ) : (
-    <Box>
+    <Box maxWidth={"100%"}>
       <Box
         sx={{
           display: "flex",
@@ -64,7 +73,7 @@ const MyCourses = () => {
           gap: "18px",
           paddingLeft: "4.5%",
           paddingRight: "4.5%",
-          paddingTop: "45px",
+          paddingTop: { md: "45px", xs: "30px" },
           paddingBottom: "60px",
         }}
       >
@@ -74,76 +83,69 @@ const MyCourses = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "space-between",
                 }}
               >
+                <ImgContainer>
+                  <Box
+                    component={"img"}
+                    src={`data:image/jpeg;base64,${items.courseImage}`}
+                    alt={items.course}
+                    loading="lazy"
+                    objectfit="true"
+                    sx={{
+                      width: { md: "200px", xs: "100px" },
+                      minHeight: { md: "133px" },
+                      borderRadius: { md: "16px", xs: "10px" },
+                    }}
+                  />
+                </ImgContainer>
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: "column",
+                    gap: { md: "8px", xs: "4px" },
+                    marginLeft: "8px",
+                    width: "80vw",
                   }}
                 >
-                  <ImgContainer>
-                    <img
-                      src={items.courseImage}
-                      alt={items.course}
-                      loading="lazy"
-                      objectfit="true"
-                      width={"200px"}
-                      height={"133px"}
-                      style={{
-                        borderRadius: "16px",
-                      }}
-                    />
-                  </ImgContainer>
-                  <Box
+                  <Typography
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                      marginLeft: "8px",
-                      width: "80vw",
+                      paddingTop: { md: "10px", xs: "4px" },
+                      fontFamily: "Poppins",
+                      fontSize: { md: "16px", xs: "12px" },
+                      fontWeight: "400",
+                      color: "#828282",
+                      display: { md: "block", xs: "none" },
                     }}
                   >
-                    <Typography
-                      sx={{
-                        paddingTop: "10px",
-                        fontFamily: "Poppins",
-                        fontSize: "16px",
-                        fontWeight: "400",
-                        color: "#828282",
-                      }}
-                    >
-                      {items.category}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        marginTop: "-6px",
-                        fontFamily: "Poppins",
-                        fontSize: "24px",
-                        fontWeight: "600",
-                        color: "#333333",
-                      }}
-                    >
-                      {items.course}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontFamily: "Poppins",
-                        fontSize: "20px",
-                        fontWeight: "400",
-                        color: "#5D5FEF",
-                      }}
-                    >
-                      {items.schedule}
-                    </Typography>
-                  </Box>
+                    {items.category}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      marginTop: "-6px",
+                      fontFamily: "Poppins",
+                      fontSize: { md: "24px", xs: "14px" },
+                      fontWeight: "600",
+                      color: "#333333",
+                    }}
+                  >
+                    {items.course}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      marginTop: { md: "0px", xs: "-6px" },
+                      fontFamily: "Poppins",
+                      fontSize: { md: "20px", xs: "14px" },
+                      fontWeight: "500",
+                      color: "#5D5FEF",
+                    }}
+                  >
+                    {items.schedule}
+                  </Typography>
                 </Box>
               </Box>
-              <Divider sx={{ mt: "18px" }} />
+              <Divider sx={{ mt: { md: "18px", xs: "13px" } }} />
             </Box>
           );
         })}

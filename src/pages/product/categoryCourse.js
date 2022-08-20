@@ -1,4 +1,6 @@
+import { Grid3x3Rounded } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -8,17 +10,22 @@ import {
   CardMedia,
   FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
+  Snackbar,
+  Stack,
   Typography,
 } from "@mui/material";
+import { blue } from "@mui/material/colors";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/userAPI";
-import { getClaimedCourses } from "../../components/GetClaimedCourse";
+import { useCart } from "../../context/CartProvider";
 import useAuth from "../../hooks/useAuth";
+import { StyledPurpleButton } from "../../styles/PurpleContainedButton";
 import numberFormat from "../../utilities/NumbeFormat";
 import CheckoutDialogs from "../cart/components/CheckoutDialogs";
 import {
@@ -35,20 +42,157 @@ const calculateTotalCost = (carts) => {
 };
 
 export default function CategoryCourse() {
-  const [age, setAge] = React.useState("");
   const [err, setErr] = useState("");
+  const { setCart } = useCart();
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
-  const [claimedCourse, setClaimedCourse] = useState([]);
-  const { auth, setAuth } = useAuth();
+  const [claimedCourse, setClaimedCourse] = useState(false);
+  const { auth } = useAuth();
   const navigate = useNavigate();
-
+  // const [openAlertError, setOpenAlertError] = useState(false);
+  // const [openAlertWarning, setOpenAlertWarning] = useState(false);
+  const [scheduleCourse, setScheduleCourse] = useState("");
+  const [claimedCart, setClaimedCart] = useState(false);
+  const [severityType, setSeverityType] = useState("error");
   const UserID = auth?.userId;
+  const [open, setOpen] = React.useState(false);
+  const token = auth?.token;
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
   let params = useParams();
 
+  //Get claimed course
+  const fetchApiClaimedCourse = async () => {
+    try {
+      const response = await api.get(`/Courses/${auth?.userId}`, config);
+      console.log("ClaimedCourse", response.data);
+      const claimedCourseState = response?.data.some(
+        (item) => item.courseId == params.courseid
+      );
+      setClaimedCourse(claimedCourseState);
+      console.log(detailOfACourse.id);
+      console.log("claimedCourseState", claimedCourseState);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  //delete purchased course from cart
+  const fetchDelete = async (courseId) => {
+    try {
+      const response = await api.delete(
+        `/Cart/ByCourseId/${UserID}/${courseId}`,
+        config
+      );
+      console.log(response.data);
+      setCart(
+        response.data.filter(
+          (item) => item.userId === UserID && item.id !== courseId
+        )
+      );
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  //update cart
+  const fetchApiCart = async (userId) => {
+    try {
+      const response = await api.get(`/Cart/${userId}`, config);
+      console.table(response.data);
+      setCart(response.data);
+      setClaimedCart(
+        response?.data.some(
+          (item) => item.courseId === parseInt(params.courseid)
+        )
+      );
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+    }
+  };
+
+  /* useStates untuk keperluan GET detail jadwal dari sebuah kelas*/
+  const [cekJadwal, setcekJadwal] = useState([]);
+  const getcekJadwal = async (courseId) => {
+    await axios
+      .get(`https://localhost:7132/api/Schedule/ByCourseId/${courseId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setcekJadwal(res.data);
+          console.log("res data", res.data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  // useEffect(() => {
+  //   getcekJadwal();
+  // }, []);
+  /* useStates untuk keperluan GET detail jadwal dari sebuah kelas */
+
+  const [detailOfACategory, setDetailOfACategory] = useState([]);
+  const getdetailOfACategory = async (url) => {
+    console.log("params", url);
+    await axios
+      .get(`https://localhost:7132/api/CourseCategory/${url}`, {
+        url,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setDetailOfACategory(res.data);
+        }
+      })
+      .catch((err) => {});
+    console.log(params);
+  };
+  useEffect(() => {
+    getdetailOfACategory(3);
+  }, []);
+
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+  const [detailOfACourseCat, setDetailOfACourseCat] = useState([]);
+
+  const getdetailOfACourseCat = async (category, course) => {
+    console.log("paramss", course);
+    console.log("paramss lah yah", category);
+    await axios
+      .get(
+        `https://localhost:7132/api/Course/categoryId/${category}/${course}`,
+        {
+          category,
+          course,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setDetailOfACourseCat(res.data);
+          console.log(res.data);
+        }
+      })
+      .catch((err) => {});
+    console.log(paramss);
+  };
+  useEffect(() => {
+    getdetailOfACourseCat(detailOfACourse.courseCategoryId, params.courseid);
+  }, []);
+
   const [detailOfACourse, setDetailOfACourse] = useState([]);
   const getdetailOfACourse = async (url) => {
     await axios
@@ -58,92 +202,69 @@ export default function CategoryCourse() {
       .then((res) => {
         if (res.status === 200) {
           setDetailOfACourse(res.data);
+          getcekJadwal(url);
+          getdetailOfACourseCat(res.data.courseCategoryId, res.data.id);
+          getdetailOfACategory(res.data.courseCategoryId);
         }
       })
       .catch((err) => {});
     console.log(params);
   };
 
-  useEffect(
-    () => {
-      getdetailOfACourse(params.courseid);
-    },
-    [params],
-    console.log(params.courseid)
-  );
+  useEffect(() => {
+    getdetailOfACourse(params.courseid);
+    fetchApiClaimedCourse();
+    fetchApiCart(auth.userId);
+    console.log(params.courseid);
+  }, [params]);
 
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
   let paramss = useParams();
   /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACourseCaategory, setDetailOfACourseCategory] = useState([]);
-  const getdetailOfACourseCategory = async (url) => {
-    console.log("paramss", url);
-    await axios
-      .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACourseCategory([res.data]);
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {});
-    console.log(paramss);
-  };
-  useEffect(() => {
-    getdetailOfACourseCategory((paramss = detailOfACourse.courseCategoryId));
-  }, [paramss]);
 
   //console.log("categoryid",detailOfACourse.categoryId)
   /* useStates untuk keperluan GET detail dari sebuah produk */
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-  //Get courses
-  useEffect(() => {
-    const fetchApiClaimedCourse = async () => {
-      try {
-        const response = await api.get(`/Courses/${auth?.userId}`);
-        console.log("ClaimedCourse", response.data);
-        setClaimedCourse(response.data);
-      } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        if (err.response.data === "Not Found") console.log(err.response.status);
-        console.log(err.response.headers);
-      }
-    };
-    fetchApiClaimedCourse();
-  }, []);
-
   /* Method to POST new Brand Item */
   const postCart = () => {
-    const courseValid = claimedCourse.some(
-      (item) => item.courseId == detailOfACourse.id
-    );
-    if (courseValid) {
+    if (!auth?.roles) navigate("/login", { replace: true });
+    if (claimedCourse) {
       setErr("Course sudah dibeli");
       return;
     }
 
-    const postDataa = { userId: UserID, courseId: detailOfACourse.id };
+    const postDataa = {
+      userId: UserID,
+      courseId: detailOfACourse.id,
+      scheduleId: scheduleCourse,
+    };
     console.log(postDataa);
     axios
-      .post("https://localhost:7132/api/Cart", postDataa)
+      .post("https://localhost:7132/api/Cart", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.status);
           console.log(res.data);
+          setSeverityType("success");
+          setErr("Berhasil menambahkan cart");
+          fetchApiCart(UserID);
+          setOpen(true);
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
-        setErr(err.response.data);
+        if (err.status !== 200) {
+          // setOpenAlertWarning(true);
+          // setTimeout(() => setOpenAlertWarning(false), 2000);
+          console.log("status eror", err.status);
+          setErr("Jadwal Tidak Valid");
+          setSeverityType("error");
+          setOpen(true);
+        } else if (err.status === "undefined") {
+          console.log(err.response.data);
+          console.log("status eror", err.status);
+          setErr(err.response.data);
+        }
       });
   };
   /* Method to POST new Brand Item */
@@ -152,7 +273,7 @@ export default function CategoryCourse() {
   useEffect(() => {
     const fetchApiInvoices = async () => {
       try {
-        const response = await api.get(`/Invoices/${UserID}`);
+        const response = await api.get(`/Invoices/${UserID}`, config);
         console.log(response?.data);
         setRegisteredInvoice(
           response?.data?.map((rawData) => rawData.noInvoice)
@@ -171,24 +292,28 @@ export default function CategoryCourse() {
   const fetchApiPostInvoice = async (url, data) => {
     console.table(data);
     try {
-      const response = await api.post(`/${url}`, data);
+      const response = await api.post(`/${url}`, data, config);
       console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
-      const selectedCart = [detailOfACourse];
+      const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
+      console.log(selectedCart);
       if (url === "MInvoice") {
         details = selectedCart.map((items) => {
           return {
             noInvoice: generateNewInvoice(registeredInvoice, auth),
             courseId: items.id,
             masterInvoiceId: masterInvoicess,
+            scheduleId: items.schedule,
           };
         });
         console.log("details", details);
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
+        fetchDelete(params.courseid);
       });
+      // fetchApiCart(auth.userId);
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
     } catch (err) {
@@ -205,11 +330,11 @@ export default function CategoryCourse() {
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
-    const selectedCart = [detailOfACourse];
+    const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
     const newInvoiceProp = {
       selectedCart,
       registeredInvoice,
-      selectedOp,
+      paymentOption,
       UserID,
       auth,
       calculateTotalCost,
@@ -220,147 +345,402 @@ export default function CategoryCourse() {
   };
 
   const checkout = () => {
-    const courseValid = claimedCourse.some(
-      (item) => item.courseId == detailOfACourse.id
-    );
-    if (courseValid) {
-      setErr("Course sudah dibeli");
+    if (!auth?.roles) navigate("/login", { replace: true });
+    if (!scheduleCourse) {
+      setErr("Jadwal Tidak Valid");
+      setSeverityType("error");
+      setOpen(true);
       return;
     }
 
+    const selectedCart = [{ ...detailOfACourse, schedule: scheduleCourse }];
     console.log("Barang yang di checkout:");
-    console.table(detailOfACourse);
+    console.table(selectedCart);
     console.log(`Total cost: ${detailOfACourse.price}`);
     setCheckoutDialogState(true);
   };
 
+  const Alerts = React.forwardRef(function Alerts(props, ref) {
+    return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <Grid>
-      <Box display="flex">
+      <Box className="Cc" fullwidth>
         <Grid
-          width="45%"
           sx={{
-            margin: "1% 0 0 5%",
+            width: {
+              lg: "45%",
+            },
+            margin: {
+              lg: "1% 0 0 0",
+            },
           }}
         >
           <Box
-            bottom="0px"
-            style={{
-              height: "400px",
+            sx={{
+              width: { lg: "90%", sm: "75%" },
+              marginLeft: { lg: "13%" },
+              marginTop: "3%",
             }}
           >
             <img
-              src={`${detailOfACourse.courseImage}`}
-              width="75%"
+              src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`}
               alt={detailOfACourse.courseImage}
-              style={{
-                right: "0px",
-                borderRadius: "20px",
-              }}
+              className="CcImg"
             ></img>
           </Box>
         </Grid>
         <Grid
-          width="65%"
           sx={{
+            width: {
+              lg: "55%",
+              sm: "100%",
+            },
             margin: "1% 0 0 0",
           }}
         >
-          <Typography color="text.secondary">{detailOfACourse.name}</Typography>
-          <Typography variant="body2" fontWeight="bold">
-            <h1>{detailOfACourse.courseTitle}</h1>
-          </Typography>
-          <Typography color="blue">
-            <h1>IDR {numberFormat(detailOfACourse.price)}</h1>
-          </Typography>
-
-          <Select
-            labelId="demo-select-small"
-            id="demo-select-small"
-            defaultValue={0}
-            onChange={handleChange}
-            size="small"
-          >
-            <MenuItem value={0}>pilih jadwal kelas</MenuItem>
-            <MenuItem value="1 july 2022">1 july 2022</MenuItem>
-            <MenuItem value={"30 july 2022"}>30 july 2022</MenuItem>
-            <MenuItem value={"17 agustus 2022"}>17 agustus 2022</MenuItem>
-            <MenuItem value={"9 september 2022"}>9 september 2022</MenuItem>
-          </Select>
-
-          <Box
-            display="flex"
+          <Typography
+            color="text.secondary"
             sx={{
-              margin: "3% 0 0 0",
+              fontSize: {
+                lg: "16px",
+                xs: "12px",
+              },
+              fontFamily: "Poppins",
+              paddingBottom: {
+                lg: "10px",
+                xs: "4px",
+              },
             }}
           >
-            <Button
-              variant="outlined"
-              sx={{
-                margin: "0 3% 0 0",
-              }}
-              onClick={async (e) => {
-                await e.preventDefault();
-                await postCart();
-              }}
-            >
-              Masukan Keranjang
+            {detailOfACategory.category}
+          </Typography>
+          <Typography
+            fontWeight="bold"
+            className="cc2"
+            sx={{
+              fontSize: {
+                lg: "24px",
+                xs: "16px",
+              },
+
+              fontFamily: "Poppins",
+              paddingBottom: {
+                lg: "10px",
+                xs: "4px",
+              },
+            }}
+          >
+            {detailOfACourse.courseTitle}
+          </Typography>
+          <Typography
+            color="#5D5FEF"
+            sx={{
+              fontSize: {
+                lg: "22px",
+                xs: "16px",
+              },
+              fontWeight: "600",
+              paddingBottom: {
+                lg: "10px",
+                xs: "4px",
+              },
+              fontFamily: "Poppins",
+            }}
+          >
+            IDR {numberFormat(detailOfACourse.price)}
+          </Typography>
+          {claimedCourse ? (
+            <Button variant="contained" component={Link} to={`/my-course`}>
+              Ke Kelasku
             </Button>
-            <Button variant="contained" onClick={() => checkout()}>
-              Beli Sekarang
-            </Button>
-          </Box>
-          <Typography color="red">{err}</Typography>
+          ) : claimedCart ? (
+            <>
+              <Box
+                sx={{
+                  minWidth: { md: 240, xs: "60%" },
+                  maxWidth: { md: 358, xs: "80%" },
+                }}
+              >
+                <FormControl width={"90%"}>
+                  <InputLabel>Pilih Jadwal Kelas</InputLabel>
+                  <Select
+                    label="Pilih Jadwal Kelas"
+                    value={scheduleCourse}
+                    onChange={(e) => setScheduleCourse(e.target.value)}
+                    size="medium"
+                    sx={{
+                      fontSize: {
+                        lg: "16px",
+                        xs: "12px",
+                      },
+                    }}
+                  >
+                    {cekJadwal.map((jadwal, i) => (
+                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box
+                display="flex"
+                sx={{
+                  margin: "3% 0 0 0",
+                }}
+              >
+                <Button variant="contained" component={Link} to={`/cart`}>
+                  Ke Cart
+                </Button>
+                <Button variant="contained" onClick={() => checkout()}>
+                  Beli Sekarang
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  minWidth: { md: 240, xs: "60%" },
+                  maxWidth: { md: 358, xs: "80%" },
+                }}
+              >
+                <FormControl
+                  fullWidth
+                  size={{
+                    lg: "medium",
+                    sm: "small",
+                  }}
+                >
+                  <InputLabel
+                    sx={{
+                      fontSize: {
+                        lg: "16px",
+                        xs: "14px",
+                      },
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Pilih Jadwal Kelas
+                  </InputLabel>
+                  <Select
+                    label="Pilih Jadwal Kelas"
+                    value={scheduleCourse}
+                    onChange={(e) => setScheduleCourse(e.target.value)}
+                    size="medium"
+                  >
+                    {cekJadwal.map((jadwal, i) => (
+                      <MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box
+                display="flex"
+                sx={{
+                  margin: "3% 0 0 0",
+                }}
+              >
+                <StyledPurpleButton
+                  variant="outlined"
+                  sx={{
+                    margin: "0 3% 0 0",
+                    fontSize: {
+                      lg: "16px",
+                      xs: "10px",
+                    },
+                    color: "#5D5FEF",
+                    backgroundColor: "white",
+                    fontFamily: "Poppins",
+                  }}
+                  onClick={async (e) => {
+                    await e.preventDefault();
+                    await postCart();
+                  }}
+                >
+                  Masukan Keranjang
+                </StyledPurpleButton>
+                <StyledPurpleButton
+                  variant="contained"
+                  onClick={() => checkout()}
+                  sx={{
+                    fontSize: {
+                      lg: "16px",
+                      xs: "10px",
+                    },
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  Beli Sekarang
+                </StyledPurpleButton>
+              </Box>
+            </>
+          )}
         </Grid>
       </Box>
-      <Typography>{detailOfACourse.description}</Typography>
+      <center>
+        <Box sx={{ width: "90vw" }}>
+          <Typography
+            mb="1.5vh"
+            mt="4vh"
+            sx={{
+              textAlign: "left",
+              fontWeight: "5semi bold",
+              fontSize: {
+                lg: "24px",
+                xs: "14px",
+              },
+              fontFamily: "Poppins",
+            }}
+          >
+            Deskripsi
+          </Typography>
+          <Typography
+            sx={{
+              paddingBottom: {
+                md: "40px",
+                xs: "14px",
+              },
+              textAlign: "left",
+              fontSize: {
+                lg: "20px",
+                xs: "12px",
+              },
+              fontFamily: "Poppins",
+            }}
+          >
+            {detailOfACourse.courseDesc}
+          </Typography>
+        </Box>
+      </center>
 
-      <div style={{ height: "0px", border: "1px solid grey" }} />
-      <Typography color="blue" sx={{ textAlign: "center" }}>
-        <h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
-      </Typography>
-      <Box
-        className="kategoriKelas"
+      <div
         style={{
-          flex: "1",
+          paddingTop: {
+            md: "40px",
+            xs: "14px",
+          },
+          height: "0px",
+          borderBottom: "1px solid grey",
+        }}
+      />
+      <Typography
+        color="#5D5FEF"
+        sx={{
+          paddingTop: {
+            md: "30px",
+            xs: "10px",
+          },
+          paddingBottom: {
+            md: "30px",
+            xs: "10px",
+          },
+          textAlign: "center",
         }}
       >
-        {detailOfACourseCaategory
-          .filter((items) => items.id != detailOfACourseCaategory.id)
-          .map((item, i) => (
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image={item.courseImage}
-                alt="kategori kelas"
-                style={{
-                  borderRadius: "10px",
-                }}
-              />
-              <CardActionArea component={Link} to={`/course/${item.id}`}>
-                <CardContent>
-                  <Typography color="text.secondary" gutterBottom>
-                    {item.courseTitle}
-                  </Typography>
-                  <Typography variant="body2" fontWeight="bold">
-                    {item.courseDesc}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Typography color="blue">
-                    IDR {numberFormat(item.price)}
-                  </Typography>
-                </CardActions>
-              </CardActionArea>
-            </Card>
-          ))}
-      </Box>
+        <h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
+      </Typography>
+      <center>
+        <Box mt="6vh" sx={{ width: "90%" }}>
+          <Grid container spacing={3}>
+            {detailOfACourseCat.map((item, index) => (
+              <Grid key={item.id} item xs={6} md={4}>
+                <Card sx={{ margin: "auto auto auto auto" }}>
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "cover",
+                    }}
+                    image={`data:image/jpeg;base64,${item.courseImage}`}
+                    alt="kategori kelas"
+                    style={{
+                      borderRadius: "16px",
+                    }}
+                  />
+                  <CardActionArea component={Link} to={`/course/${item.id}`}>
+                    <CardContent>
+                      <Typography
+                        color="text.secondary"
+                        sx={{
+                          fontWeight: "600",
+                          textAlign: "left",
+                          fontSize: {
+                            lg: "16px",
+                            xs: "12px",
+                          },
+                          fontFamily: "Poppins",
+                          paddingBottom: {
+                            lg: "10px",
+                            xs: "4px",
+                          },
+                        }}
+                      >
+                        {detailOfACategory.category}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontWeight: "600",
+                          textAlign: "left",
+                          fontSize: {
+                            md: "18px",
+                            xs: "14px",
+                          },
+                          fontFamily: "Poppins",
+                        }}
+                      >
+                        {item.courseTitle}
+                      </Typography>
+                    </CardContent>
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontWeight: "600",
+                          textAlign: "left",
+                          fontSize: {
+                            md: "18px",
+                            xs: "14px",
+                          },
+                          fontFamily: "Poppins",
+                          color: "#5D5FEF",
+                        }}
+                      >
+                        IDR {numberFormat(item.price)}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </center>
       <CheckoutDialogs
         checkoutDialogState={checkoutDialogState}
         onClose={handleCheckoutClose}
         selectedOp={selectedOp}
       />
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alerts
+            onClose={handleClose}
+            severity={severityType}
+            sx={{ width: "100%" }}
+          >
+            {err}
+          </Alerts>
+        </Snackbar>
+      </Stack>
     </Grid>
   );
 }

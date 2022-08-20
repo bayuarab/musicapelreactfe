@@ -5,11 +5,42 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { forwardRef } from "react";
+import styled from "styled-components";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#F2C94C",
+    },
+    secondary: {
+      main: "#4F4F4F",
+    },
+    remove: {
+      main: "#9F290F",
+    },
+    white: {
+      main: "#ffffff",
+    },
+  },
+});
+
+const DialogButton = styled(Button)(({ theme }) => ({
+  fontFamily: "Poppins",
+  width: "16%",
+  fontSize: "16px",
+  fontWeight: "500",
+  borderRadius: "8px",
+  textTransform: "Capitalize",
+  paddingTop: "4px",
+  paddingBottom: "4px",
+  height: "40px",
+}));
 
 const LogoutDialog = (props) => {
   const { onClose, logState } = props;
@@ -25,16 +56,33 @@ const LogoutDialog = (props) => {
       onClose={() => handleClose(false)}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle>{"Are you sure to Log Out?"}</DialogTitle>
-      {/* <DialogContent>
+      <ThemeProvider theme={theme}>
+        <DialogTitle sx={{ fontFamily: "Poppins" }}>
+          {"Apakah kamu yakin ingin Log Out ?"}
+        </DialogTitle>
+        {/* <DialogContent>
       <DialogContentText id="alert-dialog-slide-description">
       You hav.
       </DialogContentText>
     </DialogContent> */}
-      <DialogActions>
-        <Button onClick={() => handleClose(false)}>No</Button>
-        <Button onClick={() => handleClose(true)}>Yes</Button>
-      </DialogActions>
+        <DialogActions>
+          <DialogButton
+            variant="contained"
+            color="primary"
+            sx={{ color: "secondary" }}
+            onClick={() => handleClose(false)}
+          >
+            Tidak
+          </DialogButton>
+          <DialogButton
+            variant="outlined"
+            color="remove"
+            onClick={() => handleClose(true)}
+          >
+            Ya
+          </DialogButton>
+        </DialogActions>
+      </ThemeProvider>
     </Dialog>
   );
 };

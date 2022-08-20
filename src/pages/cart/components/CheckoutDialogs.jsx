@@ -1,10 +1,5 @@
-import React, { useState } from "react";
-import BCA from "../../../assets/brand/bca.png";
-import BNI from "../../../assets/brand/bni.png";
-import Dana from "../../../assets/brand/dana.png";
-import Gopay from "../../../assets/brand/gopay.png";
-import Mandiri from "../../../assets/brand/mandiri.png";
-import Ovo from "../../../assets/brand/ovo.png";
+import React, { useEffect, useState } from "react";
+import paymentApi from "../../../api/baseApi";
 
 import {
   Box,
@@ -14,33 +9,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-
-const checkoutOp = [
-  {
-    logo: Gopay,
-    name: "Gopay",
-  },
-  {
-    logo: Ovo,
-    name: "OVO",
-  },
-  {
-    logo: Dana,
-    name: "Dana",
-  },
-  {
-    logo: Mandiri,
-    name: "Mandiri",
-  },
-  {
-    logo: BCA,
-    name: "BCA",
-  },
-  {
-    logo: BNI,
-    name: "BNI",
-  },
-];
+import useAuth from "../../../hooks/useAuth";
 
 const DialogButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
@@ -73,16 +42,43 @@ const LogoDiv = styled(Box)({
 });
 
 const CheckoutDialogs = (props) => {
+  const [checkoutOp, setCheckoutOp] = useState([]);
   const { onClose, selectedOp, checkoutDialogState } = props;
-  const [optionState, setOptionState] = useState(checkoutOp.map(() => false));
+  const [optionState, setOptionState] = useState([]);
   const [options, setOptions] = useState(null);
+  const { auth } = useAuth();
+  const token = auth?.token;
+
+  useEffect(() => {
+    const fetchApiPayment = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      try {
+        const response = await paymentApi.get(`/Payment`, config);
+        console.log(response.data);
+        setCheckoutOp(response.data);
+        setOptionState(response.data.map(() => false));
+      } catch (err) {
+        !err.response
+          ? console.log(`Error: ${err.message}`)
+          : console.log(err.response.data);
+        if (err.response.data === "Not Found") console.log(err.response.status);
+        console.log(err.response.headers);
+      }
+    };
+
+    fetchApiPayment();
+  }, [setCheckoutOp, token]);
 
   const handleClose = () => {
     onClose({ paymentOption: selectedOp, paymentState: false });
   };
 
   const handleListItemClick = (indexOP) => {
-    setOptions(checkoutOp[indexOP].name);
+    setOptions(checkoutOp[indexOP].method);
     setOptionState(
       optionState.map((e, index) => {
         return indexOP === index ? true : false;
@@ -95,6 +91,7 @@ const CheckoutDialogs = (props) => {
       paymentOption: options,
       paymentState: true,
     };
+    console.log(result);
     options === null ? console.log("Belum pilih pembayaran") : onClose(result);
   };
 
@@ -130,7 +127,7 @@ const CheckoutDialogs = (props) => {
         {checkoutOp.map((options, index) => {
           return (
             <Box
-              key={options.name}
+              key={index}
               sx={{
                 paddingLeft: "20px",
                 paddingRight: "20px",
@@ -155,8 +152,8 @@ const CheckoutDialogs = (props) => {
                   <LogoDiv>
                     <img
                       style={{ alignSelf: "center" }}
-                      src={options.logo}
-                      alt={options.logo}
+                      src={`data:image/jpeg;base64,${options.icon}`}
+                      alt={options.method}
                       loading="lazy"
                       width={optionState[index] ? "40px" : "37px"}
                       height={optionState[index] ? "40px" : "37px"}
@@ -171,7 +168,7 @@ const CheckoutDialogs = (props) => {
                     color: optionState[index] ? "white" : "black",
                   }}
                 >
-                  {options.name}
+                  {options.method}
                 </Typography>
               </Box>
             </Box>

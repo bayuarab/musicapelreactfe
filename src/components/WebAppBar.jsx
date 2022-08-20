@@ -11,6 +11,7 @@ import {
 
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Divider,
@@ -24,8 +25,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useCart } from "../context/CartProvider";
 import { useComponentBarState } from "../context/ComponentStateProvider";
 import useAuth from "../hooks/useAuth";
+import { StyledPurpleButton } from "../styles/PurpleContainedButton";
 import LogoutDialog from "./LogoutDialog";
 //------------------------------------------------------------------------
 
@@ -33,8 +36,17 @@ const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
   backgroundColor: "#F2C94C",
-  height: "76px",
+  height: { md: "76px", xs: "40px" },
 });
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
 
 const SideIcons = styled(Box)(({ theme }) => ({
   display: "none",
@@ -61,11 +73,14 @@ function WebAppBar(props) {
   const [openLogout, setOpenLogout] = useState(false);
   const { auth, setAuth } = useAuth();
   const { componentState } = useComponentBarState();
+  const { cart, setCart } = useCart();
   const navigate = useNavigate();
 
   const handleCloseLogout = (state) => {
     if (!state) return setOpenLogout(false);
+    localStorage.clear();
     setAuth({});
+    setCart([]);
     navigate("/", { replace: true });
     setOpenLogout(false);
   };
@@ -96,24 +111,35 @@ function WebAppBar(props) {
         <BlackButton>Daftar Sekarang</BlackButton>
       </Link>
       <Link style={{ textDecoration: "none" }} to="/login">
-        <Button
+        <StyledPurpleButton
           variant="contained"
-          sx={{
-            fontFamily: "Poppins",
-            fontSize: "16px",
-            backgroundColor: "#5D5FEF",
-            borderRadius: "8px",
-            textTransform: "Capitalize",
-          }}
+          // variant="contained"
+          // sx={{
+          //   fontFamily: "Poppins",
+          //   fontSize: "16px",
+          //   backgroundColor: "#5D5FEF",
+          //   borderRadius: "8px",
+          //   textTransform: "Capitalize",
+          // }}
         >
           Masuk
-        </Button>
+        </StyledPurpleButton>
       </Link>
     </SideIcons>
   );
 
+  const cartIcon = () => {
+    return (
+      <IconButton sx={{ color: "black" }}>
+        <StyledBadge badgeContent={cart?.length || 0} color="secondary">
+          <ShoppingCart />
+        </StyledBadge>
+      </IconButton>
+    );
+  };
+
   const navItems = [
-    { link: "/cart", mobile: "Cart" },
+    { link: "/cart", mobile: cartIcon() },
     { link: "/my-course", mobile: "Kelasku" },
     { link: "/my-invoice", mobile: "Pembelian" },
     {
@@ -207,7 +233,9 @@ function WebAppBar(props) {
           <SideIcons>
             <Link to="/cart">
               <IconButton sx={{ color: "black" }}>
-                <ShoppingCart />
+                <StyledBadge badgeContent={cart?.length || 0} color="secondary">
+                  <ShoppingCart />
+                </StyledBadge>
               </IconButton>
             </Link>
             <Link style={{ textDecoration: "none" }} to="/my-course">
@@ -252,7 +280,7 @@ function WebAppBar(props) {
         </Drawer>
         <LogoutDialog logState={openLogout} onClose={handleCloseLogout} />
       </Box>
-      <Toolbar sx={{ height: "76px" }} />
+      <StyledToolbar />
     </Box>
   );
 }

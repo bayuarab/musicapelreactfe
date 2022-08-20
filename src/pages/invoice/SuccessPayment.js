@@ -9,10 +9,12 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "../../api/userAPI";
 import PaymentSuccess from "../../assets/Purchase Success.png";
 import Logo from "../../components/Logo";
+import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
-// import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme({
   components: {
@@ -50,7 +52,8 @@ const theme = createTheme({
 });
 
 const SuccessPayment = () => {
-  // const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
+  const { setCart } = useCart();
   const { setComponentState } = useComponentBarState();
   const LogoContainer = styled(Box)({
     backgroundColor: "white",
@@ -70,9 +73,28 @@ const SuccessPayment = () => {
     paddingBottom: "5px",
   });
 
+  const fetchApiCart = async () => {
+    try {
+      const response = await api.get(`/Cart/${auth?.userId}`);
+      console.log(response.data);
+      setCart(response.data);
+    } catch (err) {
+      !err.response
+        ? console.log(`Error: ${err.message}`)
+        : console.log(err.response.data);
+      if (err.response.data === "Not Found") console.log(err.response.status);
+      console.log(err.response.headers);
+      setCart([]);
+    }
+  };
+
   useEffect(() => {
     setComponentState({ paymentPageState: true, footerState: false });
   }, [setComponentState]);
+
+  useEffect(() => {
+    fetchApiCart();
+  }, []);
 
   const changeState = () => {
     setComponentState({ paymentPageState: false, footerState: false });
@@ -133,6 +155,8 @@ const SuccessPayment = () => {
                 fontSize: "16px",
                 fontFamilyL: "Poppins",
                 fontWeight: "400",
+                paddingLeft: { md: "0", xs: "1%" },
+                paddingRight: { md: "0", xs: "1%" },
               }}
             >
               Yey! Kamu telah berhasil membeli kursus di Apel Music

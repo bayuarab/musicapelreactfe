@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Paper,
-  styled,
   Table,
   TableBody,
   TableContainer,
@@ -10,59 +8,28 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
+import {
+  StyledNavLink,
+  StyledPaper,
+  StyledTableCell,
+  StyledTableRow,
+} from "../../styles/TableStyle";
 import numberFormat from "../../utilities/NumbeFormat";
 //==================================================
-
-const StyledPaper = styled(Paper)({
-  border: 0,
-  boxShadow: "none",
-});
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  border: 0,
-  paddingTop: "21px",
-  paddingBottom: "21px",
-  color: "#4F4F4F",
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F2C94C",
-    fontWeight: "700",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: "500",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F2C94C33",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-const StyledNavLink = styled(Typography)({
-  fontFamily: "Poppins",
-  fontWeight: "600",
-  fontSize: "16px",
-});
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
   const { setComponentState } = useComponentBarState();
   const { auth } = useAuth();
   const UserID = auth?.userId;
+  const token = auth?.token;
+
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -73,8 +40,13 @@ const InvoiceMaster = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
       try {
-        const response = await api.get(`/Invoices/${UserID}`);
+        const response = await api.get(`/Invoices/${UserID}`, config);
         console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
@@ -89,7 +61,7 @@ const InvoiceMaster = () => {
     };
 
     fetchApi();
-  }, [UserID]);
+  }, [UserID, token]);
 
   return masterInvoiceData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
@@ -101,11 +73,13 @@ const InvoiceMaster = () => {
     <Box
       sx={{
         padding: "5.5%",
-        paddingTop: "50px",
+        paddingTop: { md: "50px", xs: "20px" },
         paddingBottom: "90px",
       }}
     >
-      <Box mb={"34px"} sx={{ display: "flex", gap: "10px" }}>
+      <Box
+        sx={{ display: "flex", gap: "10px", mb: { md: "34px", xs: "20px" } }}
+      >
         <Link style={{ textDecoration: "none" }} to="/">
           <StyledNavLink color={"#828282"}>Beranda {`>`}</StyledNavLink>
         </Link>
@@ -114,12 +88,12 @@ const InvoiceMaster = () => {
         </Link>
       </Box>
       <Typography
-        mb={"24px"}
         sx={{
           fontFamily: "Poppins",
           color: "#4F4F4F",
           fontWeight: "600",
-          fontSize: "20px",
+          fontSize: { md: "20px", xs: "16px" },
+          mb: { md: "24px", xs: "15px" },
         }}
       >
         Menu Invoice
@@ -162,7 +136,7 @@ const InvoiceMaster = () => {
                       variant="contained"
                       sx={{
                         fontFamily: "Poppins",
-                        fontSize: "14px",
+                        fontSize: { md: "14px", xs: "12px" },
                         backgroundColor: "#5D5FEF",
                         borderRadius: "8px",
                         textTransform: "Capitalize",

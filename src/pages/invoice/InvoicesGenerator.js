@@ -12,7 +12,7 @@ export function generateNewInvoice(registeredInvoice, auth) {
   const getRef = () => {
     return registeredInvoice?.length <= 0
       ? {
-          resNum: 0,
+          resNum: 1,
           refToken: auth?.nama.substring(0, 3).toUpperCase(),
         }
       : {
@@ -38,17 +38,17 @@ export function generateNewInvoice(registeredInvoice, auth) {
 export function generateNewMasterInvoice({
   selectedCart,
   registeredInvoice,
-  userID,
-  selectedOp,
+  paymentOption,
   auth,
   calculateTotalCost,
 }) {
+  console.log(paymentOption);
   return {
     NoInvoice: generateNewInvoice(registeredInvoice, auth),
     PurchaseDate: generateCurrentDate(),
     Qty: selectedCart.length,
     Cost: calculateTotalCost(selectedCart),
+    Method: paymentOption,
     UserId: auth.userId,
-    Method: selectedOp,
   };
 }

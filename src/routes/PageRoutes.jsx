@@ -2,9 +2,13 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../components/Layout";
 import RequiredAuth from "../components/RequiredAuth";
-import ManageInvoices from "../pages/admin/manageInvoices";
+import MyAccount from "../pages/account/MyAccount";
 import ManageKategori from "../pages/admin/manageKategori";
 import ManageKelas from "../pages/admin/manageKelas";
+import ManagePaymentMethod from "../pages/admin/ManagePaymentMethod";
+import ManageSchedule from "../pages/admin/ManageSchedule";
+import ManageUser from "../pages/admin/ManageUsers";
+import UserInvoices from "../pages/admin/UserInvoices";
 import CartPage from "../pages/cart/CartPage";
 import Home from "../pages/home/Home";
 import InvoiceDetails from "../pages/invoice/InvoiceDetails";
@@ -28,12 +32,13 @@ const PageRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Register />} />
         <Route path="/forget" element={<Forget />} />
-        <Route path="category/:categoryid" element={<DetailCourse />} />
-        <Route path="course">
+        <Route path="/category/:categoryid" element={<DetailCourse />} />
+        <Route path="/course">
           <Route path=":courseid" element={<CategoryCourse />} />
         </Route>
         <Route path="/missing" element={<Missing />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/admin/test-payment" element={<ManagePaymentMethod />} />
 
         {/* User and admin route */}
         <Route element={<RequiredAuth allowedRoles={["student"]} />}>
@@ -44,6 +49,7 @@ const PageRoutes = () => {
             <Route path=":invoiceID" element={<InvoiceDetails />} />
           </Route>
           <Route path="/payment-status" element={<SuccessPayment />} />
+          <Route path="/my-account" element={<MyAccount />} />
           <Route path="*" element={<Route path="*" element={<NotFound />} />} />
           <Route path="/missing" element={<Missing />} />
         </Route>
@@ -54,7 +60,10 @@ const PageRoutes = () => {
             <Route index element={<ManageKelas />} />
             <Route path="/admin/kelas" element={<ManageKelas />} />
             <Route path="/admin/category" element={<ManageKategori />} />
-            <Route path="/admin/invoices" element={<ManageInvoices />} />
+            <Route path="/admin/invoices" element={<UserInvoices />} />
+            <Route path="/admin/users" element={<ManageUser />} />
+            <Route path="/admin/schedule" element={<ManageSchedule />} />
+            <Route path="/admin/payment" element={<ManagePaymentMethod />} />
           </Route>
         </Route>
       </Route>

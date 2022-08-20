@@ -1,16 +1,19 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
   CssBaseline,
   FormControl,
   Grid,
+  Snackbar,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import api from "../../api/userAPI";
+import api from "../../api/baseApi";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 
 const EMAIL_REGEX =
@@ -26,6 +29,19 @@ export default function Login() {
   const [regisState, setRegisState] = useState(false);
   const navigate = useNavigate();
   const { setComponentState } = useComponentBarState();
+  const [open, setOpen] = React.useState(false);
+
+  const Alerts = React.forwardRef(function Alerts(props, ref) {
+    return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
     setComponentState({ paymentPageState: false, footerState: false });
@@ -53,24 +69,24 @@ export default function Login() {
     const vEmail = EMAIL_REGEX.test(email);
     const vPass = PWD_REGEX.test(password);
 
-    if (nama === "" || email === "" || password === "" || rePassword === "") {
-      return setErr("Input tidak boleh kosong");
-    }
-
     if (!vEmail) {
       setErr("Email invalid");
+      setOpen(true);
       return;
     }
 
     if (!vPass) {
       setErr(
-        "Password harus terdiri dari 8-24 huruf dan harus terdapat uppercase, lowercase, serta angka"
+        "Password harus terdiri dari 8-24 karakter dan harus terdapat uppercase, lowercase, serta angka"
       );
+      setOpen(true);
       return;
     }
 
     if (password !== rePassword) {
-      return setErr("Password tidak sesuai");
+      setErr("Password tidak sesuai");
+      setOpen(true);
+      return;
     }
 
     const dataClient = {
@@ -86,7 +102,7 @@ export default function Login() {
 
     const fetchApi = async () => {
       try {
-        const response = await api.post("/", dataClient);
+        const response = await api.post("/UserAuth/Register", dataClient);
         console.log(response.data);
         navigate("/Login", { replace: true });
         setRegisState(true);
@@ -98,6 +114,7 @@ export default function Login() {
         console.log(err.response.status);
         console.log(err.response.headers);
       }
+      setOpen(true);
     };
     fetchApi();
   };
@@ -119,7 +136,7 @@ export default function Login() {
               },
             }}
           >
-            <Box mt="15vh" sx={{ textAlign: "left" }}>
+            <Box mt="10vh" sx={{ textAlign: "left" }}>
               <Typography
                 mb="2.5vh"
                 sx={{
@@ -128,6 +145,7 @@ export default function Login() {
                     md: "23px",
                     xs: "18px",
                   },
+                  fontFamily: "Poppins",
                 }}
               >
                 Selamat Datang Musikers!
@@ -139,6 +157,7 @@ export default function Login() {
                     md: "15px",
                     xs: "13px",
                   },
+                  fontFamily: "Poppins",
                 }}
               >
                 Yuk daftar terlebih dahulu akun kamu
@@ -167,7 +186,6 @@ export default function Login() {
                     label="Email"
                     name="email"
                     autoComplete="email"
-                    autoFocus
                     value={email}
                     onChange={(event) => addEmail(event)}
                   />
@@ -195,15 +213,22 @@ export default function Login() {
                     value={rePassword}
                     onChange={(event) => addRePassword(event)}
                   />
-                  <Typography sx={{ color: "red", fontSize: "12px" }}>
-                    {err}
-                  </Typography>
-                  <Box mb="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
+                  <Box mt="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
                     <Grid container>
-                      <Grid item xs={3}>
+                      <Grid item xs={3.5} md={3}>
                         <Button
+                          disabled={
+                            nama === "" ||
+                            email === "" ||
+                            password === "" ||
+                            rePassword === ""
+                              ? true
+                              : false
+                          }
                           sx={{
                             borderRadius: "7px",
+                            fontFamily: "Poppins",
+                            backgroundColor: "#5D5FEF",
                             fontSize: {
                               lg: "16px",
                               md: "15px",
@@ -219,12 +244,10 @@ export default function Login() {
                           Daftar
                         </Button>
                       </Grid>
-                      <Grid item>
-                        <Link
-                          to="/Login"
-                          mt="1vh"
+                      <Grid item xs={8.5}>
+                        <Typography
                           sx={{
-                            textAlign: "left",
+                            fontFamily: "Poppins",
                             fontSize: {
                               lg: "16px",
                               md: "15px",
@@ -232,8 +255,23 @@ export default function Login() {
                             },
                           }}
                         >
-                          Sudah punya akun? Login disini
-                        </Link>
+                          Sudah punya akun?
+                          <Link
+                            to="/Login"
+                            mt="1vh"
+                            sx={{
+                              textAlign: "left",
+                              fontSize: {
+                                lg: "16px",
+                                md: "15px",
+                                xs: "13px",
+                              },
+                              fontFamily: "Poppins",
+                            }}
+                          >
+                            Login disini
+                          </Link>
+                        </Typography>
                       </Grid>
                     </Grid>
                   </Box>
@@ -243,6 +281,13 @@ export default function Login() {
           </Box>
         </Box>
       </center>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {err}
+          </Alerts>
+        </Snackbar>
+      </Stack>
     </Container>
   );
 }
