@@ -30,7 +30,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Fact(props) {
 	const { window } = props;
 
-	const drawer = <Stepper />;
+	const drawer = <Stepper factItems={factItems} />;
 
 	const container = window !== undefined ? () => window().document.body : undefined;
 

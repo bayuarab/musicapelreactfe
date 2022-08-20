@@ -44,7 +44,7 @@ const LogoutDialog = (props) => {
 	return (
 		<Dialog open={logState} TransitionComponent={Transition} keepMounted onClose={() => handleClose(false)} aria-describedby="alert-dialog-slide-description">
 			<ThemeProvider theme={theme}>
-				<DialogTitle>{"Apakah kamu yakin ingin Log Out ?"}</DialogTitle>
+				<DialogTitle sx={{ fontFamily: "Poppins" }}>{"Apakah kamu yakin ingin Log Out ?"}</DialogTitle>
 				{/* <DialogContent>
       <DialogContentText id="alert-dialog-slide-description">
       You hav.

@@ -33,6 +33,22 @@ const theme = createTheme({
 			main: "#ffffff",
 		},
 	},
+	components: {
+		MuiButton: {
+			variants: [
+				{
+					props: { variant: "outlined" },
+					style: {
+						fontFamily: "Poppins",
+						fontSize: "16px",
+						fontWeight: "600",
+						textTransform: "Capitalize",
+						borderRadius: "5px",
+					},
+				},
+			],
+		},
+	},
 });
 
 const Alerts = React.forwardRef(function Alerts(props, ref) {
@@ -47,9 +63,9 @@ const ReadMore = ({ children }) => {
 	};
 	return (
 		<Typography className="text">
-			{isReadMore ? text.slice(0, 150) : text}
-			<span style={{ color: "blue", fontWeight: "500" }} onClick={toggleReadMore} className="read-or-hide">
-				{isReadMore ? "...read more" : " show less"}
+			{isReadMore ? text.slice(0, 120) : text}
+			<span style={{ color: "blue", fontWeight: "500", fontSize: "15px" }} onClick={toggleReadMore} className="read-or-hide">
+				{isReadMore ? "...lebih lanjut" : "sembunyikan"}
 			</span>
 		</Typography>
 	);
@@ -197,9 +213,6 @@ function ManageKelas() {
 														<CardContent>
 															<Typography gutterBottom variant="h5" component="div">
 																{item.category}
-															</Typography>
-															<Typography variant="h7" color="div">
-																Id {item.id}
 															</Typography>
 															<Typography variant="body2" color="text.secondary">
 																<ReadMore>{item.desc}</ReadMore>

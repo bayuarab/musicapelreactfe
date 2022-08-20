@@ -1,7 +1,6 @@
 import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Input, Snackbar, Stack, TextField } from "@mui/material";
-import axios from "axios";
+import api from "../api/baseApi";
 import React, { useState } from "react";
-import { APIRequest } from "./APICalls";
 
 function DialogAddKelas(
 	props = {
@@ -11,7 +10,6 @@ function DialogAddKelas(
 		onAdd: () => {},
 	}
 ) {
-	/* useStates untuk keperluan POST merk baru */
 	const [categoryName, setcategoryName] = useState("");
 	const [categoryDescription, setcategoryDescription] = useState("");
 	const [imagePreview, setImagePreview] = useState("");
@@ -19,7 +17,6 @@ function DialogAddKelas(
 	const [err, setErr] = useState("");
 	const [open, setOpen] = React.useState(false);
 	const [severityType, setSeverityType] = useState("error");
-	/* useStates untuk keperluan POST merk baru */
 
 	const Alerts = React.forwardRef(function Alerts(props, ref) {
 		return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -33,7 +30,6 @@ function DialogAddKelas(
 		setOpen(false);
 	};
 
-	/* Methods to convert image input into base64 */
 	const onFileSubmit = (e) => {
 		e.preventDefault();
 		console.log(base64);
@@ -65,37 +61,31 @@ function DialogAddKelas(
 			reader.readAsDataURL(file);
 		}
 	};
-	/* Methods to convert image input into base64 */
 
-	/* Method to POST new Brand Item */
-	const postKelas = () => {
+	const postKelas = async () => {
 		const postDataa = {
 			category: categoryName,
 			image: base64,
 			desc: categoryDescription,
 		};
 		console.log(postDataa);
-		axios
-			.post("https://localhost:7132/api/CourseCategory", postDataa)
-			.then((res) => {
-				if (res.status === 200) {
-					console.log(res.status);
-					console.log(res.data);
-					setSeverityType("success");
-					setErr("Berhasil menambahkan kategori");
-					setOpen(true);
-					props.onClose();
-				}
-			})
-			.catch((err) => {
-				console.log(err.response.data);
-				setSeverityType("error");
-				setErr("Error : Kategori Tidak Valid");
+		try {
+			const res = await api.post("/CourseCategory", postDataa);
+			if (res.status === 200) {
+				console.log(res.status);
+				console.log(res.data);
+				setSeverityType("success");
+				setErr("Berhasil menambahkan kategori");
 				setOpen(true);
-			});
+				props.onClose();
+			}
+		} catch (err) {
+			console.log(err.response.data);
+			setSeverityType("error");
+			setErr("Error : Kategori Tidak Valid");
+			setOpen(true);
+		}
 	};
-	/* Method to POST new Brand Item */
-
 
 	return (
 		<div>

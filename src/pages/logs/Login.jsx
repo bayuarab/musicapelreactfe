@@ -113,6 +113,7 @@ export default function Login() {
 										md: "23px",
 										xs: "18px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Selamat Datang Musikers!
 							</Typography>
@@ -123,6 +124,7 @@ export default function Login() {
 										md: "15px",
 										xs: "13px",
 									},
+									fontFamily: "Poppins",
 								}}>
 								Login dulu yuk
 							</Typography>
@@ -137,20 +139,25 @@ export default function Login() {
 									<Link
 										to="/forget"
 										style={{
-											fontSize: {
-												lg: "16px",
-												md: "15px",
-												xs: "13px",
-											},
 											textDecoration: "None",
 											color: "black",
+											fontFamily: "Poppins",
 										}}>
-										Lupa kata sandi
+										<Typography
+											sx={{
+												fontSize: {
+													lg: "16px",
+													md: "15px",
+													xs: "13px",
+												},
+											}}>
+											Lupa kata sandi
+										</Typography>
 									</Link>
 								</Box>
 								<Box mt="2vh" sx={{ textAlign: "left" }}>
 									<Grid container>
-										<Grid item xs={3}>
+										<Grid item xs={3.5} md={3}>
 											<Button
 												disabled={email === "" || password === "" ? true : false}
 												onClick={(event) => goLogin(event)}
@@ -171,8 +178,16 @@ export default function Login() {
 												Masuk
 											</Button>
 										</Grid>
-										<Grid>
-											<Typography>
+										<Grid item xs={8.5}>
+											<Typography
+												sx={{
+													fontSize: {
+														lg: "16px",
+														md: "15px",
+														xs: "13px",
+													},
+													fontFamily: "Poppins",
+												}}>
 												Belum punya akun?
 												<Link
 													to="/registration"
@@ -181,9 +196,9 @@ export default function Login() {
 														fontSize: {
 															lg: "16px",
 															md: "15px",
-															sm: "13px",
-															xs: "10px",
+															xs: "13px",
 														},
+														fontFamily: "Poppins",
 													}}>
 													Daftar disini
 												</Link>

@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Grid, Input, Snackbar, Stack, TextField } from "@mui/material";
-import axios from "axios";
+import api from "../api/baseApi";
 import React, { useState } from "react";
 
 const DialogEditCat = (props) => {
@@ -25,7 +25,6 @@ const DialogEditCat = (props) => {
 		setOpen(false);
 	};
 
-	/* Methods to convert image input into base64 */
 	const onFileSubmit = (e) => {
 		e.preventDefault();
 		console.log(base64);
@@ -59,7 +58,7 @@ const DialogEditCat = (props) => {
 	};
 
 	/* Method to POST new Brand Item */
-	const postKelas = () => {
+	const postKelas = async () => {
 		const postDataa = {
 			id: selectedCat.id,
 			category: categoryName,
@@ -67,24 +66,22 @@ const DialogEditCat = (props) => {
 			desc: categoryDescription,
 		};
 		console.log(postDataa);
-		axios
-			.put("https://localhost:7132/api/CourseCategory", postDataa)
-			.then((res) => {
-				if (res.status === 200) {
-					console.log(res.status);
-					console.log(res.data);
-					setSeverityType("success");
-					setErr("Berhasil mengubah kategori");
-					setOpen(true);
-					onClose();
-				}
-			})
-			.catch((err) => {
-				console.log(err.response.data);
-				setSeverityType("error");
-				setErr("Error : Kategori Tidak Valid");
+		try {
+			const res = await api.put("/CourseCategory", postDataa);
+			if (res.status === 200) {
+				console.log(res.status);
+				console.log(res.data);
+				setSeverityType("success");
+				setErr("Berhasil mengubah kategori");
 				setOpen(true);
-			});
+				onClose();
+			}
+		} catch (err) {
+			console.log(err.response.data);
+			setSeverityType("error");
+			setErr("Error : Kategori Tidak Valid");
+			setOpen(true);
+		}
 	};
 
 	return (
@@ -92,7 +89,7 @@ const DialogEditCat = (props) => {
 			<Dialog open={openDialog} onClose={onClose}>
 				<div style={{ padding: "20px", width: "100%" }}>
 					{/* TITLE */}
-					<DialogTitle>Edit Kategori Id {selectedCat?.id}</DialogTitle>
+					<DialogTitle>Edit Kategori</DialogTitle>
 					<DialogContent>
 						{/* FORM INPUT */}
 						<form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>

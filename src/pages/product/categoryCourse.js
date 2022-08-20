@@ -95,7 +95,7 @@ export default function CategoryCourse() {
 					console.log("res data", res.data);
 				}
 			})
-			.catch((err) => { });
+			.catch((err) => {});
 	};
 
 	// useEffect(() => {
@@ -115,7 +115,7 @@ export default function CategoryCourse() {
 					setDetailOfACategory(res.data);
 				}
 			})
-			.catch((err) => { });
+			.catch((err) => {});
 		console.log(params);
 	};
 	useEffect(() => {
@@ -157,10 +157,10 @@ export default function CategoryCourse() {
 					setDetailOfACourse(res.data);
 					getcekJadwal(url);
 					getdetailOfACourseCat(res.data.courseCategoryId, res.data.id);
-					getdetailOfACategory(res.data.courseCategoryId)
+					getdetailOfACategory(res.data.courseCategoryId);
 				}
 			})
-			.catch((err) => { });
+			.catch((err) => {});
 		console.log(params);
 	};
 
@@ -171,12 +171,7 @@ export default function CategoryCourse() {
 		console.log(params.courseid);
 	}, [params]);
 
-
-
-
 	/* useStates untuk keperluan GET detail dari sebuah produk */
-
-
 
 	let paramss = useParams();
 	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
@@ -324,6 +319,7 @@ export default function CategoryCourse() {
 			<Box className="Cc" fullwidth>
 				<Grid
 					sx={{
+<<<<<<< HEAD
 						width: {
 							lg: "45%"
 						},
@@ -344,6 +340,12 @@ export default function CategoryCourse() {
 							alt={detailOfACourse.courseImage}
 							className="CcImg"
 						></img>
+=======
+						margin: "1% 0 0 5%",
+					}}>
+					<Box className="Cc1">
+						<img src={`data:image/jpeg;base64,${detailOfACourse.courseImage}`} alt={detailOfACourse.courseImage} className="CcImg"></img>
+>>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 					</Box>
 				</Grid>
 				<Grid
@@ -353,6 +355,7 @@ export default function CategoryCourse() {
 							sm: "100%"
 						},
 						margin: "1% 0 0 0",
+<<<<<<< HEAD
 					}}
 
 				>
@@ -387,6 +390,52 @@ export default function CategoryCourse() {
 							xs: "4px",
 						},
 					}}>
+=======
+					}}>
+					<Typography
+						color="text.secondary"
+						sx={{
+							fontSize: {
+								lg: "16px",
+								xs: "12px",
+							},
+							fontFamily: "Poppins",
+							paddingBottom: {
+								lg: "10px",
+								xs: "4px",
+							},
+						}}>
+						{detailOfACategory.category}
+					</Typography>
+					<Typography
+						fontWeight="bold"
+						className="cc2"
+						sx={{
+							fontSize: {
+								lg: "24px",
+								xs: "16px",
+							},
+							fontFamily: "Poppins",
+							paddingBottom: {
+								lg: "10px",
+								xs: "4px",
+							},
+						}}>
+						{detailOfACourse.courseTitle}
+					</Typography>
+					<Typography
+						color="blue"
+						sx={{
+							fontSize: {
+								lg: "22px",
+								xs: "16px",
+							},
+							paddingBottom: {
+								lg: "10px",
+								xs: "4px",
+							},
+						}}>
+>>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 						IDR {numberFormat(detailOfACourse.price)}
 					</Typography>
 					{claimedCourse ? (
@@ -407,9 +456,8 @@ export default function CategoryCourse() {
 											fontSize: {
 												lg: "16px",
 												xs: "12px",
-											}
-										}}
-									>
+											},
+										}}>
 										{cekJadwal.map((jadwal, i) => (
 											<MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
 										))}
@@ -420,8 +468,7 @@ export default function CategoryCourse() {
 								display="flex"
 								sx={{
 									margin: "3% 0 0 0",
-								}}
-							>
+								}}>
 								<Button variant="contained" component={Link} to={`/cart`}>
 									Ke Cart
 								</Button>
@@ -433,6 +480,7 @@ export default function CategoryCourse() {
 					) : (
 						<>
 							<Box sx={{ minWidth: 240, maxWidth: 358 }}>
+<<<<<<< HEAD
 								<FormControl fullWidth size={{
 									lg:"medium",
 									sm:"small"
@@ -451,6 +499,11 @@ export default function CategoryCourse() {
 										
 
 									>
+=======
+								<FormControl fullWidth>
+									<InputLabel>Pilih Jadwal Kelas</InputLabel>
+									<Select label="Pilih Jadwal Kelas" value={scheduleCourse} onChange={(e) => setScheduleCourse(e.target.value)} size="medium">
+>>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 										{cekJadwal.map((jadwal, i) => (
 											<MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
 										))}
@@ -502,6 +555,7 @@ export default function CategoryCourse() {
 											},fontFamily:"Poppins" }}>
 						Deskripsi
 					</Typography>
+<<<<<<< HEAD
 					<Typography sx={{
 						paddingBottom: {
 							md: "40px",
@@ -511,6 +565,18 @@ export default function CategoryCourse() {
 							xs: "12px",
 						},fontFamily:"Poppins"
 					}}>{detailOfACourse.courseDesc}</Typography>
+=======
+					<Typography
+						sx={{
+							paddingBottom: {
+								md: "40px",
+								xs: "14px",
+							},
+							textAlign: "left",
+						}}>
+						{detailOfACourse.courseDesc}
+					</Typography>
+>>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 				</Box>
 			</center>
 
@@ -535,6 +601,7 @@ export default function CategoryCourse() {
 				<></>
 			)}
 
+<<<<<<< HEAD
 			<div style={{
 				paddingTop: {
 					md: "40px",
@@ -550,6 +617,31 @@ export default function CategoryCourse() {
 					xs: "10px",
 				}, textAlign: "center"
 			}}>
+=======
+			<div
+				style={{
+					paddingTop: {
+						md: "40px",
+						xs: "14px",
+					},
+					height: "0px",
+					border: "1px solid grey",
+				}}
+			/>
+			<Typography
+				color="blue"
+				sx={{
+					paddingTop: {
+						md: "30px",
+						xs: "10px",
+					},
+					paddingBottom: {
+						md: "30px",
+						xs: "10px",
+					},
+					textAlign: "center",
+				}}>
+>>>>>>> 14960485311b21d110e89df8986759b28e6a270c
 				<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
 			</Typography>
 			<center>
@@ -618,11 +710,7 @@ export default function CategoryCourse() {
 					</Grid>
 				</Box>
 			</center>
-			<CheckoutDialogs
-				checkoutDialogState={checkoutDialogState}
-				onClose={handleCheckoutClose}
-				selectedOp={selectedOp}
-			/>
+			<CheckoutDialogs checkoutDialogState={checkoutDialogState} onClose={handleCheckoutClose} selectedOp={selectedOp} />
 		</Grid>
 	);
 }

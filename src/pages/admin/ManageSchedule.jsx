@@ -1,15 +1,15 @@
-import { DeleteForever, ModeEdit, Search, AddCircle } from "@mui/icons-material";
-import { Alert, Box, Button, Container, Grid, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography, IconButton } from "@mui/material";
+import { AddCircle, DeleteForever, ModeEdit, Search } from "@mui/icons-material";
+import { Alert, Box, Button, Container, Grid, IconButton, Paper, Snackbar, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Zoom from "@mui/material/Zoom";
 import React, { useEffect, useState } from "react";
+import api from "../../api/baseApi";
 import HeaderSet from "../../components/HeaderSet";
 import AddDialog from "./components/DialogAddSchedule";
 import DeleteDialog from "./components/DialogDeleteSchedule";
 import EditDialog from "./components/DialogEditSchedule";
-import api from "../../api/baseApi";
 
 const theme = createTheme({
 	palette: {
@@ -67,6 +67,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	},
 	[`&.${tableCellClasses.body}`]: {
 		fontWeight: "500",
+	},
+	[theme.breakpoints.down("sm")]: {
+		fontSize: "12px",
 	},
 }));
 
@@ -224,7 +227,6 @@ function ManageSchedule() {
 															No
 														</StyledTableCell>
 														<StyledTableCell align="left">Kelas</StyledTableCell>
-														<StyledTableCell align="left">Id Kelas</StyledTableCell>
 														<StyledTableCell align="left">Jadwal</StyledTableCell>
 														<StyledTableCell align="center">Action</StyledTableCell>
 													</TableRow>
@@ -236,7 +238,6 @@ function ManageSchedule() {
 																{index + 1}
 															</StyledTableCell>
 															<StyledTableCell align="left">{row.courseTitle}</StyledTableCell>
-															<StyledTableCell align="left">{row.courseId}</StyledTableCell>
 															<StyledTableCell align="left">{row.jadwal}</StyledTableCell>
 															<StyledTableCell align="center">
 																<Grid container>

@@ -6,35 +6,27 @@ import drum from "../../../assets/drum.jpg";
 
 const gridClassItemsDef = [
 	{
-		categories: "Drum",
 		image: drum,
 	},
 	{
-		categories: "Piano",
 		image: drum,
 	},
 	{
-		categories: "Gitar",
 		image: drum,
 	},
 	{
-		categories: "Bass",
 		image: drum,
 	},
 	{
-		categories: "Biola",
 		image: drum,
 	},
 	{
-		categories: "Menyanyi",
 		image: drum,
 	},
 	{
-		categories: "Flute",
 		image: drum,
 	},
 	{
-		categories: "Sexophone",
 		image: drum,
 	},
 ];
@@ -63,7 +55,7 @@ export default function GridClassCat() {
 		<Box
 			mt={{
 				md: "6vh",
-				xs: "4vh",
+				xs: "3vh",
 			}}
 			sx={{ flexGrow: 1 }}>
 			<Grid container spacing={2}>
@@ -79,9 +71,9 @@ export default function GridClassCat() {
 									},
 									maxHeight: {
 										lg: "120px",
-										xs: "50%",
+										xs: "65%",
 									},
-									maxWidth: "50%",
+									maxWidth: "65%",
 									borderRadius: {
 										md: "20px",
 										xs: "5px",
@@ -108,8 +100,9 @@ export default function GridClassCat() {
 											lg: "24px",
 											md: "22px",
 											sm: "16px",
-											xs: "10px",
+											xs: "11px",
 										},
+										fontFamily: "Poppins",
 									}}>
 									{item.category}
 								</Typography>
