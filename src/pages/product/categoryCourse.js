@@ -1,4 +1,6 @@
+import { Grid3x3Rounded } from "@mui/icons-material";
 import { Alert, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Typography } from "@mui/material";
+import { blue } from "@mui/material/colors";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
@@ -137,7 +139,7 @@ export default function CategoryCourse() {
 					console.log(res.data);
 				}
 			})
-			.catch((err) => {});
+			.catch((err) => { });
 		console.log(paramss);
 	};
 	useEffect(() => {
@@ -321,13 +323,20 @@ export default function CategoryCourse() {
 		<Grid>
 			<Box className="Cc" fullwidth>
 				<Grid
-					width="45%"
 					sx={{
-						margin: "1% 0 0 5%",
+						width: {
+							lg: "45%"
+						},
+						margin: {
+							lg: "1% 0 0 0",
+						}
 					}}
 				>
 					<Box
-						className="Cc1"
+						sx={{width:{lg:"90%", sm:"75%"},
+							marginLeft:{lg:"13%"},
+							marginTop:"3%"
+						}}
 
 					>
 						<img
@@ -338,43 +347,46 @@ export default function CategoryCourse() {
 					</Box>
 				</Grid>
 				<Grid
-					width="65%"
 					sx={{
+						width: {
+							lg: "55%",
+							sm: "100%"
+						},
 						margin: "1% 0 0 0",
 					}}
 
 				>
 					<Typography color="text.secondary" sx={{
-										fontSize: {
-											lg: "16px",
-											xs: "12px",
-										},fontFamily:"Poppins"
-										,paddingBottom:{
-											lg: "10px",
-											xs: "4px",
-										},
-									}}>{detailOfACategory.category}</Typography>
+						fontSize: {
+							lg: "16px",
+							xs: "12px",
+						}, fontFamily: "Poppins"
+						, paddingBottom: {
+							lg: "10px",
+							xs: "4px",
+						},
+					}}>{detailOfACategory.category}</Typography>
 					<Typography fontWeight="bold" className="cc2" sx={{
-										fontSize: {
-											lg: "24px",
-											xs: "16px",
-										},fontFamily:"Poppins",
-										paddingBottom:{
-											lg: "10px",
-											xs: "4px",
-										},
-									}}>
-					{detailOfACourse.courseTitle}
+						fontSize: {
+							lg: "24px",
+							xs: "16px",
+						}, fontFamily: "Poppins",
+						paddingBottom: {
+							lg: "10px",
+							xs: "4px",
+						},
+					}}>
+						{detailOfACourse.courseTitle}
 					</Typography>
 					<Typography color="blue" sx={{
-										fontSize: {
-											lg: "22px",
-											xs: "16px",
-										},paddingBottom:{
-											lg: "10px",
-											xs: "4px",
-										},
-									}}>
+						fontSize: {
+							lg: "22px",
+							xs: "16px",
+						}, paddingBottom: {
+							lg: "10px",
+							xs: "4px",
+						},
+					}}>
 						IDR {numberFormat(detailOfACourse.price)}
 					</Typography>
 					{claimedCourse ? (
@@ -421,14 +433,23 @@ export default function CategoryCourse() {
 					) : (
 						<>
 							<Box sx={{ minWidth: 240, maxWidth: 358 }}>
-								<FormControl fullWidth>
-									<InputLabel>Pilih Jadwal Kelas</InputLabel>
+								<FormControl fullWidth size={{
+									lg:"medium",
+									sm:"small"
+								}}>
+									<InputLabel sx={{
+											fontSize: {
+												lg: "16px",
+												xs: "14px",
+											},fontFamily:"Poppins"
+										}}>Pilih Jadwal Kelas</InputLabel>
 									<Select
 										label="Pilih Jadwal Kelas"
 										value={scheduleCourse}
 										onChange={(e) => setScheduleCourse(e.target.value)}
 										size="medium"
 										
+
 									>
 										{cekJadwal.map((jadwal, i) => (
 											<MenuItem value={jadwal.id}>{jadwal.jadwal}</MenuItem>
@@ -448,8 +469,8 @@ export default function CategoryCourse() {
 										margin: "0 3% 0 0",
 										fontSize: {
 											lg: "16px",
-											xs: "10px",
-										},
+											sm: "10px",
+										},fontFamily:"Poppins"
 									}}
 									onClick={async (e) => {
 										await e.preventDefault();
@@ -464,7 +485,7 @@ export default function CategoryCourse() {
 										fontSize: {
 											lg: "16px",
 											xs: "10px",
-										},
+										},fontFamily:"Poppins"
 									}}>
 									Beli Sekarang
 								</Button>
@@ -475,22 +496,30 @@ export default function CategoryCourse() {
 			</Box>
 			<center>
 				<Box sx={{ width: "90vw" }}>
-					<Typography mb="1.5vh" mt="4vh" sx={{ textAlign: "left", fontWeight: "5semi bold", fontSize: "20px" }}>
+					<Typography mb="1.5vh" mt="4vh" sx={{ textAlign: "left", fontWeight: "5semi bold", fontSize: {
+												lg: "24px",
+												xs: "14px",
+											},fontFamily:"Poppins" }}>
 						Deskripsi
 					</Typography>
-					<Typography sx={{paddingBottom:{
-					md: "40px",
-					xs: "14px",
-				}, textAlign: "left" }}>{detailOfACourse.courseDesc}</Typography>
+					<Typography sx={{
+						paddingBottom: {
+							md: "40px",
+							xs: "14px",
+						}, textAlign: "left",fontSize: {
+							lg: "20px",
+							xs: "12px",
+						},fontFamily:"Poppins"
+					}}>{detailOfACourse.courseDesc}</Typography>
 				</Box>
 			</center>
 
 			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
 			{openAlertSucces === true ? (
 				<Snackbar>
-				<Alert className="success-alert" variant="filled" severity="success">
-					kelas berhasil ditambahkan ke keranjang!
-				</Alert>
+					<Alert className="success-alert" variant="filled" severity="success">
+						kelas berhasil ditambahkan ke keranjang!
+					</Alert>
 				</Snackbar>
 			) : (
 				<></>
@@ -498,9 +527,9 @@ export default function CategoryCourse() {
 			{/* Alert yang ditampilkan ketika pelanggan menambahkan course */}
 			{openAlertWarning === true ? (
 				<Snackbar>
-				<Alert className="success-alert" variant="filled" severity="warning">
-					Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
-				</Alert>
+					<Alert className="success-alert" variant="filled" severity="warning">
+						Kelas sudah terdapat di keranjang! / Jadwal kelas tidak sinkron
+					</Alert>
 				</Snackbar>
 			) : (
 				<></>
@@ -512,13 +541,15 @@ export default function CategoryCourse() {
 					xs: "14px",
 				}, height: "0px", border: "1px solid grey"
 			}} />
-			<Typography color="blue" sx={{paddingTop: {
+			<Typography color="blue" sx={{
+				paddingTop: {
 					md: "30px",
 					xs: "10px",
-				},paddingBottom: {
+				}, paddingBottom: {
 					md: "30px",
 					xs: "10px",
-				}, textAlign: "center" }}>
+				}, textAlign: "center"
+			}}>
 				<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
 			</Typography>
 			<center>
@@ -532,16 +563,28 @@ export default function CategoryCourse() {
 										sx={{
 											maxWidth: "100%",
 											maxHeight: "100%",
-											objectFit: "cover",
+											objectFit: "cover"
 										}}
 										image={`data:image/jpeg;base64,${item.courseImage}`}
 										alt="kategori kelas"
 										style={{
-											borderRadius: "10px",
+											borderRadius: "16px",
 										}}
 									/>
 									<CardActionArea component={Link} to={`/course/${item.id}`}>
 										<CardContent>
+											<Typography color="text.secondary" sx={{
+												fontWeight: "600",
+												textAlign: "left",
+												fontSize: {
+													lg: "16px",
+													xs: "12px",
+												}, fontFamily: "Poppins"
+												, paddingBottom: {
+													lg: "10px",
+													xs: "4px",
+												},
+											}}>{detailOfACategory.category}</Typography>
 											<Typography
 												sx={{
 													fontWeight: "600",
@@ -549,7 +592,7 @@ export default function CategoryCourse() {
 													fontSize: {
 														md: "18px",
 														xs: "14px",
-													},
+													},fontFamily:"Poppins"
 												}}>
 												{item.courseTitle}
 											</Typography>

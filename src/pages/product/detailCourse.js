@@ -10,73 +10,73 @@ export default function DetailCourse() {
 	const [dataClass, setDataClass] = useState("");
 	let params = useParams();
 
-  const pageResponsive = {
-    superLargeDesktop: {
-      // the naming can be any, depends on you.
-      breakpoint: { max: 4000, min: 3000 },
-      items: 2,
-      partialVisibilityGutter: 30
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 2,
-      partialVisibilityGutter: 30
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 1,
-      partialVisibilityGutter: 30
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-      partialVisibilityGutter: 30
-    }
-  };
+	const pageResponsive = {
+		superLargeDesktop: {
+			// the naming can be any, depends on you.
+			breakpoint: { max: 4000, min: 3000 },
+			items: 2,
+			partialVisibilityGutter: 30
+		},
+		desktop: {
+			breakpoint: { max: 3000, min: 1024 },
+			items: 2,
+			partialVisibilityGutter: 30
+		},
+		tablet: {
+			breakpoint: { max: 1024, min: 464 },
+			items: 1,
+			partialVisibilityGutter: 30
+		},
+		mobile: {
+			breakpoint: { max: 464, min: 0 },
+			items: 1,
+			partialVisibilityGutter: 30
+		}
+	};
 
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACategory, setDetailOfACategory] = useState([]);
-  const getdetailOfACategory = async (url) => {
-    console.log("params", url);
-    await axios
-      .get(`https://localhost:7132/api/CourseCategory/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACategory(res.data);
-        }
-      })
-      .catch((err) => { });
-    console.log(params);
-  };
-  useEffect(() => {
-    getdetailOfACategory(params.categoryid);
-  }, [params]);
+	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+	const [detailOfACategory, setDetailOfACategory] = useState([]);
+	const getdetailOfACategory = async (url) => {
+		console.log("params", url);
+		await axios
+			.get(`https://localhost:7132/api/CourseCategory/${url}`, {
+				url,
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					setDetailOfACategory(res.data);
+				}
+			})
+			.catch((err) => { });
+		console.log(params);
+	};
+	useEffect(() => {
+		getdetailOfACategory(params.categoryid);
+	}, [params]);
 
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
-  let paramss = useParams();
-  /* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
-  const [detailOfACourse, setDetailOfACourse] = useState([]);
-  const getdetailOfACourse = async (url) => {
-    console.log("paramss", url);
-    await axios
-      .get(`https://localhost:7132/api/Course/categoryId/${url}`, {
-        url,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setDetailOfACourse(res.data);
-          console.log(res.data);
-        }
-      })
-      .catch((err) => { });
-    console.log(paramss);
-  };
-  useEffect(() => {
-    getdetailOfACourse(paramss.categoryid);
-  }, [paramss]);
+	let paramss = useParams();
+	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
+	const [detailOfACourse, setDetailOfACourse] = useState([]);
+	const getdetailOfACourse = async (url) => {
+		console.log("paramss", url);
+		await axios
+			.get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+				url,
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					setDetailOfACourse(res.data);
+					console.log(res.data);
+				}
+			})
+			.catch((err) => { });
+		console.log(paramss);
+	};
+	useEffect(() => {
+		getdetailOfACourse(paramss.categoryid);
+	}, [paramss]);
 
 	/* useStates untuk keperluan GET detail dari sebuah produk */
 
@@ -101,9 +101,10 @@ export default function DetailCourse() {
 						<Typography
 							sx={{
 								fontSize: {
-									md: "24px",
+									lg: "24px",
 									xs: "14px",
-								},
+								}, fontFamily: "Poppins"
+								,
 								margin: "auto 2% auto 2%",
 								textAlign: "left",
 							}}>
@@ -115,7 +116,8 @@ export default function DetailCourse() {
 								fontSize: {
 									md: "16px",
 									xs: "12px",
-								},
+								}, fontFamily: "Poppins"
+								,
 								textAlign: "left",
 							}}>
 							{detailData.desc}
@@ -129,7 +131,8 @@ export default function DetailCourse() {
 						fontSize: {
 							md: "24px",
 							xs: "14px",
-						},
+						}, fontFamily: "Poppins"
+						,
 					}}>
 					<h4>Kelas Yang Tersedia</h4>
 				</Typography>
@@ -154,6 +157,18 @@ export default function DetailCourse() {
 										/>
 										<CardActionArea component={Link} to={`/course/${item.id}`}>
 											<CardContent>
+												<Typography color="text.secondary"
+													sx={{
+														fontSize: {
+															lg: "16px",
+															xs: "12px",
+														}, fontFamily: "Poppins"
+														,
+														margin: "auto 2% auto 2%",
+														textAlign: "left",
+													}}>
+													{detailData.category}
+												</Typography>
 												<Typography
 													sx={{
 														fontWeight: "600",
@@ -161,7 +176,8 @@ export default function DetailCourse() {
 														fontSize: {
 															md: "18px",
 															xs: "14px",
-														},
+														}, fontFamily: "Poppins"
+														,
 													}}>
 													{item.courseTitle}
 												</Typography>
@@ -174,7 +190,8 @@ export default function DetailCourse() {
 														fontSize: {
 															md: "18px",
 															xs: "14px",
-														},
+														}, fontFamily: "Poppins"
+														,
 													}}
 													color="blue">
 													IDR {numberFormat(item.price)}
