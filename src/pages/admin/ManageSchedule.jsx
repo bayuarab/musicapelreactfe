@@ -227,7 +227,6 @@ function ManageSchedule() {
 															No
 														</StyledTableCell>
 														<StyledTableCell align="left">Kelas</StyledTableCell>
-														<StyledTableCell align="left">Id Kelas</StyledTableCell>
 														<StyledTableCell align="left">Jadwal</StyledTableCell>
 														<StyledTableCell align="center">Action</StyledTableCell>
 													</TableRow>
@@ -239,7 +238,6 @@ function ManageSchedule() {
 																{index + 1}
 															</StyledTableCell>
 															<StyledTableCell align="left">{row.courseTitle}</StyledTableCell>
-															<StyledTableCell align="left">{row.courseId}</StyledTableCell>
 															<StyledTableCell align="left">{row.jadwal}</StyledTableCell>
 															<StyledTableCell align="center">
 																<Grid container>

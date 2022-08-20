@@ -89,7 +89,7 @@ const DialogEditCat = (props) => {
 			<Dialog open={openDialog} onClose={onClose}>
 				<div style={{ padding: "20px", width: "100%" }}>
 					{/* TITLE */}
-					<DialogTitle>Edit Kategori Id {selectedCat?.id}</DialogTitle>
+					<DialogTitle>Edit Kategori</DialogTitle>
 					<DialogContent>
 						{/* FORM INPUT */}
 						<form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
