@@ -53,7 +53,6 @@ export default function CardClass() {
 										lg: "93%",
 										md: "92%",
 										sm: "90%",
-										xs: "88%",
 									},
 									maxWidth: "88%",
 									marginBottom: "35px",
@@ -95,7 +94,6 @@ export default function CardClass() {
 													lg: "18px",
 													md: "14px",
 													sm: "12px",
-													xs: "10px",
 												},
 												fontFamily: "Poppins",
 											}}>
@@ -109,7 +107,6 @@ export default function CardClass() {
 													lg: "20px",
 													md: "16px",
 													sm: "14px",
-													xs: "12px",
 												},
 												fontWeight: "600",
 												fontFamily: "Poppins",
@@ -122,7 +119,7 @@ export default function CardClass() {
 									sx={{
 										textAlign: "left",
 										paddingLeft: "8px",
-										paddingBottom: { md: "15px", xs: "7px" },
+										paddingBottom: { md: "15px" },
 									}}>
 									<Typography
 										mt="4vh"
@@ -131,7 +128,6 @@ export default function CardClass() {
 												lg: "20px",
 												md: "16px",
 												sm: "14px",
-												xs: "12px",
 											},
 											fontWeight: "600",
 											color: "#5D5FEF",
