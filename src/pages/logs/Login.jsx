@@ -201,6 +201,7 @@ export default function Login() {
                           md: "15px",
                           xs: "13px",
                         },
+                        fontFamily: "Poppins",
                       }}
                     >
                       Lupa kata sandi

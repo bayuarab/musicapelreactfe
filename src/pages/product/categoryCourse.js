@@ -25,6 +25,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/userAPI";
 import { useCart } from "../../context/CartProvider";
 import useAuth from "../../hooks/useAuth";
+import { StyledPurpleButton } from "../../styles/PurpleContainedButton";
 import numberFormat from "../../utilities/NumbeFormat";
 import CheckoutDialogs from "../cart/components/CheckoutDialogs";
 import {
@@ -431,6 +432,7 @@ export default function CategoryCourse() {
                 lg: "24px",
                 xs: "16px",
               },
+
               fontFamily: "Poppins",
               paddingBottom: {
                 lg: "10px",
@@ -441,16 +443,18 @@ export default function CategoryCourse() {
             {detailOfACourse.courseTitle}
           </Typography>
           <Typography
-            color="blue"
+            color="#5D5FEF"
             sx={{
               fontSize: {
                 lg: "22px",
                 xs: "16px",
               },
+              fontWeight: "600",
               paddingBottom: {
                 lg: "10px",
                 xs: "4px",
               },
+              fontFamily: "Poppins",
             }}
           >
             IDR {numberFormat(detailOfACourse.price)}
@@ -461,8 +465,13 @@ export default function CategoryCourse() {
             </Button>
           ) : claimedCart ? (
             <>
-              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
-                <FormControl fullWidth>
+              <Box
+                sx={{
+                  minWidth: { md: 240, xs: "60%" },
+                  maxWidth: { md: 358, xs: "80%" },
+                }}
+              >
+                <FormControl width={"90%"}>
                   <InputLabel>Pilih Jadwal Kelas</InputLabel>
                   <Select
                     label="Pilih Jadwal Kelas"
@@ -498,7 +507,12 @@ export default function CategoryCourse() {
             </>
           ) : (
             <>
-              <Box sx={{ minWidth: 240, maxWidth: 358 }}>
+              <Box
+                sx={{
+                  minWidth: { md: 240, xs: "60%" },
+                  maxWidth: { md: 358, xs: "80%" },
+                }}
+              >
                 <FormControl
                   fullWidth
                   size={{
@@ -536,14 +550,16 @@ export default function CategoryCourse() {
                   margin: "3% 0 0 0",
                 }}
               >
-                <Button
+                <StyledPurpleButton
                   variant="outlined"
                   sx={{
                     margin: "0 3% 0 0",
                     fontSize: {
                       lg: "16px",
-                      sm: "10px",
+                      xs: "10px",
                     },
+                    color: "#5D5FEF",
+                    backgroundColor: "white",
                     fontFamily: "Poppins",
                   }}
                   onClick={async (e) => {
@@ -552,8 +568,8 @@ export default function CategoryCourse() {
                   }}
                 >
                   Masukan Keranjang
-                </Button>
-                <Button
+                </StyledPurpleButton>
+                <StyledPurpleButton
                   variant="contained"
                   onClick={() => checkout()}
                   sx={{
@@ -565,7 +581,7 @@ export default function CategoryCourse() {
                   }}
                 >
                   Beli Sekarang
-                </Button>
+                </StyledPurpleButton>
               </Box>
             </>
           )}
@@ -614,11 +630,11 @@ export default function CategoryCourse() {
             xs: "14px",
           },
           height: "0px",
-          border: "1px solid grey",
+          borderBottom: "1px solid grey",
         }}
       />
       <Typography
-        color="blue"
+        color="#5D5FEF"
         sx={{
           paddingTop: {
             md: "30px",
@@ -695,8 +711,9 @@ export default function CategoryCourse() {
                             md: "18px",
                             xs: "14px",
                           },
+                          fontFamily: "Poppins",
+                          color: "#5D5FEF",
                         }}
-                        color="blue"
                       >
                         IDR {numberFormat(item.price)}
                       </Typography>

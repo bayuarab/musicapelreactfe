@@ -144,6 +144,7 @@ const CartList = (props) => {
                           fontSize: { md: "16px" },
                           fontWeight: "400",
                           color: "#828282",
+                          display: { md: "flex", xs: "none" },
                         }}
                       >
                         {items.category}
@@ -173,7 +174,7 @@ const CartList = (props) => {
                       <Typography
                         sx={{
                           fontFamily: "Poppins",
-                          fontSize: { md: "20px", sm: "16px", xs: "16px" },
+                          fontSize: { md: "20px", sm: "16px", xs: "14px" },
                           fontWeight: "600",
                           color: "#5D5FEF",
                         }}

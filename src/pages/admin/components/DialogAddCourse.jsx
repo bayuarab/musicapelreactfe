@@ -99,7 +99,7 @@ function DialogAddCourse(
   const postKelas = () => {
     const postDataa = {
       courseTitle: courseTitle,
-      courseCategoryId: courseCategoryId,
+      courseCategoryId: scheduleCourse,
       courseDesc: courseDesc,
       price: coursePrice,
       courseimage: base64,
@@ -249,7 +249,7 @@ function DialogAddCourse(
                         courseTitle === "" ||
                         courseDesc === "" ||
                         coursePrice === "" ||
-                        courseCategoryId === "" ||
+                        scheduleCourse === "" ||
                         base64 === ""
                           ? true
                           : false
@@ -275,7 +275,11 @@ function DialogAddCourse(
       </Dialog>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alerts onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          <Alerts
+            onClose={handleClose}
+            severity={severityType}
+            sx={{ width: "100%" }}
+          >
             {err}
           </Alerts>
         </Snackbar>

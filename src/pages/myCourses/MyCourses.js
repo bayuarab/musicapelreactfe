@@ -125,7 +125,7 @@ const MyCourses = () => {
                     sx={{
                       marginTop: "-6px",
                       fontFamily: "Poppins",
-                      fontSize: { md: "24px", xs: "18px" },
+                      fontSize: { md: "24px", xs: "14px" },
                       fontWeight: "600",
                       color: "#333333",
                     }}
