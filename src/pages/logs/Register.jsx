@@ -103,7 +103,6 @@ export default function Login() {
     const fetchApi = async () => {
       try {
         const response = await api.post("/UserAuth/Register", dataClient);
-        console.log(response.data);
         navigate("/Login", { replace: true });
         setRegisState(true);
       } catch (err) {
@@ -220,16 +219,6 @@ export default function Login() {
                     value={password}
                     id="txtPassword"
                     onChange={(event) => addPassword(event)}
-                    InputProps={{
-                      style: { fontFamily: "Poppins" },
-                    }}
-                    variant="outlined"
-                    style={{
-                      display: "flex",
-                      flexGrow: 1,
-                      marginRight: "10px",
-                    }}
-                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     margin="normal"
@@ -242,16 +231,6 @@ export default function Login() {
                     id="txtRePassword"
                     value={rePassword}
                     onChange={(event) => addRePassword(event)}
-                    InputProps={{
-                      style: { fontFamily: "Poppins" },
-                    }}
-                    variant="outlined"
-                    style={{
-                      display: "flex",
-                      flexGrow: 1,
-                      marginRight: "10px",
-                    }}
-                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <Box mt="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
                     <Grid container>

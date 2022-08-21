@@ -37,11 +37,9 @@ const DialogEditJadwal = (props) => {
 			jadwal: jadwal,
 			courseId: courseId,
 		};
-		console.log(postDataa);
 		try {
 			const res = await api.put("/Schedule", postDataa, config);
 			if (res.status === 200) {
-				console.log(res.data);
 				setSeverityType("success");
 				setErr("Berhasil merubah jadwal kelas");
 				setOpen(true);
@@ -59,7 +57,6 @@ const DialogEditJadwal = (props) => {
 		const getCourse = async () => {
 			try {
 				const response = await api.get("Course/AdminDialog");
-				console.log(response.data);
 				setListCourse(response.data);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);

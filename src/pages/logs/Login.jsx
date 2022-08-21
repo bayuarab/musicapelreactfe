@@ -50,7 +50,6 @@ export default function Login() {
   const fetchApiCart = async (userId) => {
     try {
       const response = await api.get(`/Cart/${userId}`);
-      console.log(response.data);
       setCart(response.data);
     } catch (err) {
       !err.response
@@ -83,7 +82,6 @@ export default function Login() {
     const fetchApi = async () => {
       try {
         const response = await userApi.post("/UserAuth/Login", dataLogin);
-        console.log(response.data);
         const roles = response?.data?.userData?.roles;
         const userId = response?.data?.userData?.id;
         const nama = response?.data?.userData?.nama;

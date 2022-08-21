@@ -40,10 +40,8 @@ function DialogAddKelas(
 
 	const onFileSubmit = (e) => {
 		e.preventDefault();
-		console.log(base64);
 	};
 	const onChange = (e) => {
-		console.log("file", e.target.files[0]);
 		let file = e.target.files[0];
 		if (file) {
 			const reader = new FileReader();
@@ -60,8 +58,6 @@ function DialogAddKelas(
 		e.preventDefault();
 		const reader = new FileReader();
 		const file = e.target.files[0];
-		console.log("reader", reader);
-		console.log("file", file);
 		if (reader !== undefined && file !== undefined) {
 			reader.onloadend = () => {
 				setImagePreview(reader.result);
@@ -76,7 +72,6 @@ function DialogAddKelas(
 			image: base64,
 			desc: categoryDescription,
 		};
-		console.log(postDataa);
 		courseCatApi
 			.post("/", postDataa, config)
 			.then((res) => {

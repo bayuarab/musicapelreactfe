@@ -132,10 +132,8 @@ function ManageKategori(
   /* Methods to convert image input into base64 */
   const onFileSubmit = (e) => {
     e.preventDefault();
-    console.log(base64);
   };
   const onChange = (e) => {
-    console.log("file", e.target.files[0]);
     let file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -160,8 +158,6 @@ function ManageKategori(
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log("reader", reader);
-    console.log("file", file);
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -176,7 +172,6 @@ function ManageKategori(
     const fetchDelete = async () => {
       try {
         const response = await courseApi.delete(`/${selectedCou.id}`, config);
-        console.log(response.data);
         getListOfBrands();
         setSeverityType("warning");
         setErr("Kelas telah dihapus dari daftar");

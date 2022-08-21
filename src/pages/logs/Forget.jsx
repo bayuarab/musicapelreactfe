@@ -37,7 +37,6 @@ export default function Login() {
 		const fetchApi = async () => {
 			try {
 				const response = await api.post("/CheckEmail", dataLogin);
-				console.log(response.status);
 				setOk("Sukses");
 				setErr("");
 			} catch (err) {

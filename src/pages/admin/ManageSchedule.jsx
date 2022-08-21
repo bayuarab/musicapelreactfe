@@ -88,7 +88,6 @@ function ManageSchedule() {
 		const fetchDelete = async () => {
 			try {
 				const response = await api.delete(`/Schedule/${selectedSchedule.id}`, config);
-				console.log(response.data);
 				setSchedules((item) => item.filter((item) => item.id !== selectedSchedule.id));
 				setSeverityType("warning");
 				setMessage("Jadwal telah dihapus dari daftar");
@@ -120,7 +119,6 @@ function ManageSchedule() {
 			};
 			try {
 				const response = await api.get("/Schedule/Admin", reqConfig);
-				console.log(response.data);
 				setLoadMessage(null);
 				setSchedules(response.data);
 			} catch (err) {
