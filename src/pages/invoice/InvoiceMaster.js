@@ -47,16 +47,16 @@ const InvoiceMaster = () => {
       };
       try {
         const response = await api.get(`/Invoices/${UserID}`, config);
-        console.log(response.data);
+        // console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
       }
     };
 

@@ -1,45 +1,13 @@
 import React, { useEffect, useState } from "react";
 import paymentApi from "../../../api/baseApi";
 
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Box, Dialog, DialogTitle, Typography } from "@mui/material";
 import useAuth from "../../../hooks/useAuth";
-
-const DialogButton = styled(Button)(({ theme }) => ({
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  fontWeight: "600",
-  width: "44%",
-  borderRadius: "8px",
-  textTransform: "Capitalize",
-  paddingTop: "10px",
-  paddingBottom: "10px",
-}));
-
-const LogoContainer = styled(Box)({
-  backgroundColor: "white",
-  alignContent: "center",
-  alignSelf: "center",
-  marginTop: "-2px",
-  marginBottom: "-2px",
-  marginLeft: "-2px",
-  paddingLeft: "7px",
-  borderRadius: "11px",
-  width: "48px",
-});
-
-const LogoDiv = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  paddingTop: "5px",
-  paddingBottom: "5px",
-});
+import {
+  DialogButton,
+  LogoContainer,
+  LogoDiv,
+} from "../../../styles/CheckoutDialogStyle";
 
 const CheckoutDialogs = (props) => {
   const [checkoutOp, setCheckoutOp] = useState([]);
@@ -58,15 +26,15 @@ const CheckoutDialogs = (props) => {
       };
       try {
         const response = await paymentApi.get(`/Payment`, config);
-        console.log(response.data);
+        // console.log(response.data);
         setCheckoutOp(response.data);
         setOptionState(response.data.map(() => false));
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        if (err.response.data === "Not Found") console.log(err.response.status);
-        console.log(err.response.headers);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // if (err.response.data === "Not Found") console.log(err.response.status);
+        // console.log(err.response.headers);
       }
     };
 
@@ -91,7 +59,7 @@ const CheckoutDialogs = (props) => {
       paymentOption: options,
       paymentState: true,
     };
-    console.log(result);
+    // console.log(result);
     options === null ? console.log("Belum pilih pembayaran") : onClose(result);
   };
 

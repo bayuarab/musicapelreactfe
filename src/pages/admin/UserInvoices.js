@@ -90,15 +90,15 @@ function UserInvoices() {
       };
       try {
         const response = await api.get(`/AllInvoices`, config);
-        console.log(response.data);
+        // console.log(response.data);
         setLoadMessage(null);
         setInvoices(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");

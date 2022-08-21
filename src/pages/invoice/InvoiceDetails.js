@@ -49,15 +49,15 @@ const InvoiceDetails = () => {
           `/InvoicesDetails/${UserId}/${invoiceID}`,
           config
         );
-        console.log(response.data);
+        // console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
         setApiDataMessage("Oops, terjadi kesalahan");
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
       }
     };
 

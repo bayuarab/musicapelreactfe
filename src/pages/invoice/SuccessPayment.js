@@ -15,6 +15,7 @@ import Logo from "../../components/Logo";
 import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
+import { LogoDiv } from "../../styles/CheckoutDialogStyle";
 
 const theme = createTheme({
   components: {
@@ -55,6 +56,9 @@ const SuccessPayment = () => {
   const { auth } = useAuth();
   const { setCart } = useCart();
   const { setComponentState } = useComponentBarState();
+  const token = auth?.token;
+  const UserId = auth?.userId;
+
   const LogoContainer = styled(Box)({
     backgroundColor: "white",
     alignContent: "center",
@@ -66,35 +70,32 @@ const SuccessPayment = () => {
     borderRadius: "11px",
   });
 
-  const LogoDiv = styled(Box)({
-    display: "flex",
-    alignItems: "center",
-    paddingTop: "5px",
-    paddingBottom: "5px",
-  });
-
-  const fetchApiCart = async () => {
-    try {
-      const response = await api.get(`/Cart/${auth?.userId}`);
-      console.log(response.data);
-      setCart(response.data);
-    } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      if (err.response.data === "Not Found") console.log(err.response.status);
-      console.log(err.response.headers);
-      setCart([]);
-    }
-  };
-
   useEffect(() => {
     setComponentState({ paymentPageState: true, footerState: false });
   }, [setComponentState]);
 
   useEffect(() => {
+    const fetchApiCart = async () => {
+      const config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      try {
+        const response = await api.get(`/Cart/${UserId}`, config);
+        // console.log(response.data);
+        setCart(response.data);
+      } catch (err) {
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // if (err.response.data === "Not Found") console.log(err.response.status);
+        // console.log(err.response.headers);
+        setCart([]);
+      }
+    };
     fetchApiCart();
-  }, []);
+  }, [setCart, token, UserId]);
 
   const changeState = () => {
     setComponentState({ paymentPageState: false, footerState: false });

@@ -10,17 +10,13 @@ import {
 import AppBar from "@mui/material/AppBar";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
-import Slide from "@mui/material/Slide";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../../api/Invoices";
 import useAuth from "../../../hooks/useAuth";
+import { SlideUpTransition } from "../../../styles/Transition";
 import numberFormat from "../../../utilities/NumbeFormat";
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const DetailInvoiceDialog = (props) => {
   const {
@@ -53,14 +49,14 @@ const DetailInvoiceDialog = (props) => {
           `/DetailsByMasterId/${masterInvoiceId}`,
           config
         );
-        console.log(response.data);
+        // console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
       }
     };
 
@@ -73,7 +69,7 @@ const DetailInvoiceDialog = (props) => {
         fullScreen
         open={logState}
         onClose={handleClose}
-        TransitionComponent={Transition}
+        TransitionComponent={SlideUpTransition}
       >
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>

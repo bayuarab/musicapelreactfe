@@ -8,18 +8,13 @@ import {
   DialogTitle,
   Grid,
   Input,
-  Slide,
   TextField,
   Typography,
 } from "@mui/material";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import api from "../../../api/baseApi";
-import useAuth from "../../../hooks/useAuth";
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { SlideUpTransition } from "../../../styles/Transition";
 
 const DialogButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
@@ -34,16 +29,9 @@ const DialogButton = styled(Button)(({ theme }) => ({
 }));
 
 const PaymentMethodDialog = (props) => {
-  const { onClose, logState, selectedOption, dialogOption } = props;
+  const { onClose, logState, selectedOption, dialogOption, config } = props;
   const [imagePreview, setImagePreview] = useState("");
   const [postData, setPostData] = useState(selectedOption);
-  const { auth } = useAuth();
-  const token = auth?.token;
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
 
   const handleClose = (state, data = null) => {
     onClose(state, data);
@@ -52,18 +40,20 @@ const PaymentMethodDialog = (props) => {
   const fetchApiPost = async (data) => {
     try {
       const response = await api.post(`/Payment`, data, config);
-      console.log(response.data);
-      const feedback = {
-        severity: "success",
-        msg: "Opsi pembayaran berhasil ditambahkan",
-      };
-      handleClose(true, feedback);
+      // console.log(response.data);
+      if (response?.data) {
+        const feedback = {
+          severity: "success",
+          msg: "Opsi pembayaran berhasil ditambahkan",
+        };
+        handleClose(true, feedback);
+      }
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      // !err.response
+      //   ? console.log(`Error: ${err.message}`)
+      //   : console.log(err.response.data);
+      // console.log(err.response.status);
+      // console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: "Error: Gagal menambahkan opsi pembayaran, data tidak valid",
@@ -74,21 +64,22 @@ const PaymentMethodDialog = (props) => {
 
   const fetchApiPut = async (data) => {
     data = { ...postData, id: selectedOption.id };
-    console.log("put", data);
+    // console.log("put", data);
     try {
       const response = await api.put(`/Payment`, data, config);
-      console.log(response.data);
-      const feedback = {
-        severity: "success",
-        msg: "Opsi pembayaran berhasil diubah",
-      };
-      handleClose(true, feedback);
+      if (response?.data) {
+        const feedback = {
+          severity: "success",
+          msg: "Opsi pembayaran berhasil diubah",
+        };
+        handleClose(true, feedback);
+      }
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      // !err.response
+      //   ? console.log(`Error: ${err.message}`)
+      //   : console.log(err.response.data);
+      // console.log(err.response.status);
+      // console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: "Error: Gagal merubah opsi pembayaran, data tidak valid",
@@ -328,7 +319,7 @@ const PaymentMethodDialog = (props) => {
   return (
     <Dialog
       open={logState}
-      TransitionComponent={Transition}
+      TransitionComponent={SlideUpTransition}
       keepMounted
       onClose={() => handleClose(false)}
       aria-describedby="alert-dialog-slide-description"

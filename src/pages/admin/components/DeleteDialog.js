@@ -6,15 +6,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide,
   Typography,
 } from "@mui/material";
-import { forwardRef } from "react";
 import styled from "styled-components";
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { SlideUpTransition } from "../../../styles/Transition";
 
 const DialogButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
@@ -37,7 +32,7 @@ const DeleteDialog = (props) => {
   return (
     <Dialog
       open={logState}
-      TransitionComponent={Transition}
+      TransitionComponent={SlideUpTransition}
       keepMounted
       onClose={() => handleClose(false)}
       aria-describedby="alert-dialog-slide-description"

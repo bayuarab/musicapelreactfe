@@ -1,30 +1,7 @@
 import { DeleteForever } from "@mui/icons-material";
-import { Box, Divider, IconButton, styled, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import React from "react";
-
-const DeleteText = styled(Typography)(({ theme }) => ({
-  display: "none",
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  fontWeight: "500",
-  color: "#333333",
-  [theme.breakpoints.up("md")]: {
-    display: "block",
-  },
-}));
-
-const ImgContainer = styled(Box)(({ theme }) => ({
-  display: "none",
-  marginLeft: "2%",
-  marginRight: "15px",
-  width: "200px",
-  height: "133px",
-  borderRadius: "16px",
-  borderColor: "#828282",
-  [theme.breakpoints.up("sm")]: {
-    display: "block",
-  },
-}));
+import { DeleteText, ImgContainer } from "../../../styles/CartStyle";
 
 const CartList = (props) => {
   const { Cart, handleCheck, handleChange, StyledCheckbox, handleDelete } =
@@ -76,7 +53,7 @@ const CartList = (props) => {
                 </ImgContainer>
                 <Box
                   sx={{
-                    minHeight: "100px",
+                    minHeight: "88px",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -101,7 +78,7 @@ const CartList = (props) => {
                         mt: { md: "-4px", sm: "-3px", xs: "-5px" },
                         mb: { sm: "10px", xs: "-10px" },
                         fontFamily: "Poppins",
-                        fontSize: { md: "24px", sm: "20px", xs: "18px" },
+                        fontSize: { md: "24px", sm: "20px", xs: "15px" },
                         fontWeight: "600",
                         color: "#333333",
                       }}
@@ -153,7 +130,7 @@ const CartList = (props) => {
                         sx={{
                           mt: { md: "-4px", sm: "3px" },
                           fontFamily: "Poppins",
-                          fontSize: { md: "24px", sm: "24px", xs: "18px" },
+                          fontSize: { md: "24px", sm: "24px", xs: "15px" },
                           fontWeight: "600",
                           color: "#333333",
                           display: { md: "block", sm: "block", xs: "none" },

@@ -1,13 +1,10 @@
 import { DeleteForever, Search } from "@mui/icons-material";
 import {
-  Alert,
   Box,
   Button,
   Container,
   Grid,
   Paper,
-  Snackbar,
-  Stack,
   Table,
   TableBody,
   TableContainer,
@@ -22,6 +19,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
 import HeaderSet from "../../components/HeaderSet";
+import SnackBar from "../../components/SnackBar";
 import useAuth from "../../hooks/useAuth";
 import {
   StyledPaper,
@@ -65,10 +63,6 @@ const theme = createTheme({
   },
 });
 
-const Alerts = React.forwardRef(function Alerts(props, ref) {
-  return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 function ManageUser() {
   const [users, setUsers] = useState([]);
   const [searchUser, setSearchUser] = useState("");
@@ -100,19 +94,20 @@ function ManageUser() {
     const fetchDelete = async () => {
       try {
         const response = await api.delete(`/${selectedUser.email}`, config);
-        console.log(response.data);
-        setUsers((item) =>
-          item.filter((item) => item.email !== selectedUser.email)
-        );
+        if (response?.data) {
+          setUsers((item) =>
+            item.filter((item) => item.email !== selectedUser.email)
+          );
+        }
         setSeverityType("warning");
         setMessage("User telah dihapus dari daftar");
         setSnackbarState(true);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
         setSeverityType("error");
         setMessage("Error: Gagal menghapus, terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
@@ -138,15 +133,15 @@ function ManageUser() {
       };
       try {
         const response = await api.get(`/AllUser`, config);
-        console.log(response.data);
+        // console.log(response.data);
         setLoadMessage(null);
         setUsers(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        if (err.response.data === "Not Found") console.log(err.response.status);
-        console.log(err.response.headers);
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // if (err.response.data === "Not Found") console.log(err.response.status);
+        // console.log(err.response.headers);
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
@@ -320,21 +315,12 @@ function ManageUser() {
           />
         </Box>
       </ThemeProvider>
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        <Snackbar
-          open={snackbarState}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alerts
-            onClose={handleCloseSnackbar}
-            severity={severityType}
-            sx={{ width: "100%" }}
-          >
-            {message}
-          </Alerts>
-        </Snackbar>
-      </Stack>
+      <SnackBar
+        message={message}
+        snackbarState={snackbarState}
+        handleCloseSnackbar={handleCloseSnackbar}
+        severityType={severityType}
+      />
     </div>
   );
 }

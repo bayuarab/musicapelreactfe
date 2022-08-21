@@ -1,38 +1,19 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogContent,
   DialogTitle,
   Slide,
-  styled,
   TextField,
 } from "@mui/material";
 import { forwardRef, useState } from "react";
 import api from "../../../api/baseApi";
 import useAuth from "../../../hooks/useAuth";
+import { DialogButton } from "../../../styles/MyAccountStyle";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const DialogButton = styled(Button)(({ theme }) => ({
-  display: "block",
-  fontFamily: "Poppins",
-  width: "100%",
-  fontSize: "16px",
-  fontWeight: "500",
-  borderRadius: "8px",
-  textTransform: "Capitalize",
-  paddingTop: "7px",
-  paddingBottom: "7px",
-  color: "white",
-  backgroundColor: "#5D5FEF",
-  [theme.breakpoints.down("sm")]: {
-    display: "block",
-    fontSize: "12px",
-  },
-}));
 
 const UserChangeDataDialog = (props) => {
   const { onClose, logState, dialogOption } = props;
@@ -53,7 +34,7 @@ const UserChangeDataDialog = (props) => {
 
   const fetchPasswordValidation = async () => {
     try {
-      console.table(postData);
+      // console.table(postData);
       const response = await api.post(
         "/UserAuth/PasswordValidation",
         {
@@ -62,24 +43,26 @@ const UserChangeDataDialog = (props) => {
         },
         config
       );
-      console.log(response.data);
-      setDialogState({
-        ...dialogState,
-        oldPass: true,
-        newPassword: "",
-        rePassword: "",
-      });
-      const feedback = {
-        severity: "success",
-        msg: "Password lama tervalidasi",
-      };
-      handleClose(false, feedback);
+      // console.log(response.data);
+      if (response?.data) {
+        setDialogState({
+          ...dialogState,
+          oldPass: true,
+          newPassword: "",
+          rePassword: "",
+        });
+        const feedback = {
+          severity: "success",
+          msg: "Password lama tervalidasi",
+        };
+        handleClose(false, feedback);
+      }
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      // !err.response
+      //   ? console.log(`Error: ${err.message}`)
+      //   : console.log(err.response.data);
+      // console.log(err.response.status);
+      // console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: "Error: Password lama tidak valid",
@@ -91,7 +74,7 @@ const UserChangeDataDialog = (props) => {
   const fetchApiPut = async (url, data) => {
     try {
       const response = await api.post(`/${url}`, data, config);
-      console.log(response.data);
+      // console.log(response.data);
       const feedback = {
         severity: "success",
         msg: `Berhasil, ${dialogOption} telah dirubah`,
@@ -106,11 +89,11 @@ const UserChangeDataDialog = (props) => {
       setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
       handleClose(true, feedback);
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      // !err.response
+      //   ? console.log(`Error: ${err.message}`)
+      //   : console.log(err.response.data);
+      // console.log(err.response.status);
+      // console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: `Error: Gagal merubah ${dialogOption}, data tidak valid`,
@@ -272,7 +255,6 @@ const UserChangeDataDialog = (props) => {
               <TextField
                 value={postData.nama}
                 label="Nama Lengkap Pengguna"
-                // type="password"
                 onChange={(e) => {
                   setPostData({ ...postData, nama: e.target.value });
                 }}

@@ -42,7 +42,7 @@ export function generateNewMasterInvoice({
   auth,
   calculateTotalCost,
 }) {
-  console.log(paymentOption);
+  // console.log(paymentOption);
   return {
     NoInvoice: generateNewInvoice(registeredInvoice, auth),
     PurchaseDate: generateCurrentDate(),

@@ -1,14 +1,11 @@
 import { AddCircle, DeleteForever, Edit, Search } from "@mui/icons-material";
 import {
-  Alert,
   Box,
   Button,
   Container,
   Grid,
   IconButton,
   Paper,
-  Snackbar,
-  Stack,
   Table,
   TableBody,
   TableContainer,
@@ -25,6 +22,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import api from "../../api/baseApi";
 import HeaderSet from "../../components/HeaderSet";
+import SnackBar from "../../components/SnackBar";
 import useAuth from "../../hooks/useAuth";
 import {
   StyledPaper,
@@ -68,9 +66,9 @@ const theme = createTheme({
   },
 });
 
-const Alerts = React.forwardRef(function Alerts(props, ref) {
-  return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+// const Alerts = React.forwardRef(function Alerts(props, ref) {
+//   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+// });
 
 function ManagePaymentMethod() {
   const [options, setOptions] = useState([]);
@@ -81,6 +79,7 @@ function ManagePaymentMethod() {
   const [message, setMessage] = useState("");
   const [snackbarState, setSnackbarState] = useState(false);
   const [dialogOption, setDialogOption] = useState("delete");
+  const [refreshState, setRefreshState] = useState(true);
   const [loadMessage, setLoadMessage] = useState(
     "Sedang mengambil data ke server harap tunggu"
   );
@@ -92,44 +91,28 @@ function ManagePaymentMethod() {
     },
   };
 
-  const fetchApiGet = async () => {
-    try {
-      const response = await api.get(`/Payment`, config);
-      console.log(response.data);
-      setLoadMessage(null);
-      setOptions(response.data);
-    } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      if (err.response.data === "Not Found") console.log(err.response.status);
-      setLoadMessage("Terjadi kesalahan");
-      if (err.response.status === 401 || err.response.status === 403)
-        setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
-      console.log(err.response.headers);
-    }
-  };
-
   const fetchDelete = async () => {
     try {
       const response = await api.delete(
         `/Payment/${selectedOption.id}`,
         config
       );
-      console.log(response.data);
-      setOptions((item) =>
-        item.filter((item) => item.id !== selectedOption.id)
-      );
-      fetchApiGet();
+      if (response?.data) {
+        setOptions((item) =>
+          item.filter((item) => item.id !== selectedOption.id)
+        );
+        setRefreshState((status) => !status);
+        // fetchApiGet();
+      }
       setSeverityType("warning");
       setMessage("Opsi pembayaran telah dihapus dari daftar");
       setSnackbarState(true);
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      // !err.response
+      //   ? console.log(`Error: ${err.message}`)
+      //   : console.log(err.response.data);
+      // console.log(err.response.status);
+      // console.log(err.response.headers);
       setSeverityType("error");
       setMessage("Error: Gagal menghapus, terjadi kesalahan");
       setSnackbarState(true);
@@ -151,7 +134,8 @@ function ManagePaymentMethod() {
       setSeverityType(severity);
       setMessage(msg);
       setSnackbarState(true);
-      fetchApiGet();
+      setRefreshState((status) => !status);
+      // fetchApiGet();
     }
     setOpenDialog(false);
   };
@@ -164,8 +148,30 @@ function ManagePaymentMethod() {
   };
 
   useEffect(() => {
+    const fetchApiGet = async () => {
+      const reqConfig = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      try {
+        const response = await api.get(`/Payment`, reqConfig);
+        // console.log(response.data);
+        setLoadMessage(null);
+        setOptions(response.data);
+      } catch (err) {
+        // !err.response
+        //   ? console.log(`Error: ${err.message}`)
+        //   : console.log(err.response.data);
+        // if (err.response.data === "Not Found") console.log(err.response.status);
+        setLoadMessage("Terjadi kesalahan");
+        if (err.response.status === 401 || err.response.status === 403)
+          setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
+        console.log(err.response.headers);
+      }
+    };
     fetchApiGet();
-  }, [setOptions]);
+  }, [setOptions, refreshState, token]);
 
   const optionFilter = () => {
     return searchOption?.length > 0
@@ -392,24 +398,16 @@ function ManagePaymentMethod() {
             selectedOption={selectedOption}
             logState={openDialog}
             onClose={handleCloseDialog}
+            config={config}
           />
         </Box>
       </ThemeProvider>
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        <Snackbar
-          open={snackbarState}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alerts
-            onClose={handleCloseSnackbar}
-            severity={severityType}
-            sx={{ width: "100%" }}
-          >
-            {message}
-          </Alerts>
-        </Snackbar>
-      </Stack>
+      <SnackBar
+        message={message}
+        snackbarState={snackbarState}
+        handleCloseSnackbar={handleCloseSnackbar}
+        severityType={severityType}
+      />
     </div>
   );
 }
