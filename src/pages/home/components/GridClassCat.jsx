@@ -1,16 +1,19 @@
 import { Box, CardMedia, Grid, Typography } from "@mui/material/";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Loading from "../../../components/Loading";
 import api from "../../../api/courseCatAPI";
 
 export default function GridClassCat() {
 	const [dataClass, setDataClass] = useState([]);
+	const [loadingState, setLoadingState] = useState(true);
 
 	useEffect(() => {
 		const fetchApi = async () => {
 			try {
 				const response = await api.get("/");
 				setDataClass(response.data);
+				setLoadingState(false);
 			} catch (err) {
 				!err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
 				console.log(err.response.status);
@@ -22,7 +25,9 @@ export default function GridClassCat() {
 
 	const gridClassItems = dataClass;
 
-	return (
+	return loadingState ? (
+		<Loading />
+	) : (
 		<Box
 			mt={{
 				md: "6vh",
