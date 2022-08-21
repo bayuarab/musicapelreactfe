@@ -23,7 +23,6 @@ function DialogAddKelas(
     onAdd: () => {},
   }
 ) {
-  /* useStates untuk keperluan POST merk baru */
   const [categoryName, setcategoryName] = useState("");
   const [categoryDescription, setcategoryDescription] = useState("");
   const [imagePreview, setImagePreview] = useState("");
@@ -39,8 +38,6 @@ function DialogAddKelas(
     },
   };
 
-  /* useStates untuk keperluan POST merk baru */
-
   const Alerts = React.forwardRef(function Alerts(props, ref) {
     return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -53,13 +50,10 @@ function DialogAddKelas(
     setOpen(false);
   };
 
-  /* Methods to convert image input into base64 */
   const onFileSubmit = (e) => {
     e.preventDefault();
-    console.log(base64);
   };
   const onChange = (e) => {
-    console.log("file", e.target.files[0]);
     let file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -76,8 +70,6 @@ function DialogAddKelas(
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log("reader", reader);
-    console.log("file", file);
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -85,22 +77,17 @@ function DialogAddKelas(
       reader.readAsDataURL(file);
     }
   };
-  /* Methods to convert image input into base64 */
 
-  /* Method to POST new Brand Item */
   const postKelas = () => {
     const postDataa = {
       category: categoryName,
       image: base64,
       desc: categoryDescription,
     };
-    console.log(postDataa);
     courseCatApi
       .post("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.status);
-          console.log(res.data);
           setSeverityType("success");
           setErr("Berhasil menambahkan kategori");
           setOpen(true);
@@ -117,16 +104,15 @@ function DialogAddKelas(
         setOpen(true);
       });
   };
-  /* Method to POST new Brand Item */
 
   return (
     <div>
       <Dialog open={props.open} onClose={props.onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
-          {/* TITLE */}
-          <DialogTitle>Tambahkan Kategori Baru</DialogTitle>
+          <DialogTitle sx={{ fontFamily: "Poppins" }}>
+            Tambahkan Kategori Baru
+          </DialogTitle>
           <DialogContent>
-            {/* FORM INPUT */}
             <form
               onSubmit={(e) => onFileSubmit(e)}
               onChange={(e) => onChange(e)}
@@ -174,6 +160,8 @@ function DialogAddKelas(
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <TextField
                       id="description"
@@ -186,6 +174,8 @@ function DialogAddKelas(
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
 
                     <Button
@@ -204,6 +194,7 @@ function DialogAddKelas(
                         flexGrow: 1,
                         marginTop: "20px",
                         marginBottom: "20px",
+                        fontFamily: "Poppins",
                       }}
                     >
                       Tambah Kategori

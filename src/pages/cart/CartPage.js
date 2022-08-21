@@ -1,78 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import api from "../../api/userAPI";
-import useAuth from "../../hooks/useAuth";
-import numberFormat from "../../utilities/NumbeFormat";
-import CartList from "./components/CartList";
-import CheckoutDialogs from "./components/CheckoutDialogs";
-
-import {
-  generateNewInvoice,
-  generateNewMasterInvoice,
-} from "../invoice/InvoicesGenerator";
-
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  IconButton,
-  styled,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-
 import {
   IndeterminateCheckBox,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Divider,
+  FormControlLabel,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import api from "../../api/userAPI";
+import Loading from "../../components/Loading";
 import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
-
-const StyledCheckbox = styled(Checkbox)({
-  color: "#BDBDBD",
-  "&.Mui-checked": {
-    color: "#5D5FEF",
-  },
-});
-
-const CheckoutButton = styled(Button)(({ theme }) => ({
-  display: "none",
-  fontFamily: "Poppins",
-  fontSize: "16px",
-  fontWeight: "600",
-  backgroundColor: "#5D5FEF",
-  borderRadius: "8px",
-  textTransform: "Capitalize",
-  paddingLeft: "60px",
-  paddingRight: "60px",
-  paddingTop: "10px",
-  paddingBottom: "10px",
-  [theme.breakpoints.up("md")]: {
-    display: "block",
-  },
-}));
-
-const calculateTotalCost = (carts) => {
-  return carts.reduce((totalCost, items) => {
-    return totalCost + items.price;
-  }, 0);
-};
-
-const findItemsIDInArray = (arr, targetValue) => {
-  return arr.some((items) => items.id === targetValue);
-};
-
-const filterCartItems = (arr, filterValue, operator) => {
-  return arr.filter((items) => {
-    return operator === "equality"
-      ? items.id === filterValue
-      : items.id !== filterValue;
-  });
-};
+import useAuth from "../../hooks/useAuth";
+import { CheckoutButton, StyledCheckbox } from "../../styles/CartStyle";
+import numberFormat from "../../utilities/NumbeFormat";
+import {
+  generateNewInvoice,
+  generateNewMasterInvoice,
+} from "../invoice/InvoicesGenerator";
+import CartList from "./components/CartList";
+import CheckoutDialogs from "./components/CheckoutDialogs";
+import {
+  calculateTotalCost,
+  filterCartItems,
+  findItemsIDInArray,
+} from "./components/Methods";
 
 const CartPage = () => {
   const { setComponentState } = useComponentBarState();
@@ -83,9 +42,8 @@ const CartPage = () => {
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
   const [checkoutState, setCheckoutState] = useState(false);
-  const [apiDataMessage, setApiDataMessage] = useState(
-    "Mengambil data ke server, harap tunggu"
-  );
+  const [loadState, setLoadState] = useState(true);
+  const [apiDataMessage, setApiDataMessage] = useState("");
   const navigate = useNavigate();
   const { auth } = useAuth();
   const userID = auth?.userId;
@@ -99,16 +57,15 @@ const CartPage = () => {
   const fetchDelete = async (id) => {
     try {
       const response = await api.delete(`/Cart/${userID}/${id}`, config);
-      console.log(response.data);
-      setCart(
-        response.data.filter((item) => item.userId === userID && item.id !== id)
-      );
+      if (response?.data) {
+        setCart(
+          response.data.filter(
+            (item) => item.userId === userID && item.id !== id
+          )
+        );
+      }
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      setApiDataMessage("Terjadi kesalahan");
     }
   };
 
@@ -125,17 +82,11 @@ const CartPage = () => {
       };
       try {
         const response = await api.get(`/Invoices/${userID}`, reqConfig);
-        console.log(response?.data);
+
         setRegisteredInvoice(
           response?.data?.map((rawData) => rawData.noInvoice)
         );
-      } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      }
+      } catch (err) {}
     };
     fetchApiInvoices();
   }, [userID, token]);
@@ -149,16 +100,13 @@ const CartPage = () => {
       };
       try {
         const response = await api.get(`/Cart/${userID}`, reqConfig);
-        console.log(response.data);
         setCart(response.data);
+        setLoadState(false);
+        setApiDataMessage(null);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
+        setLoadState(false);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
-        console.log(err.response.status);
-        console.log(err.response.headers);
       }
     };
     fetchApiCart();
@@ -171,7 +119,6 @@ const CartPage = () => {
   const fetchApiPostInvoice = async (url, data) => {
     try {
       const response = await api.post(`/${url}`, data, config);
-      console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
       if (url === "MInvoice") {
@@ -183,7 +130,6 @@ const CartPage = () => {
             scheduleId: items.scheduleId,
           };
         });
-        console.log(details);
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
@@ -191,24 +137,16 @@ const CartPage = () => {
       navigate("/payment-status", { replace: true });
       setCheckoutState(true);
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      setApiDataMessage("Terjadi kesalahan");
     }
   };
 
   const checkout = () => {
-    console.log("Barang yang di checkout:");
-    console.table(selectedCart);
-    console.log(`Total cost: ${cost}`);
     setCheckoutDialogState(true);
   };
 
   const handleCheckoutClose = (value) => {
     const { paymentOption, paymentState } = value;
-    console.log("paymentOption", paymentOption);
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
@@ -254,6 +192,10 @@ const CartPage = () => {
 
   return checkoutState ? (
     <Navigate to="/payment-success" replace />
+  ) : loadState ? (
+    <Box sx={{ paddingTop: { md: "50px", xs: "20px" } }}>
+      <Loading />
+    </Box>
   ) : cart?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
       <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
@@ -368,7 +310,6 @@ const CartPage = () => {
                     fontSize="inherit"
                     sx={{
                       color: "white",
-                      // fontSize: 30,
                     }}
                   />
                 </Avatar>

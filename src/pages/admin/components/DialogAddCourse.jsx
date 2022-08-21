@@ -64,7 +64,6 @@ function DialogAddCourse(
   /* Methods to convert image input into base64 */
   const onFileSubmit = (e) => {
     e.preventDefault();
-    console.log(base64);
   };
   const onChange = (e) => {
     let file = e.target.files[0];
@@ -101,13 +100,10 @@ function DialogAddCourse(
       price: coursePrice,
       courseimage: base64,
     };
-    console.log(postDataa);
     courseApi
       .post("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.status);
-          console.log(res.data);
           props.onClose();
           setRefreshPage((status) => !status);
           setSeverityType("success");
@@ -149,7 +145,9 @@ function DialogAddCourse(
       <Dialog open={props.open} onClose={props.onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
           {/* TITLE */}
-          <DialogTitle sx={{fontFamily:"Poppins"}}>Tambahkan Kelas Baru</DialogTitle>
+          <DialogTitle sx={{ fontFamily: "Poppins" }}>
+            Tambahkan Kelas Baru
+          </DialogTitle>
           <DialogContent>
             {/* FORM INPUT */}
             <form
@@ -199,11 +197,13 @@ function DialogAddCourse(
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
-                      
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <FormControl fullWidth>
-                      <InputLabel sx={{fontFamily:"Poppins"}}>Pilih Kategori Kelas</InputLabel>
+                      <InputLabel sx={{ fontFamily: "Poppins" }}>
+                        Pilih Kategori Kelas
+                      </InputLabel>
                       <Select
                         label="Pilih Kategori Kelas"
                         value={scheduleCourse}
@@ -211,7 +211,10 @@ function DialogAddCourse(
                         size="medium"
                       >
                         {cekKategori.map((kategori, i) => (
-                          <MenuItem value={kategori.id} sx={{fontFamily:"Poppins"}}>
+                          <MenuItem
+                            value={kategori.id}
+                            sx={{ fontFamily: "Poppins" }}
+                          >
                             {kategori.category}
                           </MenuItem>
                         ))}
@@ -228,7 +231,8 @@ function DialogAddCourse(
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <TextField
                       id="price"
@@ -241,7 +245,8 @@ function DialogAddCourse(
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
 
                     <Button
@@ -262,7 +267,8 @@ function DialogAddCourse(
                         flexGrow: 1,
                         marginTop: "20px",
                         marginBottom: "20px",
-                        fontFamily:"Poppins", textTransform:"capitalize"
+                        fontFamily: "Poppins",
+                        textTransform: "capitalize",
                       }}
                     >
                       Tambahkan Kelas Baru

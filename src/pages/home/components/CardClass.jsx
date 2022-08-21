@@ -1,27 +1,36 @@
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Box, CardMedia, Grid, IconButton, Typography } from "@mui/material/";
+import {
+  Box,
+  CardMedia,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material/";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../api/courseAPI";
+import Loading from "../../../components/Loading";
 import numberFormat from "../../../utilities/NumbeFormat";
 
 export default function CardClass() {
   const [dataClass, setDataClass] = useState([]);
   const [expMore, setExpMore] = useState(true);
+  const [loadingState, setLoadingState] = useState(true);
 
   useEffect(() => {
     const fetchApi = async () => {
       try {
         const response = await api.get("/LandingPage");
-        console.log(response.data);
         const limit = response.data.filter((data, index) => index < 6);
         setDataClass(limit);
+        setLoadingState(false);
       } catch (err) {
         !err.response
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
         console.log(err.response.status);
-        console.log(err.response.headers);
       }
     };
     fetchApi();
@@ -34,7 +43,9 @@ export default function CardClass() {
   const gridItems = dataClass;
   const itemCount = expMore ? 2 : gridItems.length;
 
-  return (
+  return loadingState ? (
+    <Loading />
+  ) : (
     <Box>
       <Box
         sx={{
@@ -68,21 +79,12 @@ export default function CardClass() {
                       sx={{
                         objectFit: "cover",
                         maxWidth: "100%",
-                        // minHeight: {
-                        //   lg: "280px",
-                        // },
                         maxHeight: "280px",
                         borderRadius: "20px",
                       }}
                       image={`data:image/jpeg;base64,${item.courseImage}`}
                     />
                   </Link>
-                  {/* <Typography
-                  sx={{
-                    textAlign: "left",
-                    paddingLeft: "10px",
-                  }}
-                > */}
                   <Box
                     sx={{
                       paddingTop: "1.2vh",
@@ -142,7 +144,6 @@ export default function CardClass() {
                     IDR {numberFormat(item.price)}
                   </Typography>
                 </Box>
-                {/* </Typography> */}
               </Box>
             </Grid>
           ))}
@@ -161,11 +162,11 @@ export default function CardClass() {
             <Grid key={item.id} item lg={4} xs={6}>
               <Box
                 sx={{
-                  maxWidth: "88%",
+                  maxWidth: "95%",
                   marginBottom: "10px",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  height: "35vh",
+                  height: "220px",
                 }}
               >
                 <Box textAlign={"left"} sx={{ height: "100%" }}>
@@ -195,7 +196,7 @@ export default function CardClass() {
                     </Typography>
                   </Box>
                   <Box
-                    sx={{ width: "100%", height: "37%", paddingLeft: "8px" }}
+                    sx={{ width: "100%", height: "80px", paddingLeft: "8px" }}
                   >
                     <Typography
                       sx={{

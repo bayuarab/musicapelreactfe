@@ -50,7 +50,6 @@ export default function Login() {
   const fetchApiCart = async (userId) => {
     try {
       const response = await api.get(`/Cart/${userId}`);
-      console.log(response.data);
       setCart(response.data);
     } catch (err) {
       !err.response
@@ -83,7 +82,6 @@ export default function Login() {
     const fetchApi = async () => {
       try {
         const response = await userApi.post("/UserAuth/Login", dataLogin);
-        console.log(response.data);
         const roles = response?.data?.userData?.roles;
         const userId = response?.data?.userData?.id;
         const nama = response?.data?.userData?.nama;
@@ -171,6 +169,16 @@ export default function Login() {
                     autoFocus
                     value={email}
                     onChange={(event) => addEmail(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     margin="normal"
@@ -183,6 +191,16 @@ export default function Login() {
                     id="txtPassword"
                     value={password}
                     onChange={(event) => addPassword(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                 </FormControl>
                 <Box style={{ textAlign: "right" }}>

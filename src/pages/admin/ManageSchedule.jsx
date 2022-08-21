@@ -120,7 +120,6 @@ function ManageSchedule() {
           `/Schedule/${selectedSchedule.id}`,
           config
         );
-        console.log(response.data);
         setSchedules((item) =>
           item.filter((item) => item.id !== selectedSchedule.id)
         );
@@ -128,11 +127,9 @@ function ManageSchedule() {
         setMessage("Jadwal telah dihapus dari daftar");
         setSnackbarState(true);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // !err.response ? console.log(`Error: ${err.message}`) : console.log(err.response.data);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
         setSeverityType("error");
         setMessage("Error: Gagal menghapus, terjadi kesalahan");
         setSnackbarState(true);
@@ -156,7 +153,6 @@ function ManageSchedule() {
       };
       try {
         const response = await api.get("/Schedule/Admin", reqConfig);
-        console.log(response.data);
         setLoadMessage(null);
         setSchedules(response.data);
       } catch (err) {
@@ -164,7 +160,7 @@ function ManageSchedule() {
           ? console.log(`Error: ${err.message}`)
           : console.log(err.response.data);
         if (err.response.data === "Not Found") console.log(err.response.status);
-        console.log(err.response.headers);
+        // console.log(err.response.headers);
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
@@ -191,7 +187,6 @@ function ManageSchedule() {
           <CssBaseline />
           <HeaderSet roles={`admin`} />
 
-          {/* Body Content */}
           <Box
             component="main"
             sx={{
@@ -211,19 +206,18 @@ function ManageSchedule() {
                   <Paper
                     sx={{ p: 2, display: "flex", flexDirection: "column" }}
                   >
-                    {/* TITLE */}
                     <Typography
                       variant="h5"
                       color="secondary"
                       sx={{
                         fontWeight: "bold",
                         fontSize: { md: "24px", xs: "18px" },
+                        fontFamily: "Poppins",
                       }}
                     >
                       Manage Jadwal
                     </Typography>
 
-                    {/* BOX PENCARIAN DATA */}
                     <Box
                       component={"div"}
                       sx={{
@@ -240,8 +234,10 @@ function ManageSchedule() {
                         id="input-with-icon-textfield"
                         label="Pencarian"
                         InputProps={{
+                          style: { fontFamily: "Poppins" },
                           endAdornment: <Search color="primary" />,
                         }}
+                        InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                         variant="outlined"
                         style={{
                           display: "flex",
@@ -287,9 +283,6 @@ function ManageSchedule() {
                                 Kelas
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                Id Kelas
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
                                 Jadwal
                               </StyledTableCell>
                               <StyledTableCell align="center">
@@ -311,13 +304,13 @@ function ManageSchedule() {
                                   {row.courseTitle}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
-                                  {row.courseId}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
                                   {row.jadwal}
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                  <Grid container>
+                                  <Grid
+                                    container
+                                    sx={{ display: { md: "flex", xs: "none" } }}
+                                  >
                                     <Grid item mb="0.5vh" xs={10} md={6}>
                                       <Button
                                         onClick={(e) => {
@@ -330,16 +323,7 @@ function ManageSchedule() {
                                         startIcon={<ModeEdit />}
                                         aria-label="delete"
                                       >
-                                        <Typography
-                                          sx={{
-                                            display: {
-                                              md: "block",
-                                              xs: "none",
-                                            },
-                                          }}
-                                        >
-                                          Edit
-                                        </Typography>
+                                        Edit
                                       </Button>
                                     </Grid>
                                     <Grid item mb="0.5vh" xs={10} md={6}>
@@ -352,17 +336,45 @@ function ManageSchedule() {
                                         startIcon={<DeleteForever />}
                                         aria-label="delete"
                                       >
-                                        <Typography
-                                          sx={{
-                                            display: {
-                                              md: "block",
-                                              xs: "none",
-                                            },
-                                          }}
-                                        >
-                                          Hapus
-                                        </Typography>
+                                        Hapus
                                       </Button>
+                                    </Grid>
+                                  </Grid>
+                                  <Grid
+                                    container
+                                    sx={{ display: { md: "none", xs: "flex" } }}
+                                  >
+                                    <Grid item mb="0.5vh" xs={10} md={6}>
+                                      <Button
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          setOpenEdit(true);
+                                          setEditItemData(row);
+                                        }}
+                                        variant="outlined"
+                                        color="secondary"
+                                        startIcon={
+                                          <ModeEdit
+                                            sx={{ marginLeft: "10px" }}
+                                          />
+                                        }
+                                        aria-label="delete"
+                                      ></Button>
+                                    </Grid>
+                                    <Grid item mb="0.5vh" xs={10} md={6}>
+                                      <Button
+                                        onClick={() =>
+                                          handleClickOpenLogout(row)
+                                        }
+                                        variant="outlined"
+                                        color="remove"
+                                        startIcon={
+                                          <DeleteForever
+                                            sx={{ marginLeft: "10px" }}
+                                          />
+                                        }
+                                        aria-label="delete"
+                                      ></Button>
                                     </Grid>
                                   </Grid>
                                 </StyledTableCell>

@@ -26,7 +26,6 @@ function DialogAddJadwal(
     onAdd: () => {},
   }
 ) {
-  /* useStates untuk keperluan POST merk baru */
   const [jadwal, setJadwal] = useState("");
   const [courseId, setCourseId] = useState("");
   const [err, setErr] = useState("");
@@ -40,7 +39,7 @@ function DialogAddJadwal(
       Authorization: "Bearer " + token,
     },
   };
-  /* useStates untuk keperluan POST merk baru */
+
   const Alerts = React.forwardRef(function Alerts(props, ref) {
     return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -53,7 +52,6 @@ function DialogAddJadwal(
     setOpen(false);
   };
 
-  /* Method to POST new Brand Item */
   const postJadwal = async () => {
     const postDataa = {
       jadwal: jadwal,
@@ -62,7 +60,6 @@ function DialogAddJadwal(
     try {
       const res = await api.post("/Schedule", postDataa, config);
       if (res.status === 200) {
-        console.log(res.data);
         setSeverityType("success");
         setErr("Berhasil menambahkan jadwal kelas");
         setOpen(true);
@@ -80,7 +77,6 @@ function DialogAddJadwal(
     const getCourse = async () => {
       try {
         const response = await api.get("Course/AdminDialog");
-        console.log(response.data);
         setListCourse(response.data);
       } catch (err) {
         !err.response
@@ -97,8 +93,9 @@ function DialogAddJadwal(
     <div>
       <Dialog open={props.open} onClose={props.onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
-          {/* TITLE */}
-          <DialogTitle>Tambahkan Jadwal Kelas Baru</DialogTitle>
+          <DialogTitle sx={{ fontFamily: "Poppins" }}>
+            Tambahkan Jadwal Kelas Baru
+          </DialogTitle>
           <DialogContent>
             <form
               onSubmit={(e) => {
@@ -124,21 +121,14 @@ function DialogAddJadwal(
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
-                    {/* <TextField
-											id="description"
-											value={courseId}
-											label="Id Kelas"
-											onChange={(e) => setCourseId(e.target.value)}
-											style={{
-												display: "flex",
-												flexGrow: 1,
-												marginTop: "20px",
-												marginBottom: "20px",
-											}}
-										/>*/}
+
                     <FormControl fullWidth>
-                      <InputLabel>Pilih Kelas</InputLabel>
+                      <InputLabel sx={{ fontFamily: "Poppins" }}>
+                        Pilih Kelas
+                      </InputLabel>
                       <Select
                         label="Pilih Kelas"
                         value={courseId}
@@ -146,7 +136,10 @@ function DialogAddJadwal(
                         size="medium"
                       >
                         {listCourse.map((course, i) => (
-                          <MenuItem value={course.id}>
+                          <MenuItem
+                            value={course.id}
+                            sx={{ fontFamily: "Poppins" }}
+                          >
                             {course.courseTitle}
                           </MenuItem>
                         ))}
@@ -163,6 +156,7 @@ function DialogAddJadwal(
                         flexGrow: 1,
                         marginTop: "20px",
                         marginBottom: "20px",
+                        fontFamily: "Poppins",
                       }}
                     >
                       Tambahkan Jadwal Baru

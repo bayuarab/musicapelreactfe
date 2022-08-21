@@ -12,6 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import Loading from "../../components/Loading";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -21,11 +22,11 @@ import {
   StyledTableRow,
 } from "../../styles/TableStyle";
 
-//--
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
   const { setComponentState } = useComponentBarState();
+  const [loadState, setLoadState] = useState(true);
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -49,22 +50,22 @@ const InvoiceDetails = () => {
           `/InvoicesDetails/${UserId}/${invoiceID}`,
           config
         );
-        console.log(response.data);
+        setLoadState(false);
         setInvoiceDetailData(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
+        setLoadState(false);
         setApiDataMessage("Oops, terjadi kesalahan");
-        console.log(err.response.status);
-        console.log(err.response.headers);
       }
     };
 
     fetchApi();
   }, [invoiceID, token, UserId]);
 
-  return invoiceDetailData?.length <= 0 ? (
+  return loadState ? (
+    <Box sx={{ paddingTop: { md: "50px", xs: "20px" } }}>
+      <Loading />
+    </Box>
+  ) : invoiceDetailData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
       <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
         {apiDataMessage}
@@ -145,7 +146,6 @@ const InvoiceDetails = () => {
               display: { md: "block", xs: "none" },
             }}
           >
-            {/* .toLocaleString("de-DE") */}
             Total Harga&nbsp;:&nbsp;&nbsp; IDR{" "}
             {invoiceDetailData[0]
               ? numberFormat(invoiceDetailData[0].cost)
@@ -162,7 +162,6 @@ const InvoiceDetails = () => {
             display: { md: "none", xs: "block" },
           }}
         >
-          {/* .toLocaleString("de-DE") */}
           Total Harga &nbsp;&nbsp;:&nbsp;&nbsp; IDR{" "}
           {invoiceDetailData[0] ? numberFormat(invoiceDetailData[0].cost) : "-"}
         </Typography>

@@ -12,6 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
+import Loading from "../../components/Loading";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -21,11 +22,11 @@ import {
   StyledTableRow,
 } from "../../styles/TableStyle";
 import numberFormat from "../../utilities/NumbeFormat";
-//==================================================
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
   const { setComponentState } = useComponentBarState();
+  const [loadState, setLoadState] = useState(true);
   const { auth } = useAuth();
   const UserID = auth?.userId;
   const token = auth?.token;
@@ -47,23 +48,23 @@ const InvoiceMaster = () => {
       };
       try {
         const response = await api.get(`/Invoices/${UserID}`, config);
-        console.log(response.data);
+        setLoadState(false);
         setMasterInvoiceData(response.data);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
+        setLoadState(false);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
-        console.log(err.response.status);
-        console.log(err.response.headers);
       }
     };
 
     fetchApi();
   }, [UserID, token]);
 
-  return masterInvoiceData?.length <= 0 ? (
+  return loadState ? (
+    <Box sx={{ paddingTop: { md: "50px", xs: "20px" } }}>
+      <Loading />
+    </Box>
+  ) : masterInvoiceData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
       <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
         {apiDataMessage}
@@ -124,7 +125,6 @@ const InvoiceMaster = () => {
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.qty}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {/* row.cost.toLocaleString("de-DE") */}
                   IDR {numberFormat(row.cost)}
                 </StyledTableCell>
                 <StyledTableCell align="center">

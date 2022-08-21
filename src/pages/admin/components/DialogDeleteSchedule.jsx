@@ -24,16 +24,11 @@ const DeleteDialog = (props) => {
 	};
 
 	return (
-		<Dialog
-			open={logState}
-			TransitionComponent={Transition}
-			keepMounted
-			onClose={() => handleClose(false)}
-			aria-describedby="alert-dialog-slide-description"
-			// sx={{ padding: "30px" }}
-		>
+		<Dialog open={logState} TransitionComponent={Transition} keepMounted onClose={() => handleClose(false)} aria-describedby="alert-dialog-slide-description">
 			<Box sx={{ padding: "10px" }}>
-				<DialogTitle mb={1}>{"Apakah anda yakin untuk menghapus akun ini?"}</DialogTitle>
+				<DialogTitle mb={1} sx={{ fontFamily: "Poppins" }}>
+					{"Apakah anda yakin untuk menghapus akun ini?"}
+				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-slide-description">
 						<Typography

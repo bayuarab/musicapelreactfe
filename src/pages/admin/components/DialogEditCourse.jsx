@@ -58,7 +58,6 @@ const DialogEditCourse = (props) => {
   /* Methods to convert image input into base64 */
   const onFileSubmit = (e) => {
     e.preventDefault();
-    console.log(base64);
   };
   const onChange = (e) => {
     let file = e.target.files[0];
@@ -96,13 +95,10 @@ const DialogEditCourse = (props) => {
       price: coursePrice,
       courseimage: base64,
     };
-    console.log(postDataa);
     courseApi
       .put("/", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.status);
-          console.log(res.data);
           setSeverityType("success");
           setErr("Berhasil menambahkan kelas");
           props.onClose();
@@ -141,7 +137,9 @@ const DialogEditCourse = (props) => {
       <Dialog open={openDialog} onClose={onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
           {/* TITLE */}
-          <DialogTitle sx={{fontFamily:"Poppins"}}>Edit Kelas Baru</DialogTitle>
+          <DialogTitle sx={{ fontFamily: "Poppins" }}>
+            Edit Kelas Baru
+          </DialogTitle>
           <DialogContent>
             {/* FORM INPUT */}
             <form
@@ -191,10 +189,13 @@ const DialogEditCourse = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <FormControl fullWidth>
-                      <InputLabel sx={{fontFamily:"Poppins"}}>Pilih Kategori Kelas</InputLabel>
+                      <InputLabel sx={{ fontFamily: "Poppins" }}>
+                        Pilih Kategori Kelas
+                      </InputLabel>
                       <Select
                         label="Pilih Kategori Kelas"
                         value={kategori}
@@ -202,7 +203,10 @@ const DialogEditCourse = (props) => {
                         size="medium"
                       >
                         {cekKategori.map((kategori, i) => (
-                          <MenuItem value={kategori.id} sx={{fontFamily:"Poppins"}}>
+                          <MenuItem
+                            value={kategori.id}
+                            sx={{ fontFamily: "Poppins" }}
+                          >
                             {kategori.category}
                           </MenuItem>
                         ))}
@@ -219,7 +223,8 @@ const DialogEditCourse = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <TextField
                       id="price"
@@ -232,7 +237,8 @@ const DialogEditCourse = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
 
                     <Button
@@ -253,7 +259,8 @@ const DialogEditCourse = (props) => {
                         flexGrow: 1,
                         marginTop: "20px",
                         marginBottom: "20px",
-                        fontFamily:"Poppins", textTransform:"capitalize"
+                        fontFamily: "Poppins",
+                        textTransform: "capitalize",
                       }}
                     >
                       Edit Kelas

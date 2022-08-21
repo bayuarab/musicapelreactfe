@@ -27,20 +27,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import HeaderbarAdmin from "../component/HeaderBarAdmin";
-import HeaderSet from "../../components/HeaderSet";
-// import ManageBrandDialogAddItem from '../components/ManageBrandDialogAddItem';
-// import ManageBrandDialogEditItem from '../components/ManageBrandDialogEditItem';
-// import { APIRequest } from '../components/APICalls';
 import apiBase from "../../api/baseApi";
 import api from "../../api/courseCatAPI";
 import DialogAddKelas from "../../components/DialogAddKelas";
 import DialogDeleteCat from "../../components/DialogDeleteCat";
 import DialogEditCat from "../../components/DialogEditCat";
+import HeaderSet from "../../components/HeaderSet";
 import useAuth from "../../hooks/useAuth";
-// import { getKategoriKelas, getMusic } from "../../JSON Data/Data";
-// let kategoris = getKategoriKelas();
-// let musics = getMusic();
 
 const theme = createTheme({
   palette: {
@@ -89,7 +82,12 @@ const ReadMore = ({ children }) => {
     <Typography className="text">
       {isReadMore ? text.slice(0, 120) : text}
       <span
-        style={{ color: "blue", fontWeight: "500", fontSize: "15px" }}
+        style={{
+          color: "#5D5FEF",
+          fontWeight: "500",
+          fontSize: "15px",
+          fontFamily: "Poppins",
+        }}
         onClick={toggleReadMore}
         className="read-or-hide"
       >
@@ -103,7 +101,6 @@ function ManageKelas() {
   const [refreshPage, setRefreshPage] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [listOfBrands, setListOfBrands] = useState([]);
-  // const [category, setCat] = useState([]);
   const [selectedCat, setSelectedCat] = useState({});
   const [openDelete, setOpenDelete] = useState(false);
   const [severityType, setSeverityType] = useState("error");
@@ -136,7 +133,6 @@ function ManageKelas() {
     const fetchDelete = async () => {
       try {
         const response = await api.delete(`/${selectedCat.id}`, config);
-        console.log(response.data);
         getListOfBrands();
         setSeverityType("warning");
         setErr("Kategori telah dihapus dari daftar");
@@ -198,9 +194,7 @@ function ManageKelas() {
       <ThemeProvider theme={theme}>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
-          {/* Header bar */}
           <HeaderSet roles={`admin`} />
-          {/* Body Content */}
           <Box
             component="main"
             sx={{
@@ -219,18 +213,18 @@ function ManageKelas() {
                   <Paper
                     sx={{ p: 2, display: "flex", flexDirection: "column" }}
                   >
-                    {/* TITLE */}
                     <Typography
                       variant="h5"
                       color="secondary"
                       sx={{
                         fontWeight: "bold",
                         fontSize: { md: "24px", xs: "18px" },
+                        fontFamily: "Poppins",
                       }}
                     >
                       Manage Kategori Kursus
                     </Typography>
-                    {/* BOX PENCARIAN DATA */}
+
                     <Box
                       component={"div"}
                       sx={{
@@ -247,8 +241,10 @@ function ManageKelas() {
                         id="input-with-icon-textfield"
                         label="Pencarian Berdasarkan Nama atau Id Kategori"
                         InputProps={{
+                          style: { fontFamily: "Poppins" },
                           endAdornment: <Search color="primary" />,
                         }}
+                        InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                         variant="outlined"
                         style={{
                           display: "flex",
@@ -293,12 +289,14 @@ function ManageKelas() {
                                 gutterBottom
                                 variant="h5"
                                 component="div"
+                                sx={{ fontFamily: "Poppins" }}
                               >
                                 {item.category}
                               </Typography>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
+                                sx={{ fontFamily: "Poppins" }}
                               >
                                 <ReadMore>{item.desc}</ReadMore>
                               </Typography>
@@ -375,6 +373,12 @@ function ManageKelas() {
                             </Grid>
                           </Grid>
                         </Grid>
+                        <Box
+                          sx={{
+                            height: "0px",
+                            borderBottom: "0.5px solid gray",
+                          }}
+                        ></Box>
                       </Grid>
                     ))}
                   </Paper>
@@ -383,7 +387,7 @@ function ManageKelas() {
             </Container>
           </Box>
           <Toolbar />
-          {/* DIALOG ADD*/}
+
           <DialogAddKelas
             open={openAdd}
             onClose={() => {
@@ -391,7 +395,7 @@ function ManageKelas() {
               setRefreshPage((status) => !status);
             }}
           />
-          {/* DIALOG EDIT */}
+
           <DialogEditCat
             selectedCat={editItemData}
             openDialog={openEdit}
@@ -400,7 +404,7 @@ function ManageKelas() {
               setRefreshPage((status) => !status);
             }}
           />
-          {/* <ManageBrandDialogEditItem open={openEdit} editItemData={editItemData} onClose={() => { setOpenEdit(false); setRefreshPage((status) => !status); }} /> */}
+
           <DialogDeleteCat
             selectedCat={selectedCat}
             logState={openDelete}

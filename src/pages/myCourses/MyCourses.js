@@ -1,6 +1,7 @@
 import { Box, Divider, styled, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import api from "../../api/userAPI";
+import Loading from "../../components/Loading";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 
@@ -21,6 +22,7 @@ const ImgContainer = styled(Box)(({ theme }) => ({
 const MyCourses = () => {
   const [myCourseData, setMyCourseData] = useState([]);
   const { setComponentState } = useComponentBarState();
+  const [loadState, setLoadState] = useState(true);
   const { auth } = useAuth();
   const UserId = auth?.userId;
   const token = auth?.token;
@@ -42,23 +44,23 @@ const MyCourses = () => {
       };
       try {
         const response = await api.get(`/Courses/${UserId}`, config);
-        console.log(response.data);
         setMyCourseData(response.data);
+        setLoadState(false);
       } catch (err) {
-        !err.response
-          ? console.log(`Error: ${err.message}`)
-          : console.log(err.response.data);
+        setLoadState(false);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
-        console.log(err.response.status);
-        console.log(err.response.headers);
       }
     };
 
     fetchApi();
   }, [UserId, token]);
 
-  return myCourseData?.length <= 0 ? (
+  return loadState ? (
+    <Box sx={{ paddingTop: { md: "50px", xs: "20px" } }}>
+      <Loading />
+    </Box>
+  ) : myCourseData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
       <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
         {apiDataMessage}

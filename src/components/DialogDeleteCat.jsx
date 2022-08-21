@@ -24,16 +24,11 @@ const DeleteDialog = (props) => {
 	};
 
 	return (
-		<Dialog
-			open={logState}
-			TransitionComponent={Transition}
-			keepMounted
-			onClose={() => handleClose(false)}
-			aria-describedby="alert-dialog-slide-description"
-			// sx={{ padding: "30px" }}
-		>
+		<Dialog open={logState} TransitionComponent={Transition} keepMounted onClose={() => handleClose(false)} aria-describedby="alert-dialog-slide-description">
 			<Box sx={{ padding: "10px" }}>
-				<DialogTitle mb={1}>{"Apakah anda yakin untuk menghapus Kelas ini?"}</DialogTitle>
+				<DialogTitle mb={1} sx={{ fontFamily: "Poppins" }}>
+					{"Apakah anda yakin untuk menghapus Kelas ini?"}
+				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-slide-description">
 						<Typography
@@ -42,8 +37,9 @@ const DeleteDialog = (props) => {
 								fontSize: "17px",
 								fontWeight: "400",
 								fontFamily: "Poppins",
+								fontFamily: "Poppins",
 							}}>
-							Kelas : {selectedCat?.category} Id : {selectedCat?.id}
+							Kategori : {selectedCat?.category}
 						</Typography>
 					</DialogContentText>
 				</DialogContent>

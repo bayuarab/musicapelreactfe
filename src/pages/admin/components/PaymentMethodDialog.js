@@ -8,18 +8,13 @@ import {
   DialogTitle,
   Grid,
   Input,
-  Slide,
   TextField,
   Typography,
 } from "@mui/material";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import api from "../../../api/baseApi";
-import useAuth from "../../../hooks/useAuth";
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { SlideUpTransition } from "../../../styles/Transition";
 
 const DialogButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
@@ -34,16 +29,9 @@ const DialogButton = styled(Button)(({ theme }) => ({
 }));
 
 const PaymentMethodDialog = (props) => {
-  const { onClose, logState, selectedOption, dialogOption } = props;
+  const { onClose, logState, selectedOption, dialogOption, config } = props;
   const [imagePreview, setImagePreview] = useState("");
   const [postData, setPostData] = useState(selectedOption);
-  const { auth } = useAuth();
-  const token = auth?.token;
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
 
   const handleClose = (state, data = null) => {
     onClose(state, data);
@@ -52,18 +40,14 @@ const PaymentMethodDialog = (props) => {
   const fetchApiPost = async (data) => {
     try {
       const response = await api.post(`/Payment`, data, config);
-      console.log(response.data);
-      const feedback = {
-        severity: "success",
-        msg: "Opsi pembayaran berhasil ditambahkan",
-      };
-      handleClose(true, feedback);
+      if (response?.data) {
+        const feedback = {
+          severity: "success",
+          msg: "Opsi pembayaran berhasil ditambahkan",
+        };
+        handleClose(true, feedback);
+      }
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: "Error: Gagal menambahkan opsi pembayaran, data tidak valid",
@@ -74,21 +58,16 @@ const PaymentMethodDialog = (props) => {
 
   const fetchApiPut = async (data) => {
     data = { ...postData, id: selectedOption.id };
-    console.log("put", data);
     try {
       const response = await api.put(`/Payment`, data, config);
-      console.log(response.data);
-      const feedback = {
-        severity: "success",
-        msg: "Opsi pembayaran berhasil diubah",
-      };
-      handleClose(true, feedback);
+      if (response?.data) {
+        const feedback = {
+          severity: "success",
+          msg: "Opsi pembayaran berhasil diubah",
+        };
+        handleClose(true, feedback);
+      }
     } catch (err) {
-      !err.response
-        ? console.log(`Error: ${err.message}`)
-        : console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: "Error: Gagal merubah opsi pembayaran, data tidak valid",
@@ -108,7 +87,6 @@ const PaymentMethodDialog = (props) => {
   };
 
   const onChange = (e) => {
-    console.log("file", e.target.files[0]);
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -129,8 +107,6 @@ const PaymentMethodDialog = (props) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log("reader", reader);
-    console.log("file", file);
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -200,7 +176,6 @@ const PaymentMethodDialog = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               onUpdatePost();
-              // onClose(true, postData);
             }}
           >
             <Grid
@@ -223,6 +198,8 @@ const PaymentMethodDialog = (props) => {
                       marginTop: "20px",
                       marginBottom: "20px",
                     }}
+                    InputProps={{ style: { fontFamily: "Poppins" } }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
 
                   <Button
@@ -249,7 +226,6 @@ const PaymentMethodDialog = (props) => {
   };
 
   const dialogEdit = () => {
-    // setPostData({ ...postData, id: selectedOption?.id });
     return (
       <Box sx={{ padding: "10px" }}>
         <DialogTitle mb={1}>{"Form ubah opsi pembayaran"}</DialogTitle>
@@ -300,6 +276,8 @@ const PaymentMethodDialog = (props) => {
                       marginTop: "20px",
                       marginBottom: "20px",
                     }}
+                    InputProps={{ style: { fontFamily: "Poppins" } }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
 
                   <Button
@@ -328,11 +306,10 @@ const PaymentMethodDialog = (props) => {
   return (
     <Dialog
       open={logState}
-      TransitionComponent={Transition}
+      TransitionComponent={SlideUpTransition}
       keepMounted
       onClose={() => handleClose(false)}
       aria-describedby="alert-dialog-slide-description"
-      // sx={{ padding: "30px" }}
     >
       {dialogOption === "delete"
         ? dialogDelete()

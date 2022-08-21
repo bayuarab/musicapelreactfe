@@ -103,7 +103,6 @@ export default function Login() {
     const fetchApi = async () => {
       try {
         const response = await api.post("/UserAuth/Register", dataClient);
-        console.log(response.data);
         navigate("/Login", { replace: true });
         setRegisState(true);
       } catch (err) {
@@ -177,6 +176,16 @@ export default function Login() {
                     autoFocus
                     value={nama}
                     onChange={(event) => addNama(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     id="txtEmail"
@@ -188,6 +197,16 @@ export default function Login() {
                     autoComplete="email"
                     value={email}
                     onChange={(event) => addEmail(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     margin="normal"

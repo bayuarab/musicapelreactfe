@@ -46,18 +46,15 @@ const DialogEditJadwal = (props) => {
     setOpen(false);
   };
 
-  /* Method to POST new Brand Item */
   const postJadwal = async () => {
     const postDataa = {
       id: selectedSchedule.id,
       jadwal: jadwal,
       courseId: courseId,
     };
-    console.log(postDataa);
     try {
       const res = await api.put("/Schedule", postDataa, config);
       if (res.status === 200) {
-        console.log(res.data);
         setSeverityType("success");
         setErr("Berhasil merubah jadwal kelas");
         setOpen(true);
@@ -75,7 +72,6 @@ const DialogEditJadwal = (props) => {
     const getCourse = async () => {
       try {
         const response = await api.get("Course/AdminDialog");
-        console.log(response.data);
         setListCourse(response.data);
       } catch (err) {
         !err.response
@@ -92,8 +88,9 @@ const DialogEditJadwal = (props) => {
     <div>
       <Dialog open={openDialog} onClose={onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
-          {/* TITLE */}
-          <DialogTitle>Edit Jadwal Kelas</DialogTitle>
+          <DialogTitle sx={{ fontFamily: "Poppins" }}>
+            Edit Jadwal Kelas
+          </DialogTitle>
           <DialogContent>
             <form
               onSubmit={(e) => {
@@ -119,17 +116,25 @@ const DialogEditJadwal = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputProps={{ style: { fontFamily: "Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <FormControl fullWidth>
-                      <InputLabel>Pilih Kelas</InputLabel>
+                      <InputLabel sx={{ fontFamily: "Poppins" }}>
+                        Pilih Kelas
+                      </InputLabel>
                       <Select
                         label="Pilih Kelas"
                         value={courseId}
                         onChange={(e) => setCourseId(e.target.value)}
                         size="medium"
+                        LabelProps={{ style: { fontFamily: "Poppins" } }}
                       >
                         {listCourse.map((course, i) => (
-                          <MenuItem value={course.id}>
+                          <MenuItem
+                            value={course.id}
+                            sx={{ fontFamily: "Poppins" }}
+                          >
                             {course.courseTitle}
                           </MenuItem>
                         ))}
@@ -146,6 +151,7 @@ const DialogEditJadwal = (props) => {
                         flexGrow: 1,
                         marginTop: "20px",
                         marginBottom: "20px",
+                        fontFamily: "Poppins",
                       }}
                     >
                       Edit Jadwal
