@@ -39,8 +39,8 @@ export default function DetailCourse() {
 	const [detailOfACategory, setDetailOfACategory] = useState([]);
 	const getdetailOfACategory = async (url) => {
 		console.log("params", url);
-		await axios
-			.get(`https://localhost:7132/api/CourseCategory/${url}`, {
+		await baseApi
+			.get(`CourseCategory/${url}`, {
 				url,
 			})
 			.then((res) => {
@@ -62,8 +62,8 @@ export default function DetailCourse() {
 	const [detailOfACourse, setDetailOfACourse] = useState([]);
 	const getdetailOfACourse = async (url) => {
 		console.log("paramss", url);
-		await axios
-			.get(`https://localhost:7132/api/Course/categoryId/${url}`, {
+		await baseApi
+			.get(`Course/categoryId/${url}`, {
 				url,
 			})
 			.then((res) => {
@@ -79,6 +79,9 @@ export default function DetailCourse() {
 		getdetailOfACourse(paramss.categoryid);
 	}, [paramss]);
 
+	/* useStates untuk keperluan GET detail dari sebuah produk */
+
+	// const gridClassItems = dataClass;
 	const detailData = detailOfACategory;
 	return (
 		<Grid>
@@ -95,7 +98,7 @@ export default function DetailCourse() {
 					<img src={`data:image/jpeg;base64,${detailData.image}`} width="100%" alt={detailData.image} style={{ height: "100%", objectFit: "cover" }}></img>
 				</Box>
 				<center>
-					<Box sx={{ width: "95%" }}>
+					<Box mb="4vh" sx={{ width: "95%" }}>
 						<Typography
 							sx={{
 								fontSize: {
@@ -122,8 +125,18 @@ export default function DetailCourse() {
 						</Typography>
 					</Box>
 				</center>
+				<div
+					style={{
+						paddingTop: {
+							md: "40px",
+							xs: "14px",
+						},
+						height: "0px",
+						borderBottom: "1px solid grey",
+					}}
+				/>
 				<Typography
-					color="blue"
+					color="#5D5FEF"
 					sx={{
 						textAlign: "center",
 						fontSize: {
@@ -135,7 +148,7 @@ export default function DetailCourse() {
 					<h4>Kelas Yang Tersedia</h4>
 				</Typography>
 				<center>
-					<Box mt="6vh" sx={{ width: "90%" }}>
+					<Box sx={{ width: "90%", marginTop: { md: "6vh", xs: "2vh" } }}>
 						<Grid container spacing={3}>
 							{detailOfACourse.map((item, index) => (
 								<Grid key={item.id} item xs={6} md={4}>
@@ -192,7 +205,7 @@ export default function DetailCourse() {
 														},
 														fontFamily: "Poppins",
 													}}
-													color="blue">
+													color="#5D5FEF">
 													IDR {numberFormat(item.price)}
 												</Typography>
 											</CardContent>
