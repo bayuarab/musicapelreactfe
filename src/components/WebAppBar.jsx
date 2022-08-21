@@ -11,9 +11,7 @@ import {
 
 import {
   AppBar,
-  Badge,
   Box,
-  Button,
   Divider,
   Drawer,
   IconButton,
@@ -21,51 +19,20 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  styled,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import { useCart } from "../context/CartProvider";
 import { useComponentBarState } from "../context/ComponentStateProvider";
 import useAuth from "../hooks/useAuth";
 import { StyledPurpleButton } from "../styles/PurpleContainedButton";
+import {
+  BlackButton,
+  SideIcons,
+  StyledBadge,
+  StyledToolbar,
+} from "../styles/WebAppBarStyle";
 import LogoutDialog from "./LogoutDialog";
 //------------------------------------------------------------------------
-
-const StyledToolbar = styled(Toolbar)({
-  display: "flex",
-  justifyContent: "space-between",
-  backgroundColor: "#F2C94C",
-  height: { md: "76px", xs: "40px" },
-});
-
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: "0 4px",
-  },
-}));
-
-const SideIcons = styled(Box)(({ theme }) => ({
-  display: "none",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: "35px",
-  marginRight: "10px",
-  [theme.breakpoints.up("md")]: {
-    display: "flex",
-  },
-}));
-
-const BlackButton = styled(Button)({
-  color: "black",
-  textTransform: "Capitalize",
-  fontSize: "16px",
-  fontFamily: "Poppins",
-  fontWeight: "500",
-});
 
 function WebAppBar(props) {
   const { window } = props;
@@ -111,19 +78,7 @@ function WebAppBar(props) {
         <BlackButton>Daftar Sekarang</BlackButton>
       </Link>
       <Link style={{ textDecoration: "none" }} to="/login">
-        <StyledPurpleButton
-          variant="contained"
-          // variant="contained"
-          // sx={{
-          //   fontFamily: "Poppins",
-          //   fontSize: "16px",
-          //   backgroundColor: "#5D5FEF",
-          //   borderRadius: "8px",
-          //   textTransform: "Capitalize",
-          // }}
-        >
-          Masuk
-        </StyledPurpleButton>
+        <StyledPurpleButton variant="contained">Masuk</StyledPurpleButton>
       </Link>
     </SideIcons>
   );

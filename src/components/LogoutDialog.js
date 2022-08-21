@@ -4,10 +4,10 @@ import {
   DialogActions,
   DialogTitle,
   Slide,
+  styled,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { forwardRef } from "react";
-import styled from "styled-components";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -30,7 +30,7 @@ const theme = createTheme({
   },
 });
 
-const DialogButton = styled(Button)(({ theme }) => ({
+const DialogButton = styled(Button)({
   fontFamily: "Poppins",
   width: "16%",
   fontSize: "16px",
@@ -40,7 +40,7 @@ const DialogButton = styled(Button)(({ theme }) => ({
   paddingTop: "4px",
   paddingBottom: "4px",
   height: "40px",
-}));
+});
 
 const LogoutDialog = (props) => {
   const { onClose, logState } = props;
@@ -60,11 +60,6 @@ const LogoutDialog = (props) => {
         <DialogTitle sx={{ fontFamily: "Poppins" }}>
           {"Apakah kamu yakin ingin Log Out ?"}
         </DialogTitle>
-        {/* <DialogContent>
-      <DialogContentText id="alert-dialog-slide-description">
-      You hav.
-      </DialogContentText>
-    </DialogContent> */}
         <DialogActions>
           <DialogButton
             variant="contained"

@@ -3,34 +3,16 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Alert,
   Avatar,
   Box,
-  Button,
-  Snackbar,
-  Stack,
-  styled,
   Typography,
 } from "@mui/material";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import SnackBar from "../../components/SnackBar";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
+import { StyledButton } from "../../styles/MyAccountStyle";
 import UserChangeDataDialog from "./components/UserChangeDataDialog";
-
-const Alerts = forwardRef(function Alerts(props, ref) {
-  return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  borderColor: "#F2C94C",
-  color: "black",
-  fontFamily: "Poppins",
-  textTransform: "capitalize",
-  [theme.breakpoints.down("sm")]: {
-    display: "block",
-    fontSize: "14px",
-  },
-}));
 
 const MyAccount = () => {
   const [expanded, setExpanded] = useState(false);
@@ -117,7 +99,6 @@ const MyAccount = () => {
                     fontSize: { md: "23px", xs: "17px" },
                     fontFamily: "Poppins",
                     fontWeight: { md: "600", xs: "500" },
-                    // display: { xs: "none", md: "block" },
                     marginTop: { xs: "-8px", md: "6px" },
                   }}
                 >
@@ -135,30 +116,6 @@ const MyAccount = () => {
                 >
                   {auth.email}
                 </Typography>
-                {/* <Typography
-                  textAlign={"left"}
-                  sx={{
-                    fontSize: "17px",
-                    fontFamily: "Poppins",
-                    fontWeight: "500",
-                    display: { xs: "block", md: "none" },
-                    marginTop: "-8px",
-                  }}
-                >
-                  {auth.nama}
-                </Typography> */}
-                {/* <Typography
-                  textAlign={"left"}
-                  sx={{
-                    fontSize: "16px",
-                    fontFamily: "Poppins",
-                    fontWeight: "400",
-                    display: { xs: "block", md: "none" },
-                    marginTop: "8px",
-                  }}
-                >
-                  Email :
-                </Typography> */}
                 <Typography
                   textAlign={"left"}
                   sx={{
@@ -181,7 +138,7 @@ const MyAccount = () => {
                 >
                   <StyledButton
                     variant="outlined"
-                    onClick={() => handleClickOpenDialog("name")}
+                    onClick={() => handleClickOpenDialog("nama")}
                   >
                     Ubah Nama
                   </StyledButton>
@@ -202,21 +159,12 @@ const MyAccount = () => {
         logState={openDialog}
         onClose={handleCloseDialog}
       />
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        <Snackbar
-          open={snackbarState}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alerts
-            onClose={handleCloseSnackbar}
-            severity={severityType}
-            sx={{ width: "100%" }}
-          >
-            {message}
-          </Alerts>
-        </Snackbar>
-      </Stack>
+      <SnackBar
+        message={message}
+        snackbarState={snackbarState}
+        handleCloseSnackbar={handleCloseSnackbar}
+        severityType={severityType}
+      />
     </div>
   );
 };
