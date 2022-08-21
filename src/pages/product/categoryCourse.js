@@ -40,6 +40,7 @@ const calculateTotalCost = (carts) => {
 export default function CategoryCourse() {
   const [err, setErr] = useState("");
   const { setCart } = useCart();
+  const [cartId, setCartId] = useState(null);
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
@@ -82,24 +83,35 @@ export default function CategoryCourse() {
   };
 
   //delete purchased course from cart
-  const fetchDelete = async (courseId) => {
+  // const fetchDelete = async (courseId) => {
+  //   try {
+  //     const response = await api.delete(
+  //       `/Cart/ByCourseId/${UserID}/${courseId}`,
+  //       config
+  //     );
+  //     // console.log(response.data);
+  //   } catch (err) {
+  //     // !err.response
+  //     // 	? console.log(`Error: ${err.message}`)
+  //     // 	: console.log(err.response.data);
+  //     // console.log(err.response.status);
+  //     // console.log(err.response.headers);
+  //   }
+  // };
+
+  const fetchDelete = async (id) => {
     try {
-      const response = await api.delete(
-        `/Cart/ByCourseId/${UserID}/${courseId}`,
-        config
-      );
-      // console.log(response.data);
-      setCart(
-        response.data.filter(
-          (item) => item.userId === UserID && item.id !== courseId
-        )
-      );
+      const response = await api.delete(`/Cart/${auth.userId}/${id}`, config);
+      if (response?.data) {
+        setCart(
+          response.data.filter(
+            (item) => item.userId === auth.userId && item.id !== cartId
+          )
+        );
+      }
+      fetchApiCart(auth.userId);
     } catch (err) {
-      // !err.response
-      // 	? console.log(`Error: ${err.message}`)
-      // 	: console.log(err.response.data);
-      // console.log(err.response.status);
-      // console.log(err.response.headers);
+      // setApiDataMessage("Terjadi kesalahan");
     }
   };
 
@@ -236,14 +248,18 @@ export default function CategoryCourse() {
     };
     // console.log(postDataa);
     baseApi
-      .post("https://localhost:7132/api/Cart", postDataa, config)
+      .post("/Cart", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           // console.log(res.status);
           // console.log(res.data);
+          // console.table(res.data);
           setSeverityType("success");
           setErr("Berhasil menambahkan cart");
-          fetchApiCart(UserID);
+          const lastCartId = res.data[res.data.length - 1];
+          // console.table(lastCartId);
+          setCartId(lastCartId.id);
+          fetchApiCart(auth.userId);
           setOpen(true);
         }
       })
@@ -306,9 +322,7 @@ export default function CategoryCourse() {
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
-        fetchDelete(params.courseid);
       });
-      // fetchApiCart(auth.userId);
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
     } catch (err) {
@@ -337,6 +351,7 @@ export default function CategoryCourse() {
     // console.table(selectedCart);
     // console.table(newInvoiceProp);
     fetchApiPostInvoice("MInvoice", generateNewMasterInvoice(newInvoiceProp));
+    fetchDelete(cartId);
   };
 
   const checkout = () => {
