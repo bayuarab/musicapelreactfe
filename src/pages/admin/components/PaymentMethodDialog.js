@@ -118,7 +118,7 @@ const PaymentMethodDialog = (props) => {
   const dialogDelete = () => {
     return (
       <Box sx={{ padding: "10px" }}>
-        <DialogTitle mb={1}>
+        <DialogTitle mb={1} sx={{ fontFamily: "Poppins" }}>
           {"Apakah anda yakin untuk menghapus opsi pembayaran ini?"}
         </DialogTitle>
         <DialogContent>
@@ -150,7 +150,9 @@ const PaymentMethodDialog = (props) => {
   const dialogAdd = () => {
     return (
       <Box sx={{ padding: "10px" }}>
-        <DialogTitle mb={1}>{"Form penambahan opsi pembayaran"}</DialogTitle>
+        <DialogTitle mb={1} sx={{ fontFamily: "Poppins" }}>
+          {"Form penambahan opsi pembayaran"}
+        </DialogTitle>
         <DialogContent>
           <form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
             {imagePreview === "" ? (
@@ -228,7 +230,9 @@ const PaymentMethodDialog = (props) => {
   const dialogEdit = () => {
     return (
       <Box sx={{ padding: "10px" }}>
-        <DialogTitle mb={1}>{"Form ubah opsi pembayaran"}</DialogTitle>
+        <DialogTitle mb={1} sx={{ fontFamily: "Poppins" }}>
+          {"Form ubah opsi pembayaran"}
+        </DialogTitle>
         <DialogContent>
           <form onSubmit={(e) => onFileSubmit(e)} onChange={(e) => onChange(e)}>
             {imagePreview === "" ? (

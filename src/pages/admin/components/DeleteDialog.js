@@ -38,7 +38,7 @@ const DeleteDialog = (props) => {
       aria-describedby="alert-dialog-slide-description"
     >
       <Box sx={{ padding: "10px" }}>
-        <DialogTitle mb={1}>
+        <DialogTitle mb={1} sx={{ fontFamily: "Poppins" }}>
           {"Apakah anda yakin untuk menghapus akun ini?"}
         </DialogTitle>
         <DialogContent>
