@@ -60,8 +60,8 @@
   flex: 1;
 }
 
-.carouselCategory {
-}
+/* .carouselCategory {
+} */
 @media only screen and (max-width: 880px) {
   .carouselCategory card {
     overflow-x: auto;
@@ -69,16 +69,16 @@
   }
 }
 
-.mySlides {
-}
+/* .mySlides {
+} */
 @media only screen and (max-width: 880px) {
   .mySlides {
     display: none;
   }
 }
 
-.fade {
-}
+/* .fade {
+} */
 @media only screen and (max-width: 880px) {
   .fade {
     animation-name: fade;
