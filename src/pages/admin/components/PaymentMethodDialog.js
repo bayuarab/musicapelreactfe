@@ -99,7 +99,7 @@ const PaymentMethodDialog = (props) => {
   };
 
   const onChange = (e) => {
-    console.log("file", e.target.files[0]);
+    // console.log("file", e.target.files[0]);
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -120,8 +120,8 @@ const PaymentMethodDialog = (props) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log("reader", reader);
-    console.log("file", file);
+    // console.log("reader", reader);
+    // console.log("file", file);
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = () => {
         setImagePreview(reader.result);

@@ -244,7 +244,7 @@ const UserChangeDataDialog = (props) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.table(postData);
+              // console.table(postData);
               fetchApiPut("UserAuth/ChangeName", {
                 ...postData,
                 id: auth?.userId,

@@ -143,7 +143,7 @@ function ManagePaymentMethod() {
   const handleClickOpenDialog = (dialogOps, data) => {
     setDialogOption(dialogOps);
     setSelectedOption(data);
-    console.table(data);
+    // console.table(data);
     setOpenDialog(true);
   };
 
@@ -167,7 +167,7 @@ function ManagePaymentMethod() {
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
-        console.log(err.response.headers);
+        // console.log(err.response.headers);
       }
     };
     fetchApiGet();

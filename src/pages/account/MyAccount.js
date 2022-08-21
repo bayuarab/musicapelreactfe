@@ -138,7 +138,7 @@ const MyAccount = () => {
                 >
                   <StyledButton
                     variant="outlined"
-                    onClick={() => handleClickOpenDialog("name")}
+                    onClick={() => handleClickOpenDialog("nama")}
                   >
                     Ubah Nama
                   </StyledButton>
