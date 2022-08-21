@@ -180,13 +180,10 @@ export default function CategoryCourse() {
     // console.log("paramss", course);
     // console.log("paramss lah yah", category);
     await baseApi
-      .get(
-        `https://localhost:7132/api/Course/categoryId/${category}/${course}`,
-        {
-          category,
-          course,
-        }
-      )
+      .get(`Course/categoryId/${category}/${course}`, {
+        category,
+        course,
+      })
       .then((res) => {
         if (res.status === 200) {
           setDetailOfACourseCat(res.data);
@@ -203,7 +200,7 @@ export default function CategoryCourse() {
   const [detailOfACourse, setDetailOfACourse] = useState([]);
   const getdetailOfACourse = async (url) => {
     await baseApi
-      .get(`https://localhost:7132/api/Course/${url}`, {
+      .get(`Course/${url}`, {
         url,
       })
       .then((res) => {
@@ -248,7 +245,7 @@ export default function CategoryCourse() {
     };
     // console.log(postDataa);
     baseApi
-      .post("/Cart", postDataa, config)
+      .post("Cart", postDataa, config)
       .then((res) => {
         if (res.status === 200) {
           // console.log(res.status);
