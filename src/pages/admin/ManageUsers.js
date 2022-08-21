@@ -159,8 +159,10 @@ function ManageUser() {
 												id="input-with-icon-textfield"
 												label="Pencarian User"
 												InputProps={{
+													style: { fontFamily: "Poppins" },
 													endAdornment: <Search color="primary" />,
 												}}
+												InputLabelProps={{ style: { fontFamily: "Poppins" } }}
 												variant="outlined"
 												style={{
 													display: "flex",

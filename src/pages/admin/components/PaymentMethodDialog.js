@@ -198,6 +198,8 @@ const PaymentMethodDialog = (props) => {
                       marginTop: "20px",
                       marginBottom: "20px",
                     }}
+                    InputProps={{ style: { fontFamily: "Poppins" } }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
 
                   <Button
@@ -274,6 +276,8 @@ const PaymentMethodDialog = (props) => {
                       marginTop: "20px",
                       marginBottom: "20px",
                     }}
+                    InputProps={{ style: { fontFamily: "Poppins" } }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
 
                   <Button

@@ -15,6 +15,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import api from "../../api/userAPI";
+import Loading from "../../components/Loading";
 import { useCart } from "../../context/CartProvider";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
@@ -41,9 +42,8 @@ const CartPage = () => {
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [registeredInvoice, setRegisteredInvoice] = useState([]);
   const [checkoutState, setCheckoutState] = useState(false);
-  const [apiDataMessage, setApiDataMessage] = useState(
-    "Mengambil data ke server, harap tunggu"
-  );
+  const [loadState, setLoadState] = useState(true);
+  const [apiDataMessage, setApiDataMessage] = useState("");
   const navigate = useNavigate();
   const { auth } = useAuth();
   const userID = auth?.userId;
@@ -101,8 +101,10 @@ const CartPage = () => {
       try {
         const response = await api.get(`/Cart/${userID}`, reqConfig);
         setCart(response.data);
+        setLoadState(false);
         setApiDataMessage(null);
       } catch (err) {
+        setLoadState(false);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
       }
@@ -190,6 +192,10 @@ const CartPage = () => {
 
   return checkoutState ? (
     <Navigate to="/payment-success" replace />
+  ) : loadState ? (
+    <Box sx={{ paddingTop: { md: "50px", xs: "20px" } }}>
+      <Loading />
+    </Box>
   ) : cart?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
       <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
