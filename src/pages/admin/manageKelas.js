@@ -99,7 +99,6 @@ function ManageKelas() {
 		const fetchDelete = async () => {
 			try {
 				const response = await api.delete(`/${selectedCat.id}`, config);
-				console.log(response.data);
 				getListOfBrands();
 				setSeverityType("warning");
 				setErr("Kategori telah dihapus dari daftar");

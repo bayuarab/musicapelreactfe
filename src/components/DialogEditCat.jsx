@@ -35,10 +35,8 @@ const DialogEditCat = (props) => {
 
 	const onFileSubmit = (e) => {
 		e.preventDefault();
-		console.log(base64);
 	};
 	const onChange = (e) => {
-		console.log("file", e.target.files[0]);
 		let file = e.target.files[0];
 		if (file) {
 			const reader = new FileReader();
@@ -55,8 +53,7 @@ const DialogEditCat = (props) => {
 		e.preventDefault();
 		const reader = new FileReader();
 		const file = e.target.files[0];
-		console.log("reader", reader);
-		console.log("file", file);
+
 		if (reader !== undefined && file !== undefined) {
 			reader.onloadend = () => {
 				setImagePreview(reader.result);
@@ -72,12 +69,11 @@ const DialogEditCat = (props) => {
 			image: base64,
 			desc: categoryDescription,
 		};
-		console.log(postDataa);
+
 		courseCatApi
 			.put("/", postDataa, config)
 			.then((res) => {
 				if (res.status === 200) {
-					console.log(res.status);
 					setSeverityType("success");
 					setErr("Berhasil mengubah kategori");
 					setOpen(true);
