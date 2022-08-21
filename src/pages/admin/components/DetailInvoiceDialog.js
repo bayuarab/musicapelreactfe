@@ -27,10 +27,8 @@ const DetailInvoiceDialog = (props) => {
     logState,
     masterInvoiceId,
   } = props;
-
   const { auth } = useAuth();
   const token = auth?.token;
-
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
 
   const handleClose = () => {
@@ -49,17 +47,9 @@ const DetailInvoiceDialog = (props) => {
           `/DetailsByMasterId/${masterInvoiceId}`,
           config
         );
-        // console.log(response.data);
         setInvoiceDetailData(response.data);
-      } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
-      }
+      } catch (err) {}
     };
-
     if (logState) fetchApi();
   }, [setInvoiceDetailData, logState, masterInvoiceId, token]);
 
@@ -143,7 +133,6 @@ const DetailInvoiceDialog = (props) => {
                   display: { md: "block", xs: "none" },
                 }}
               >
-                {/* .toLocaleString("de-DE") */}
                 Total Harga&nbsp;:&nbsp;&nbsp; IDR{" "}
                 {invoiceDetailData[0]
                   ? numberFormat(invoiceDetailData[0].cost)
@@ -159,7 +148,6 @@ const DetailInvoiceDialog = (props) => {
                 display: { md: "none", xs: "block" },
               }}
             >
-              {/* .toLocaleString("de-DE") */}
               Total Harga &nbsp;&nbsp;:&nbsp;&nbsp; IDR{" "}
               {invoiceDetailData[0]
                 ? numberFormat(invoiceDetailData[0].cost)

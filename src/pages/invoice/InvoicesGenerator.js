@@ -28,10 +28,10 @@ export function generateNewInvoice(registeredInvoice, auth) {
 
   const invoiceLength = registeredInvoice[0] ? registeredInvoice[0].length : 8;
   const { resNum, refToken } = getRef();
-  // console.log(resNum, refToken, invoiceLength);
+
   const loop = invoiceLength - refToken.length - resNum.toString().length;
   const newInvoiceNum = getInvoiceSepNum(loop);
-  // console.log(refToken + newInvoiceNum + resNum);
+
   return refToken + newInvoiceNum + resNum;
 }
 
@@ -42,7 +42,6 @@ export function generateNewMasterInvoice({
   auth,
   calculateTotalCost,
 }) {
-  // console.log(paymentOption);
   return {
     NoInvoice: generateNewInvoice(registeredInvoice, auth),
     PurchaseDate: generateCurrentDate(),

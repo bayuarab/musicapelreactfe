@@ -31,7 +31,6 @@ import {
   filterCartItems,
   findItemsIDInArray,
 } from "./components/Methods";
-//-----
 
 const CartPage = () => {
   const { setComponentState } = useComponentBarState();
@@ -58,7 +57,6 @@ const CartPage = () => {
   const fetchDelete = async (id) => {
     try {
       const response = await api.delete(`/Cart/${userID}/${id}`, config);
-      // console.log(response.data);
       if (response?.data) {
         setCart(
           response.data.filter(
@@ -67,11 +65,6 @@ const CartPage = () => {
         );
       }
     } catch (err) {
-      // !err.response
-      //   ? console.log(`Error: ${err.message}`)
-      //   : console.log(err.response.data);
-      // console.log(err.response.status);
-      // console.log(err.response.headers);
       setApiDataMessage("Terjadi kesalahan");
     }
   };
@@ -89,18 +82,11 @@ const CartPage = () => {
       };
       try {
         const response = await api.get(`/Invoices/${userID}`, reqConfig);
-        // console.log(response?.data);
+
         setRegisteredInvoice(
           response?.data?.map((rawData) => rawData.noInvoice)
         );
-      } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
-        // setApiDataMessage("Terjadi kesalahan");
-      }
+      } catch (err) {}
     };
     fetchApiInvoices();
   }, [userID, token]);
@@ -114,17 +100,11 @@ const CartPage = () => {
       };
       try {
         const response = await api.get(`/Cart/${userID}`, reqConfig);
-        // console.log(response.data);
         setCart(response.data);
         setApiDataMessage(null);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
       }
     };
     fetchApiCart();
@@ -137,7 +117,6 @@ const CartPage = () => {
   const fetchApiPostInvoice = async (url, data) => {
     try {
       const response = await api.post(`/${url}`, data, config);
-      // console.log(response.data);
       const masterInvoicess = response?.data.id;
       let details = [];
       if (url === "MInvoice") {
@@ -149,7 +128,6 @@ const CartPage = () => {
             scheduleId: items.scheduleId,
           };
         });
-        // console.log(details);
       }
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
@@ -157,25 +135,16 @@ const CartPage = () => {
       navigate("/payment-status", { replace: true });
       setCheckoutState(true);
     } catch (err) {
-      // !err.response
-      //   ? console.log(`Error: ${err.message}`)
-      //   : console.log(err.response.data);
-      // console.log(err.response.status);
-      // console.log(err.response.headers);
       setApiDataMessage("Terjadi kesalahan");
     }
   };
 
   const checkout = () => {
-    // console.log("Barang yang di checkout:");
-    // console.table(selectedCart);
-    // console.log(`Total cost: ${cost}`);
     setCheckoutDialogState(true);
   };
 
   const handleCheckoutClose = (value) => {
     const { paymentOption, paymentState } = value;
-    // console.log("paymentOption", paymentOption);
     setCheckoutDialogState(false);
     setSelectedOp(paymentOption);
     if (!paymentState) return;
@@ -335,7 +304,6 @@ const CartPage = () => {
                     fontSize="inherit"
                     sx={{
                       color: "white",
-                      // fontSize: 30,
                     }}
                   />
                 </Avatar>

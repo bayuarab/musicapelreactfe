@@ -21,7 +21,6 @@ import {
   StyledTableRow,
 } from "../../styles/TableStyle";
 import numberFormat from "../../utilities/NumbeFormat";
-//==================================================
 
 const InvoiceMaster = () => {
   const [masterInvoiceData, setMasterInvoiceData] = useState([]);
@@ -47,16 +46,10 @@ const InvoiceMaster = () => {
       };
       try {
         const response = await api.get(`/Invoices/${UserID}`, config);
-        // console.log(response.data);
         setMasterInvoiceData(response.data);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
         if (err.response.data === "Not Found")
           setApiDataMessage("Masih kosong, silahkan belanja");
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
       }
     };
 
@@ -124,7 +117,6 @@ const InvoiceMaster = () => {
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.qty}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {/* row.cost.toLocaleString("de-DE") */}
                   IDR {numberFormat(row.cost)}
                 </StyledTableCell>
                 <StyledTableCell align="center">

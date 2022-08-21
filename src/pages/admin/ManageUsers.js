@@ -103,11 +103,6 @@ function ManageUser() {
         setMessage("User telah dihapus dari daftar");
         setSnackbarState(true);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
         setSeverityType("error");
         setMessage("Error: Gagal menghapus, terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
@@ -133,15 +128,10 @@ function ManageUser() {
       };
       try {
         const response = await api.get(`/AllUser`, config);
-        // console.log(response.data);
+
         setLoadMessage(null);
         setUsers(response.data);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // if (err.response.data === "Not Found") console.log(err.response.status);
-        // console.log(err.response.headers);
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
@@ -167,7 +157,6 @@ function ManageUser() {
           <CssBaseline />
           <HeaderSet roles={`admin`} />
 
-          {/* Body Content */}
           <Box
             component="main"
             sx={{
@@ -187,7 +176,6 @@ function ManageUser() {
                   <Paper
                     sx={{ p: 2, display: "flex", flexDirection: "column" }}
                   >
-                    {/* TITLE */}
                     <Typography
                       variant="h5"
                       color="secondary"
@@ -199,7 +187,6 @@ function ManageUser() {
                       Manage User
                     </Typography>
 
-                    {/* BOX PENCARIAN DATA */}
                     <div style={{ display: "flex", padding: "20px 0" }}>
                       <TextField
                         value={searchUser}

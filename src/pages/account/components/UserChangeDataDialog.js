@@ -34,7 +34,6 @@ const UserChangeDataDialog = (props) => {
 
   const fetchPasswordValidation = async () => {
     try {
-      // console.table(postData);
       const response = await api.post(
         "/UserAuth/PasswordValidation",
         {
@@ -43,7 +42,7 @@ const UserChangeDataDialog = (props) => {
         },
         config
       );
-      // console.log(response.data);
+
       if (response?.data) {
         setDialogState({
           ...dialogState,
@@ -58,11 +57,6 @@ const UserChangeDataDialog = (props) => {
         handleClose(false, feedback);
       }
     } catch (err) {
-      // !err.response
-      //   ? console.log(`Error: ${err.message}`)
-      //   : console.log(err.response.data);
-      // console.log(err.response.status);
-      // console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: "Error: Password lama tidak valid",
@@ -74,7 +68,6 @@ const UserChangeDataDialog = (props) => {
   const fetchApiPut = async (url, data) => {
     try {
       const response = await api.post(`/${url}`, data, config);
-      // console.log(response.data);
       const feedback = {
         severity: "success",
         msg: `Berhasil, ${dialogOption} telah dirubah`,
@@ -89,11 +82,6 @@ const UserChangeDataDialog = (props) => {
       setDialogState({ oldPass: false, newPassword: "", rePassword: "" });
       handleClose(true, feedback);
     } catch (err) {
-      // !err.response
-      //   ? console.log(`Error: ${err.message}`)
-      //   : console.log(err.response.data);
-      // console.log(err.response.status);
-      // console.log(err.response.headers);
       const feedback = {
         severity: "error",
         msg: `Error: Gagal merubah ${dialogOption}, data tidak valid`,
@@ -244,7 +232,6 @@ const UserChangeDataDialog = (props) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              // console.table(postData);
               fetchApiPut("UserAuth/ChangeName", {
                 ...postData,
                 id: auth?.userId,

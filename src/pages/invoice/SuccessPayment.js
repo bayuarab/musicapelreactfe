@@ -83,14 +83,8 @@ const SuccessPayment = () => {
       };
       try {
         const response = await api.get(`/Cart/${UserId}`, config);
-        // console.log(response.data);
         setCart(response.data);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // if (err.response.data === "Not Found") console.log(err.response.status);
-        // console.log(err.response.headers);
         setCart([]);
       }
     };

@@ -26,16 +26,9 @@ const CheckoutDialogs = (props) => {
       };
       try {
         const response = await paymentApi.get(`/Payment`, config);
-        // console.log(response.data);
         setCheckoutOp(response.data);
         setOptionState(response.data.map(() => false));
-      } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // if (err.response.data === "Not Found") console.log(err.response.status);
-        // console.log(err.response.headers);
-      }
+      } catch (err) {}
     };
 
     fetchApiPayment();
@@ -59,7 +52,6 @@ const CheckoutDialogs = (props) => {
       paymentOption: options,
       paymentState: true,
     };
-    // console.log(result);
     options === null ? console.log("Belum pilih pembayaran") : onClose(result);
   };
 

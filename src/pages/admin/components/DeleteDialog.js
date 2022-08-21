@@ -36,7 +36,6 @@ const DeleteDialog = (props) => {
       keepMounted
       onClose={() => handleClose(false)}
       aria-describedby="alert-dialog-slide-description"
-      // sx={{ padding: "30px" }}
     >
       <Box sx={{ padding: "10px" }}>
         <DialogTitle mb={1}>

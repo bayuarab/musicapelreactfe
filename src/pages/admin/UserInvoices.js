@@ -90,15 +90,9 @@ function UserInvoices() {
       };
       try {
         const response = await api.get(`/AllInvoices`, config);
-        // console.log(response.data);
         setLoadMessage(null);
         setInvoices(response.data);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
@@ -124,7 +118,6 @@ function UserInvoices() {
         <CssBaseline />
         <HeaderSet roles={`admin`} />
 
-        {/* Body Content */}
         <Box
           component="main"
           sx={{
@@ -142,7 +135,6 @@ function UserInvoices() {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  {/* TITLE */}
                   <Typography
                     variant="h5"
                     color="secondary"
@@ -154,7 +146,6 @@ function UserInvoices() {
                     User Invoices
                   </Typography>
 
-                  {/* BOX PENCARIAN DATA */}
                   <Box
                     component={"div"}
                     sx={{

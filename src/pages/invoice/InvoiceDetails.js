@@ -21,7 +21,6 @@ import {
   StyledTableRow,
 } from "../../styles/TableStyle";
 
-//--
 const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
@@ -49,15 +48,9 @@ const InvoiceDetails = () => {
           `/InvoicesDetails/${UserId}/${invoiceID}`,
           config
         );
-        // console.log(response.data);
         setInvoiceDetailData(response.data);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
         setApiDataMessage("Oops, terjadi kesalahan");
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
       }
     };
 
@@ -145,7 +138,6 @@ const InvoiceDetails = () => {
               display: { md: "block", xs: "none" },
             }}
           >
-            {/* .toLocaleString("de-DE") */}
             Total Harga&nbsp;:&nbsp;&nbsp; IDR{" "}
             {invoiceDetailData[0]
               ? numberFormat(invoiceDetailData[0].cost)
@@ -162,7 +154,6 @@ const InvoiceDetails = () => {
             display: { md: "none", xs: "block" },
           }}
         >
-          {/* .toLocaleString("de-DE") */}
           Total Harga &nbsp;&nbsp;:&nbsp;&nbsp; IDR{" "}
           {invoiceDetailData[0] ? numberFormat(invoiceDetailData[0].cost) : "-"}
         </Typography>

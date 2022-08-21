@@ -66,10 +66,6 @@ const theme = createTheme({
   },
 });
 
-// const Alerts = React.forwardRef(function Alerts(props, ref) {
-//   return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
-// });
-
 function ManagePaymentMethod() {
   const [options, setOptions] = useState([]);
   const [searchOption, setSearchOption] = useState("");
@@ -102,17 +98,11 @@ function ManagePaymentMethod() {
           item.filter((item) => item.id !== selectedOption.id)
         );
         setRefreshState((status) => !status);
-        // fetchApiGet();
       }
       setSeverityType("warning");
       setMessage("Opsi pembayaran telah dihapus dari daftar");
       setSnackbarState(true);
     } catch (err) {
-      // !err.response
-      //   ? console.log(`Error: ${err.message}`)
-      //   : console.log(err.response.data);
-      // console.log(err.response.status);
-      // console.log(err.response.headers);
       setSeverityType("error");
       setMessage("Error: Gagal menghapus, terjadi kesalahan");
       setSnackbarState(true);
@@ -135,7 +125,6 @@ function ManagePaymentMethod() {
       setMessage(msg);
       setSnackbarState(true);
       setRefreshState((status) => !status);
-      // fetchApiGet();
     }
     setOpenDialog(false);
   };
@@ -143,7 +132,6 @@ function ManagePaymentMethod() {
   const handleClickOpenDialog = (dialogOps, data) => {
     setDialogOption(dialogOps);
     setSelectedOption(data);
-    // console.table(data);
     setOpenDialog(true);
   };
 
@@ -156,18 +144,13 @@ function ManagePaymentMethod() {
       };
       try {
         const response = await api.get(`/Payment`, reqConfig);
-        // console.log(response.data);
+
         setLoadMessage(null);
         setOptions(response.data);
       } catch (err) {
-        // !err.response
-        //   ? console.log(`Error: ${err.message}`)
-        //   : console.log(err.response.data);
-        // if (err.response.data === "Not Found") console.log(err.response.status);
         setLoadMessage("Terjadi kesalahan");
         if (err.response.status === 401 || err.response.status === 403)
           setLoadMessage("Otoritas tidak berlaku silahkan login kembali");
-        // console.log(err.response.headers);
       }
     };
     fetchApiGet();
@@ -186,7 +169,6 @@ function ManagePaymentMethod() {
           <CssBaseline />
           <HeaderSet roles={`admin`} />
 
-          {/* Body Content */}
           <Box
             component="main"
             sx={{
@@ -206,7 +188,6 @@ function ManagePaymentMethod() {
                   <Paper
                     sx={{ p: 2, display: "flex", flexDirection: "column" }}
                   >
-                    {/* TITLE */}
                     <Typography
                       variant="h5"
                       color="secondary"
@@ -218,7 +199,6 @@ function ManagePaymentMethod() {
                       Manage Opsi Pembayaran
                     </Typography>
 
-                    {/* BOX PENCARIAN DATA */}
                     <Box
                       component={"div"}
                       sx={{
@@ -322,7 +302,6 @@ function ManagePaymentMethod() {
                                   >
                                     <Button
                                       onClick={() =>
-                                        // setSelectedOption(row)
                                         handleClickOpenDialog("edit", row)
                                       }
                                       color="secondary"
@@ -351,7 +330,6 @@ function ManagePaymentMethod() {
                                   >
                                     <Button
                                       onClick={() =>
-                                        // setSelectedOption(row)
                                         handleClickOpenDialog("edit", row)
                                       }
                                       color="secondary"
