@@ -7,13 +7,6 @@ import { CartProvider } from "./context/CartProvider";
 import { ComponentStateProvider } from "./context/ComponentStateProvider";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-// import CategoryCourse from "./routes/categoryCourse";
-// import DetailCourse from "./routes/detailCourse";
-// // import LandingPage from "./routes/landingPage";
-// // import Login from "./routes/login";
-// import ManageInvoices from "./routes/manageInvoices";
-// import ManageKategori from "./routes/manageKategori";
-// import ManageKelas from "./routes/manageKelas";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -28,14 +21,6 @@ root.render(
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
-  // <BrowserRouter>
-  // <Routes>
-  // <Route path="/" element={<App/>}>
-  // <Route path="cart" element={<Cart />} />
-  // <Route path="*" element={ <main style={{ padding: "1rem" }}> <p>There's nothing here!</p> </main>}/>
-  // </Route>
-
-  // </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

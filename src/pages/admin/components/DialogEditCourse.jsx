@@ -15,8 +15,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import baseApi from "../../../api/baseApi";
 import courseApi from "../../../api/courseAPI";
 import useAuth from "../../../hooks/useAuth";
 
@@ -119,8 +119,8 @@ const DialogEditCourse = (props) => {
   const [cekKategori, setCekKategori] = useState([]);
   const [kategori, setKategori] = useState("");
   const getCekKategori = async (courseId) => {
-    await axios
-      .get(`https://localhost:7132/api/CourseCategory/Footer`)
+    await baseApi
+      .get(`CourseCategory/Footer`)
       .then((res) => {
         if (res.status === 200) {
           setCekKategori(res.data);
