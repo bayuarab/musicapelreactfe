@@ -36,7 +36,7 @@ const Class = () => {
 			</Box>
 			<center>
 				<Box
-					mt={{ md: "6vh", xs: "3vh" }}
+					mt={{ md: "6vh", xs: "10px" }}
 					sx={{
 						width: "88%",
 					}}>

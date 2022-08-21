@@ -65,7 +65,7 @@ const Benefit = () => {
 											xs: "8px",
 										},
 										fontFamily: "Poppins",
-										width: "100%",
+										width: "95%",
 										textAlign: "justify",
 										marginLeft: "5px",
 									}}>

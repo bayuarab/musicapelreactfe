@@ -3,21 +3,6 @@ import { styled } from "@mui/material/styles";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-// const factItems = [
-// 	{
-// 		title: "500+",
-// 		subtitle: "Lebih dari sekedar kelas biasa yang bisa mengeluarkan bakat kalian",
-// 	},
-// 	{
-// 		title: "50+",
-// 		subtitle: "Lulusan yang menjadi musisi ternama dengan skill memukau",
-// 	},
-// 	{
-// 		title: "10+",
-// 		subtitle: "Coach Special kolaborasi dengan musisi terkenal",
-// 	},
-// ];
-
 const Item = styled(Paper)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
 	...theme.typography.body2,
