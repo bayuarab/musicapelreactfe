@@ -98,10 +98,19 @@ export default function CategoryCourse() {
   //     // console.log(err.response.headers);
   //   }
   // };
+  const getCartId = () => {
+    if (!claimedCart) return null;
+    const idCart = cart.filter((item) => item.courseId === detailOfACourse.id);
+    return idCart[0].id;
+  };
 
-  const fetchDelete = async (id) => {
+  const fetchDelete = async () => {
     try {
-      const response = await api.delete(`/Cart/${auth.userId}/${id}`, config);
+      const idCart = getCartId();
+      const response = await api.delete(
+        `/Cart/${auth.userId}/${idCart}`,
+        config
+      );
       // if (response?.data) {
       //   setCart(
       //     response.data.filter(
@@ -109,8 +118,10 @@ export default function CategoryCourse() {
       //     )
       //   );
       // }
+      console.log(idCart);
       console.log("Success delete");
       fetchApiCart(auth.userId);
+      navigate("/payment-status", { replace: true });
     } catch (err) {
       // setApiDataMessage("Terjadi kesalahan");
     }
@@ -254,9 +265,8 @@ export default function CategoryCourse() {
           // console.table(res.data);
           setSeverityType("success");
           setErr("Berhasil menambahkan cart");
-          const lastCartId = res.data[res.data.length - 1];
-          // console.table(lastCartId);
-          setCartId(lastCartId.id);
+          setClaimedCart(true);
+          // console.table(res.data);
           fetchApiCart(auth.userId);
           setOpen(true);
         }
@@ -321,12 +331,16 @@ export default function CategoryCourse() {
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
       });
-      const newCart = cart.filter(
-        (item) => item.courseId !== detailOfACourse.id
-      );
-      setCart(newCart);
-      navigate("/payment-status", { replace: true });
+      // const newCart = cart.filter(
+      //   (item) => item.courseId !== detailOfACourse.id
+      // );
+      // setCart(newCart);
       // setCheckoutState(true);
+      if (claimedCart) {
+        fetchDelete();
+      } else {
+        navigate("/payment-status", { replace: true });
+      }
     } catch (err) {
       // !err.response
       // 	? console.log(`Error: ${err.message}`)
@@ -353,7 +367,6 @@ export default function CategoryCourse() {
     // console.table(selectedCart);
     // console.table(newInvoiceProp);
     fetchApiPostInvoice("MInvoice", generateNewMasterInvoice(newInvoiceProp));
-    fetchDelete(cartId);
   };
 
   const checkout = () => {
