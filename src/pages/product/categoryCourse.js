@@ -645,6 +645,7 @@ export default function CategoryCourse() {
 					alignItems: "center",
 					display: { sm: "flex", xs: "none" },
 					flexDirection: "column",
+					width: "95%"
 				}}>
 					<Grid container spacing={3}>
 						{detailOfACourseCat.map((item, index) => (
@@ -730,6 +731,7 @@ export default function CategoryCourse() {
 						alignItems: "center",
 						display: { sm: "none", xs: "flex" },
 						flexDirection: "column",
+						width: "95%"
 					}}>
 						<Grid container spacing={3} sx={{ maxWidth: "110%" }}>
 							{detailOfACourseCat.slice(0, itemCount).map((item, index) => (
