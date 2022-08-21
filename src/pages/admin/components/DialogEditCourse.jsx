@@ -61,7 +61,6 @@ const DialogEditCourse = (props) => {
     console.log(base64);
   };
   const onChange = (e) => {
-    console.log("file", e.target.files[0]);
     let file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -78,8 +77,6 @@ const DialogEditCourse = (props) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log("reader", reader);
-    console.log("file", file);
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -131,7 +128,6 @@ const DialogEditCourse = (props) => {
       .then((res) => {
         if (res.status === 200) {
           setCekKategori(res.data);
-          console.log("res data", res.data);
         }
       })
       .catch((err) => {});
@@ -145,7 +141,7 @@ const DialogEditCourse = (props) => {
       <Dialog open={openDialog} onClose={onClose}>
         <div style={{ padding: "20px", width: "100%" }}>
           {/* TITLE */}
-          <DialogTitle>Edit Kelas Baru {selectedCourse?.id}</DialogTitle>
+          <DialogTitle sx={{fontFamily:"Poppins"}}>Edit Kelas Baru</DialogTitle>
           <DialogContent>
             {/* FORM INPUT */}
             <form
@@ -195,9 +191,10 @@ const DialogEditCourse = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
                     />
                     <FormControl fullWidth>
-                      <InputLabel>Pilih Kategori Kelas</InputLabel>
+                      <InputLabel sx={{fontFamily:"Poppins"}}>Pilih Kategori Kelas</InputLabel>
                       <Select
                         label="Pilih Kategori Kelas"
                         value={kategori}
@@ -205,7 +202,7 @@ const DialogEditCourse = (props) => {
                         size="medium"
                       >
                         {cekKategori.map((kategori, i) => (
-                          <MenuItem value={kategori.id}>
+                          <MenuItem value={kategori.id} sx={{fontFamily:"Poppins"}}>
                             {kategori.category}
                           </MenuItem>
                         ))}
@@ -222,6 +219,7 @@ const DialogEditCourse = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
                     />
                     <TextField
                       id="price"
@@ -234,6 +232,7 @@ const DialogEditCourse = (props) => {
                         marginTop: "20px",
                         marginBottom: "20px",
                       }}
+                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
                     />
 
                     <Button
@@ -254,6 +253,7 @@ const DialogEditCourse = (props) => {
                         flexGrow: 1,
                         marginTop: "20px",
                         marginBottom: "20px",
+                        fontFamily:"Poppins", textTransform:"capitalize"
                       }}
                     >
                       Edit Kelas

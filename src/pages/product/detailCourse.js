@@ -1,8 +1,10 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Carousel from "react-multi-carousel";
 import { Link, useParams } from "react-router-dom";
 import numberFormat from "../../utilities/NumbeFormat";
+import baseApi from "../../api/baseApi";
 
 //#F2C94C
 export default function DetailCourse() {
@@ -33,6 +35,7 @@ export default function DetailCourse() {
 		},
 	};
 
+	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
 	const [detailOfACategory, setDetailOfACategory] = useState([]);
 	const getdetailOfACategory = async (url) => {
 		console.log("params", url);
@@ -52,8 +55,10 @@ export default function DetailCourse() {
 		getdetailOfACategory(params.categoryid);
 	}, [params]);
 
-	let paramss = useParams();
+	/* useStates untuk keperluan GET detail dari sebuah produk */
 
+	let paramss = useParams();
+	/* useStates dan metode-metode untuk keperluan GET detail dari sebuah produk */
 	const [detailOfACourse, setDetailOfACourse] = useState([]);
 	const getdetailOfACourse = async (url) => {
 		console.log("paramss", url);
