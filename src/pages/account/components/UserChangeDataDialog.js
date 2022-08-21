@@ -118,6 +118,8 @@ const UserChangeDataDialog = (props) => {
                   onChange={(e) => {
                     setPostData({ ...postData, password: e.target.value });
                   }}
+                  InputProps={{ style: { fontFamily: "Poppins" } }}
+                  InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   sx={{
                     display: "flex",
                     fontSize: "10px",
@@ -184,6 +186,8 @@ const UserChangeDataDialog = (props) => {
                       rePassword: e.target.value,
                     });
                   }}
+                  InputProps={{ style: { fontFamily: "Poppins" } }}
+                  InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   sx={{
                     display: "flex",
                     flexGrow: 1,
@@ -252,6 +256,8 @@ const UserChangeDataDialog = (props) => {
                   marginTop: { md: "20px", xs: "6px" },
                   marginBottom: { md: "20px", xs: "10px" },
                 }}
+                InputProps={{ style: { fontFamily: "Poppins" } }}
+                InputLabelProps={{ style: { fontFamily: "Poppins" } }}
               />
               <DialogButton
                 disabled={!postData.nama}
