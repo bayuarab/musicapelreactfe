@@ -261,7 +261,7 @@ function ManageKategori(
                     display: "-webkit-box",
                     WebkitLineClamp: 1,
                     WebkitBoxOrient: "vertical",
-                    fontFamily:"Poppins"
+                    fontFamily: "Poppins",
                   }}
                 >
                   {item.courseTitle}
@@ -278,14 +278,14 @@ function ManageKategori(
                     display: "-webkit-box",
                     WebkitLineClamp: 1,
                     WebkitBoxOrient: "vertical",
-                    fontFamily:"Poppins"
+                    fontFamily: "Poppins",
                   }}
                 >
                   {item.category}
                 </Typography>
 
                 {/* Price */}
-                <Typography variant="subtitle1" sx={{fontFamily:"Poppins"}}>
+                <Typography variant="subtitle1" sx={{ fontFamily: "Poppins" }}>
                   IDR {numberFormat(item.price)}
                 </Typography>
               </CardContent>
@@ -299,7 +299,12 @@ function ManageKategori(
                 variant="outlined"
                 size="medium"
                 color="secondary"
-                style={{ backgroundColor: "F2C94C", color: "black",fontFamily:"Poppins", textTransform:"capitalize"  }}
+                style={{
+                  backgroundColor: "F2C94C",
+                  color: "black",
+                  fontFamily: "Poppins",
+                  textTransform: "capitalize",
+                }}
                 onClick={async (e) => {
                   await e.preventDefault();
                   setOpenEdit(true);
@@ -315,7 +320,11 @@ function ManageKategori(
                 variant="outlined"
                 size="medium"
                 color="remove"
-                style={{ backgroundColor: "F2C94C",fontFamily:"Poppins", textTransform:"capitalize" }}
+                style={{
+                  backgroundColor: "F2C94C",
+                  fontFamily: "Poppins",
+                  textTransform: "capitalize",
+                }}
                 onClick={() => handleClickOpenDelete(item)}
               >
                 Hapus
@@ -360,7 +369,7 @@ function ManageKategori(
                     sx={{
                       fontWeight: "bold",
                       fontSize: { md: "24px", xs: "18px" },
-                      fontFamily:"Poppins"
+                      fontFamily: "Poppins",
                     }}
                   >
                     Manage Kelas
@@ -383,6 +392,7 @@ function ManageKategori(
                       id="input-with-icon-textfield"
                       label="Pencarian Berdasarkan Nama Kelas"
                       InputProps={{
+                        style: { fontFamily: "Poppins" },
                         endAdornment: <Search color="primary" />,
                       }}
                       variant="outlined"
@@ -391,7 +401,7 @@ function ManageKategori(
                         flexGrow: 1,
                         marginRight: "10px",
                       }}
-                      InputLabelProps={{ style: { fontFamily:"Poppins" } }}
+                      InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                     />
                     <Box sx={{ paddingRight: { md: "10px", xs: "1px" } }}>
                       <Tooltip

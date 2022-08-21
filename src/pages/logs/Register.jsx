@@ -177,6 +177,16 @@ export default function Login() {
                     autoFocus
                     value={nama}
                     onChange={(event) => addNama(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     id="txtEmail"
@@ -188,6 +198,16 @@ export default function Login() {
                     autoComplete="email"
                     value={email}
                     onChange={(event) => addEmail(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     margin="normal"
@@ -200,6 +220,16 @@ export default function Login() {
                     value={password}
                     id="txtPassword"
                     onChange={(event) => addPassword(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     margin="normal"
@@ -212,6 +242,16 @@ export default function Login() {
                     id="txtRePassword"
                     value={rePassword}
                     onChange={(event) => addRePassword(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <Box mt="2vh" sx={{ textAlign: "left", flexGrow: 1 }}>
                     <Grid container>

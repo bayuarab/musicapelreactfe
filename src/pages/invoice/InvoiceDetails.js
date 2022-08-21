@@ -12,6 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import Loading from "../../components/Loading";
 import { useComponentBarState } from "../../context/ComponentStateProvider";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -25,6 +26,7 @@ const InvoiceDetails = () => {
   const { invoiceID } = useParams();
   const [invoiceDetailData, setInvoiceDetailData] = useState([]);
   const { setComponentState } = useComponentBarState();
+  const [loadState, setLoadState] = useState(true);
   const [apiDataMessage, setApiDataMessage] = useState(
     "Mengambil data ke server, harap tunggu"
   );
@@ -48,8 +50,10 @@ const InvoiceDetails = () => {
           `/InvoicesDetails/${UserId}/${invoiceID}`,
           config
         );
+        setLoadState(false);
         setInvoiceDetailData(response.data);
       } catch (err) {
+        setLoadState(false);
         setApiDataMessage("Oops, terjadi kesalahan");
       }
     };
@@ -57,7 +61,11 @@ const InvoiceDetails = () => {
     fetchApi();
   }, [invoiceID, token, UserId]);
 
-  return invoiceDetailData?.length <= 0 ? (
+  return loadState ? (
+    <Box sx={{ paddingTop: { md: "50px", xs: "20px" } }}>
+      <Loading />
+    </Box>
+  ) : invoiceDetailData?.length <= 0 ? (
     <Box sx={{ marginTop: "60px" }}>
       <Typography variant="h5" sx={{ textAlign: "center", color: "#5D5FEF" }}>
         {apiDataMessage}

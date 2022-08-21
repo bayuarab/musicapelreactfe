@@ -171,6 +171,16 @@ export default function Login() {
                     autoFocus
                     value={email}
                     onChange={(event) => addEmail(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                   <TextField
                     margin="normal"
@@ -183,6 +193,16 @@ export default function Login() {
                     id="txtPassword"
                     value={password}
                     onChange={(event) => addPassword(event)}
+                    InputProps={{
+                      style: { fontFamily: "Poppins" },
+                    }}
+                    variant="outlined"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                      marginRight: "10px",
+                    }}
+                    InputLabelProps={{ style: { fontFamily: "Poppins" } }}
                   />
                 </FormControl>
                 <Box style={{ textAlign: "right" }}>
