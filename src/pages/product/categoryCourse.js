@@ -56,10 +56,11 @@ export default function CategoryCourse() {
 			// console.log(detailOfACourse.id);
 			// console.log("claimedCourseState", claimedCourseState);
 		} catch (err) {
-			!err.response
-				? console.log(`Error: ${err.message}`)
-				: console.log(err.response.data);
-			if (err.response.data === "Not Found") console.log(err.response.status);
+			// !err.response
+			// 	? console.log(`Error: ${err.message}`)
+			// 	: console.log(err.response.data);
+			if (err.response.data === "Not Found") 
+			console.log(err.response.status);
 			// console.log(err.response.headers);
 		}
 	};
@@ -78,9 +79,9 @@ export default function CategoryCourse() {
 				)
 			);
 		} catch (err) {
-			!err.response
-				? console.log(`Error: ${err.message}`)
-				: console.log(err.response.data);
+			// !err.response
+			// 	? console.log(`Error: ${err.message}`)
+			// 	: console.log(err.response.data);
 			// console.log(err.response.status);
 			// console.log(err.response.headers);
 		}
@@ -90,7 +91,7 @@ export default function CategoryCourse() {
 	const fetchApiCart = async (userId) => {
 		try {
 			const response = await api.get(`/Cart/${userId}`, config);
-			console.table(response.data);
+			// console.table(response.data);
 			setCart(response.data);
 			setClaimedCart(
 				response?.data.some(
@@ -98,9 +99,9 @@ export default function CategoryCourse() {
 				)
 			);
 		} catch (err) {
-			!err.response
-				? console.log(`Error: ${err.message}`)
-				: console.log(err.response.data);
+			// !err.response
+			// 	? console.log(`Error: ${err.message}`)
+			// 	: console.log(err.response.data);
 			if (err.response.data === "Not Found") console.log(err.response.status);
 			// console.log(err.response.headers);
 		}
@@ -257,9 +258,9 @@ export default function CategoryCourse() {
 					response?.data?.map((rawData) => rawData.noInvoice)
 				);
 			} catch (err) {
-				!err.response
-					? console.log(`Error: ${err.message}`)
-					: console.log(err.response.data);
+				// !err.response
+				// 	? console.log(`Error: ${err.message}`)
+				// 	: console.log(err.response.data);
 				// console.log(err.response.status);
 				// console.log(err.response.headers);
 			}
@@ -268,7 +269,7 @@ export default function CategoryCourse() {
 	}, [UserID]);
 
 	const fetchApiPostInvoice = async (url, data) => {
-		console.table(data);
+		// console.table(data);
 		try {
 			const response = await api.post(`/${url}`, data, config);
 			// console.log(response.data);
@@ -295,9 +296,9 @@ export default function CategoryCourse() {
 			navigate("/payment-status", { replace: true });
 			// setCheckoutState(true);
 		} catch (err) {
-			!err.response
-				? console.log(`Error: ${err.message}`)
-				: console.log(err.response.data);
+			// !err.response
+			// 	? console.log(`Error: ${err.message}`)
+			// 	: console.log(err.response.data);
 			// console.log(err.response.status);
 			// console.log(err.response.headers);
 		}
@@ -317,8 +318,8 @@ export default function CategoryCourse() {
 			auth,
 			calculateTotalCost,
 		};
-		console.table(selectedCart);
-		console.table(newInvoiceProp);
+		// console.table(selectedCart);
+		// console.table(newInvoiceProp);
 		fetchApiPostInvoice("MInvoice", generateNewMasterInvoice(newInvoiceProp));
 	};
 
@@ -355,7 +356,7 @@ export default function CategoryCourse() {
 		setExpMore(!expMore);
 	};
 	const gridItems = detailOfACourseCat;
-	const itemCount = expMore ? 3 : gridItems.length;
+	const itemCount = expMore ? 2 : gridItems.length;
 
 	return (
 		<Grid>
@@ -445,9 +446,9 @@ export default function CategoryCourse() {
 						IDR {numberFormat(detailOfACourse.price)}
 					</Typography>
 					{claimedCourse ? (
-						<Button variant="contained" component={Link} to={`/my-course`}>
+						<StyledPurpleButton variant="contained" component={Link} to={`/my-course`}>
 							Ke Kelasku
-						</Button>
+						</StyledPurpleButton>
 					) : claimedCart ? (
 						<>
 							<Box
@@ -482,12 +483,12 @@ export default function CategoryCourse() {
 									margin: "3% 0 0 0",
 								}}
 							>
-								<Button variant="contained" component={Link} to={`/cart`}>
+								<StyledPurpleButton variant="contained" sx={{ paddingRight: "3%" }} component={Link} to={`/cart`}>
 									Ke Cart
-								</Button>
-								<Button variant="contained" onClick={() => checkout()}>
+								</StyledPurpleButton>
+								<StyledPurpleButton variant="contained" sx={{ paddingLeft: "3%" }} onClick={() => checkout()}>
 									Beli Sekarang
-								</Button>
+								</StyledPurpleButton>
 							</Box>
 						</>
 					) : (
@@ -604,7 +605,7 @@ export default function CategoryCourse() {
 						}}
 					>
 						{/* <ReadMore> */}
-						
+
 						{detailOfACourse.courseDesc}
 						{/* </ReadMore> */}
 					</Typography>
@@ -638,10 +639,16 @@ export default function CategoryCourse() {
 				<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
 			</Typography>
 			<center>
-				<Box mt="3vh" sx={{ width: "90%" }}>
+				<Box mt="3vh">
+				<Box  sx={{
+					flexGrow: 1,
+					alignItems: "center",
+					display: { sm: "flex", xs: "none" },
+					flexDirection: "column",
+				}}>
 					<Grid container spacing={3}>
-						{detailOfACourseCat.slice(0, itemCount).map((item, index) => (
-							<Grid key={item.id} item xs={6} md={4}>
+						{detailOfACourseCat.map((item, index) => (
+							<Grid key={item.id} item lg={4} xs={6}>
 								<Card sx={{ margin: "auto auto auto auto" }}>
 									<CardMedia
 										component="img"
@@ -685,6 +692,12 @@ export default function CategoryCourse() {
 														xs: "14px",
 													},
 													fontFamily: "Poppins",
+													overflow: "hidden",
+													textOverflow: "ellipsis",
+													overflowWrap: "break-word",
+													display: "-webkit-box",
+													WebkitLineClamp: 1,
+													WebkitBoxOrient: "vertical",
 												}}
 											>
 												{item.courseTitle}
@@ -711,44 +724,131 @@ export default function CategoryCourse() {
 							</Grid>
 						))}
 					</Grid>
-					<IconButton
-						size="medium"
-						color="primary"
-						onClick={() => {
-							expandMore();
-						}}
-					>
-						{expMore ? (
-							<Box>
-								<Typography
-									mb="-7px"
-									sx={{
-										fontSize: "12px",
-										fontWeight: "600",
-										fontFamily: "Poppins",
-									}}
-								>
-									Lainnya
-								</Typography>
+					</Box>
+					<Box mt="3vh" sx={{
+						flexGrow: 1,
+						alignItems: "center",
+						display: { sm: "none", xs: "flex" },
+						flexDirection: "column",
+					}}>
+						<Grid container spacing={3} sx={{ maxWidth: "110%" }}>
+							{detailOfACourseCat.slice(0, itemCount).map((item, index) => (
+								<Grid key={item.id} item lg={4} xs={6}>
+									<Card sx={{ margin: "auto auto auto auto" }}>
+										<CardMedia
+											component="img"
+											sx={{
+												maxWidth: "100%",
+												objectFit: "cover",
+												minHeight: "100%"
+											}}
+											image={`data:image/jpeg;base64,${item.courseImage}`}
+											alt="kategori kelas"
+											style={{
+												borderRadius: "16px",
+											}}
+										/>
+										<CardActionArea component={Link} to={`/course/${item.id}`}>
+											<CardContent>
+												<Typography
+													color="text.secondary"
+													sx={{
+														fontWeight: "600",
+														textAlign: "left",
+														fontSize: {
+															lg: "16px",
+															xs: "12px",
+														},
+														fontFamily: "Poppins",
+														paddingBottom: {
+															lg: "10px",
+															xs: "4px",
+														},
+													}}
+												>
+													{detailOfACategory.category}
+												</Typography>
+												<Typography
+													sx={{
+														fontWeight: "600",
+														textAlign: "left",
+														fontSize: {
+															md: "18px",
+															xs: "14px",
+														},
+														fontFamily: "Poppins",
+														overflow: "hidden",
+														textOverflow: "ellipsis",
+														overflowWrap: "break-word",
+														display: "-webkit-box",
+														WebkitLineClamp: 1,
+														WebkitBoxOrient: "vertical",
+													}}
+												>
+													{item.courseTitle}
+												</Typography>
+											</CardContent>
+											<CardContent>
+												<Typography
+													sx={{
+														fontWeight: "600",
+														textAlign: "left",
+														fontSize: {
+															md: "18px",
+															xs: "14px",
+														},
+														fontFamily: "Poppins",
+														color: "#5D5FEF",
+													}}
+												>
+													IDR {numberFormat(item.price)}
+												</Typography>
+											</CardContent>
+										</CardActionArea>
+									</Card>
+								</Grid>
+							))}
+						</Grid>
+						<IconButton
+							size="medium"
+							color="primary"
+							onClick={() => {
+								expandMore();
+							}}
+						>
+							{expMore ? (
+								<Box>
+									<Typography
+										mb="-7px"
+										sx={{
+											fontSize: "12px",
+											fontWeight: "600",
+											fontFamily: "Poppins",
+										}}
+									>
+										Lainnya
+									</Typography>
 
-								<ExpandMore />
-							</Box>
-						) : (
-							<Box>
-								<ExpandLess />
-								<Typography
-									mt="-13px"
-									sx={{
-										fontSize: "12px",
-										fontWeight: "600",
-										fontFamily: "Poppins",
-									}}
-								>
-									Sembunyikan
-								</Typography>
-							</Box>
-						)}
-					</IconButton>
+									<ExpandMore />
+								</Box>
+							) : (
+								<Box>
+									<ExpandLess />
+									<Typography
+										mt="-13px"
+										sx={{
+											fontSize: "12px",
+											fontWeight: "600",
+											fontFamily: "Poppins",
+										}}
+									>
+										Sembunyikan
+									</Typography>
+								</Box>
+							)}
+						</IconButton>
+					</Box>
+
 				</Box>
 			</center>
 			<CheckoutDialogs

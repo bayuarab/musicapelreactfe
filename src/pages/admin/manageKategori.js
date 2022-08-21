@@ -5,6 +5,7 @@ import {
   Search,
 } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -16,6 +17,8 @@ import {
   IconButton,
   Input,
   Paper,
+  Snackbar,
+  Stack,
   TextField,
   Toolbar,
   Typography,
@@ -144,6 +147,10 @@ function ManageKategori(
     }
   };
 
+  const Alerts = React.forwardRef(function Alerts(props, ref) {
+    return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
   const handleClickOpenAll = () => {
     setOpenAll(true);
   };
@@ -169,6 +176,14 @@ function ManageKategori(
       reader.readAsDataURL(file);
     }
     setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   const handleCloseDelete = (state) => {
@@ -328,6 +343,7 @@ function ManageKategori(
   };
 
   return (
+    <div>
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -459,20 +475,20 @@ function ManageKategori(
         </Box>
       </Box>
     </ThemeProvider>
-  );
+    <Stack spacing={2} sx={{ width: "100%" }}>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alerts
+        onClose={handleClose}
+        severity={severityType}
+        sx={{ width: "100%" }}
+      >
+        {err}
+      </Alerts>
+    </Snackbar>
+  </Stack>
+  </div>)
 }
 
 export default ManageKategori;
 
-// function Copyright(props) {
-// return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//     {'Copyright © '}
-//     <Link color="inherit" href="/">
-//         1ELECTRONIC
-//     </Link>{' '}
-//     {new Date().getFullYear()}
-//     {'.'}
-//     </Typography>
-// );
-// }
+

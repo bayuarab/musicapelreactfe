@@ -111,14 +111,14 @@ function DialogAddCourse(
           props.onClose();
           setRefreshPage((status) => !status);
           setSeverityType("success");
-          setErr("Berhasil menambahkan kategori");
+          setErr("Berhasil menambahkan kelas");
           setOpen(true);
         }
       })
       .catch((err) => {
         console.log(err.response.data);
         setSeverityType("error");
-        setErr("Error : Kategori Tidak Valid");
+        setErr("Error : kelas Tidak Valid");
         if (err.response.status === 401 || err.response.status === 403)
           setErr("Otoritas tidak berlaku silahkan login kembali");
         setOpen(true);

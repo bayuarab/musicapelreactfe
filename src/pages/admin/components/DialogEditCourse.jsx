@@ -104,7 +104,7 @@ const DialogEditCourse = (props) => {
           console.log(res.status);
           console.log(res.data);
           setSeverityType("success");
-          setErr("Berhasil menambahkan kategori");
+          setErr("Berhasil menambahkan kelas");
           props.onClose();
           setOpen(true);
         }
