@@ -39,7 +39,7 @@ const calculateTotalCost = (carts) => {
 
 export default function CategoryCourse() {
   const [err, setErr] = useState("");
-  const { setCart } = useCart();
+  const { cart, setCart } = useCart();
   const [cartId, setCartId] = useState(null);
   const [checkoutDialogState, setCheckoutDialogState] = useState(false);
   const [selectedOp, setSelectedOp] = useState(null);
@@ -102,13 +102,14 @@ export default function CategoryCourse() {
   const fetchDelete = async (id) => {
     try {
       const response = await api.delete(`/Cart/${auth.userId}/${id}`, config);
-      if (response?.data) {
-        setCart(
-          response.data.filter(
-            (item) => item.userId === auth.userId && item.id !== cartId
-          )
-        );
-      }
+      // if (response?.data) {
+      //   setCart(
+      //     response.data.filter(
+      //       (item) => item.userId === auth.userId && item.id !== cartId
+      //     )
+      //   );
+      // }
+      console.log("Success delete");
       fetchApiCart(auth.userId);
     } catch (err) {
       // setApiDataMessage("Terjadi kesalahan");
@@ -320,6 +321,10 @@ export default function CategoryCourse() {
       details?.forEach((items) => {
         fetchApiPostInvoice("InvoiceDetails", items);
       });
+      const newCart = cart.filter(
+        (item) => item.courseId !== detailOfACourse.id
+      );
+      setCart(newCart);
       navigate("/payment-status", { replace: true });
       // setCheckoutState(true);
     } catch (err) {
