@@ -129,7 +129,7 @@ export default function Footer() {
 															lg: "14px",
 															md: "12px",
 															sm: "11px",
-															xs: "6px",
+															xs: "7px",
 														},
 														fontFamily: "Poppins",
 														textAlign: "left",
