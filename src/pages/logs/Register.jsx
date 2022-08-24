@@ -223,6 +223,7 @@ export default function Login() {
 											</Grid>
 											<Grid item xs={8.5}>
 												<Typography
+													mt="5px"
 													sx={{
 														fontFamily: "Poppins",
 														fontSize: {

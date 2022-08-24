@@ -1,5 +1,6 @@
-import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography, Stack, Snackbar, Alert } from "@mui/material";
+import { Box, Button, Container, CssBaseline, FormControl, TextField, Typography, Stack, Snackbar, Alert, Grid } from "@mui/material";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../../api/userAPI";
 
 //---------------
@@ -36,7 +37,7 @@ export default function Login() {
 
 		const fetchApi = async () => {
 			try {
-				const response = await api.post("/CheckEmail", dataLogin);
+				await api.post("/CheckEmail", dataLogin);
 				setOk("Sukses");
 				setErr("");
 			} catch (err) {
@@ -96,25 +97,57 @@ export default function Login() {
 									<TextField id="txtEmail" margin="normal" required fullWidth label="Email" name="email" autoComplete="email" autoFocus value={email} onChange={(event) => addEmail(event)} />
 								</FormControl>
 								<Box mt="2vh" sx={{ textAlign: "left" }}>
-									<Button
-										disabled={email === "" ? true : false}
-										onClick={(event) => goLogin(event)}
-										sx={{
-											borderRadius: "7px",
-											fontFamily: "Poppins",
-											backgroundColor: "#5D5FEF",
-											fontSize: {
-												lg: "16px",
-												md: "15px",
-												xs: "13px",
-											},
-											textTransform: "Capitalize",
-											width: "hug",
-											height: "hug",
-										}}
-										variant="contained">
-										Kirim
-									</Button>
+									<Grid container>
+										<Grid item xs={4.5} md={4}>
+											<Button
+												disabled={email === "" ? true : false}
+												onClick={(event) => goLogin(event)}
+												sx={{
+													borderRadius: "7px",
+													fontFamily: "Poppins",
+													backgroundColor: "#5D5FEF",
+													fontSize: {
+														lg: "16px",
+														md: "15px",
+														xs: "13px",
+													},
+													textTransform: "Capitalize",
+													width: "hug",
+													height: "hug",
+												}}
+												variant="contained">
+												Kirim
+											</Button>
+										</Grid>
+										<Grid item xs={7.5} md={8}>
+											<Typography
+												mt="5px"
+												sx={{
+													fontFamily: "Poppins",
+													fontSize: {
+														lg: "16px",
+														md: "15px",
+														xs: "13px",
+													},
+												}}>
+												{"Kembali ke "}
+												<Link
+													to="/Login"
+													mt="1vh"
+													sx={{
+														textAlign: "left",
+														fontSize: {
+															lg: "16px",
+															md: "15px",
+															xs: "13px",
+														},
+														fontFamily: "Poppins",
+													}}>
+													Login
+												</Link>
+											</Typography>
+										</Grid>
+									</Grid>
 								</Box>
 							</form>
 						</Box>

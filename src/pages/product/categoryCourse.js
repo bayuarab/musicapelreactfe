@@ -35,6 +35,7 @@ export default function CategoryCourse() {
 	const [open, setOpen] = React.useState(false);
 	const token = auth?.token;
 	const [loadingState, setLoadingState] = useState(true);
+	const [otherClass, setOtherClass] = useState(false);
 	const config = {
 		headers: {
 			Authorization: "Bearer " + token,
@@ -140,6 +141,7 @@ export default function CategoryCourse() {
 			.then((res) => {
 				if (res.status === 200) {
 					setDetailOfACourseCat(res.data);
+					setOtherClass(true);
 					// console.log(res.data);
 				}
 			})
@@ -580,240 +582,245 @@ export default function CategoryCourse() {
 					</Typography>
 				</Box>
 			</center>
-
-			<div
-				style={{
-					paddingTop: {
-						md: "40px",
-						xs: "14px",
-					},
-					height: "0px",
-					borderBottom: "1px solid grey",
-				}}
-			/>
-			<Typography
-				color="#5D5FEF"
-				sx={{
-					paddingTop: {
-						md: "30px",
-						xs: "10px",
-					},
-					paddingBottom: {
-						md: "30px",
-						xs: "10px",
-					},
-					textAlign: "center",
-				}}>
-				<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
-			</Typography>
-			<center>
-				<Box mt="3vh">
-					<Box
+			{otherClass ? (
+				<Box>
+					<div
+						style={{
+							paddingTop: {
+								md: "40px",
+								xs: "14px",
+							},
+							height: "0px",
+							borderBottom: "1px solid grey",
+						}}
+					/>
+					<Typography
+						color="#5D5FEF"
 						sx={{
-							flexGrow: 1,
-							alignItems: "center",
-							display: { sm: "flex", xs: "none" },
-							flexDirection: "column",
-							width: "95%",
+							paddingTop: {
+								md: "30px",
+								xs: "10px",
+							},
+							paddingBottom: {
+								md: "30px",
+								xs: "10px",
+							},
+							textAlign: "center",
 						}}>
-						<Grid container spacing={3}>
-							{detailOfACourseCat.map((item, index) => (
-								<Grid key={item.id} item lg={4} xs={6}>
-									<Card sx={{ margin: "auto auto auto auto" }}>
-										<CardMedia
-											component="img"
-											sx={{
-												maxWidth: "100%",
-												objectFit: "cover",
-												minHeight: "100%",
-											}}
-											image={`data:image/jpeg;base64,${item.courseImage}`}
-											alt="kategori kelas"
-											style={{
-												borderRadius: "16px",
-											}}
-										/>
-										<CardActionArea component={Link} to={`/course/${item.id}`}>
-											<CardContent>
-												<Typography
-													color="text.secondary"
+						<h4>Kelas Lain Yang Mungkin Kamu Suka</h4>
+					</Typography>
+					<center>
+						<Box mt="3vh">
+							<Box
+								sx={{
+									flexGrow: 1,
+									alignItems: "center",
+									display: { sm: "flex", xs: "none" },
+									flexDirection: "column",
+									width: "95%",
+								}}>
+								<Grid container spacing={3}>
+									{detailOfACourseCat.map((item, index) => (
+										<Grid key={item.id} item lg={4} xs={6}>
+											<Card sx={{ margin: "auto auto auto auto" }}>
+												<CardMedia
+													component="img"
 													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															lg: "16px",
-															xs: "12px",
-														},
-														fontFamily: "Poppins",
-														paddingBottom: {
-															lg: "10px",
-															xs: "4px",
-														},
-													}}>
-													{detailOfACategory.category}
-												</Typography>
-												<Typography
-													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															md: "18px",
-															xs: "14px",
-														},
-														fontFamily: "Poppins",
-														overflow: "hidden",
-														textOverflow: "ellipsis",
-														overflowWrap: "break-word",
-														display: "-webkit-box",
-														WebkitLineClamp: 1,
-														WebkitBoxOrient: "vertical",
-													}}>
-													{item.courseTitle}
-												</Typography>
-											</CardContent>
-											<CardContent>
-												<Typography
-													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															md: "18px",
-															xs: "14px",
-														},
-														fontFamily: "Poppins",
-														color: "#5D5FEF",
-													}}>
-													IDR {numberFormat(item.price)}
-												</Typography>
-											</CardContent>
-										</CardActionArea>
-									</Card>
+														maxWidth: "100%",
+														objectFit: "cover",
+														minHeight: "100%",
+													}}
+													image={`data:image/jpeg;base64,${item.courseImage}`}
+													alt="kategori kelas"
+													style={{
+														borderRadius: "16px",
+													}}
+												/>
+												<CardActionArea component={Link} to={`/course/${item.id}`}>
+													<CardContent>
+														<Typography
+															color="text.secondary"
+															sx={{
+																fontWeight: "600",
+																textAlign: "left",
+																fontSize: {
+																	lg: "16px",
+																	xs: "12px",
+																},
+																fontFamily: "Poppins",
+																paddingBottom: {
+																	lg: "10px",
+																	xs: "4px",
+																},
+															}}>
+															{detailOfACategory.category}
+														</Typography>
+														<Typography
+															sx={{
+																fontWeight: "600",
+																textAlign: "left",
+																fontSize: {
+																	md: "18px",
+																	xs: "14px",
+																},
+																fontFamily: "Poppins",
+																overflow: "hidden",
+																textOverflow: "ellipsis",
+																overflowWrap: "break-word",
+																display: "-webkit-box",
+																WebkitLineClamp: 1,
+																WebkitBoxOrient: "vertical",
+															}}>
+															{item.courseTitle}
+														</Typography>
+													</CardContent>
+													<CardContent>
+														<Typography
+															sx={{
+																fontWeight: "600",
+																textAlign: "left",
+																fontSize: {
+																	md: "18px",
+																	xs: "14px",
+																},
+																fontFamily: "Poppins",
+																color: "#5D5FEF",
+															}}>
+															IDR {numberFormat(item.price)}
+														</Typography>
+													</CardContent>
+												</CardActionArea>
+											</Card>
+										</Grid>
+									))}
 								</Grid>
-							))}
-						</Grid>
-					</Box>
-					<Box
-						mt="3vh"
-						sx={{
-							flexGrow: 1,
-							alignItems: "center",
-							display: { sm: "none", xs: "flex" },
-							flexDirection: "column",
-							width: "95%",
-						}}>
-						<Grid container spacing={3} sx={{ maxWidth: "110%" }}>
-							{detailOfACourseCat.slice(0, itemCount).map((item, index) => (
-								<Grid key={item.id} item lg={4} xs={6}>
-									<Card sx={{ margin: "auto auto auto auto" }}>
-										<CardMedia
-											component="img"
-											sx={{
-												maxWidth: "100%",
-												objectFit: "cover",
-												minHeight: "100%",
-											}}
-											image={`data:image/jpeg;base64,${item.courseImage}`}
-											alt="kategori kelas"
-											style={{
-												borderRadius: "16px",
-											}}
-										/>
-										<CardActionArea component={Link} to={`/course/${item.id}`}>
-											<CardContent>
-												<Typography
-													color="text.secondary"
+							</Box>
+							<Box
+								mt="3vh"
+								sx={{
+									flexGrow: 1,
+									alignItems: "center",
+									display: { sm: "none", xs: "flex" },
+									flexDirection: "column",
+									width: "95%",
+								}}>
+								<Grid container spacing={3} sx={{ maxWidth: "110%" }}>
+									{detailOfACourseCat.slice(0, itemCount).map((item, index) => (
+										<Grid key={item.id} item lg={4} xs={6}>
+											<Card sx={{ margin: "auto auto auto auto" }}>
+												<CardMedia
+													component="img"
 													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															lg: "16px",
-															xs: "12px",
-														},
-														fontFamily: "Poppins",
-														paddingBottom: {
-															lg: "10px",
-															xs: "4px",
-														},
-													}}>
-													{detailOfACategory.category}
-												</Typography>
-												<Typography
-													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															md: "18px",
-															xs: "14px",
-														},
-														fontFamily: "Poppins",
-														overflow: "hidden",
-														textOverflow: "ellipsis",
-														overflowWrap: "break-word",
-														display: "-webkit-box",
-														WebkitLineClamp: 1,
-														WebkitBoxOrient: "vertical",
-													}}>
-													{item.courseTitle}
-												</Typography>
-											</CardContent>
-											<CardContent>
-												<Typography
-													sx={{
-														fontWeight: "600",
-														textAlign: "left",
-														fontSize: {
-															md: "18px",
-															xs: "14px",
-														},
-														fontFamily: "Poppins",
-														color: "#5D5FEF",
-													}}>
-													IDR {numberFormat(item.price)}
-												</Typography>
-											</CardContent>
-										</CardActionArea>
-									</Card>
+														maxWidth: "100%",
+														objectFit: "cover",
+														minHeight: "100%",
+													}}
+													image={`data:image/jpeg;base64,${item.courseImage}`}
+													alt="kategori kelas"
+													style={{
+														borderRadius: "16px",
+													}}
+												/>
+												<CardActionArea component={Link} to={`/course/${item.id}`}>
+													<CardContent>
+														<Typography
+															color="text.secondary"
+															sx={{
+																fontWeight: "600",
+																textAlign: "left",
+																fontSize: {
+																	lg: "16px",
+																	xs: "12px",
+																},
+																fontFamily: "Poppins",
+																paddingBottom: {
+																	lg: "10px",
+																	xs: "4px",
+																},
+															}}>
+															{detailOfACategory.category}
+														</Typography>
+														<Typography
+															sx={{
+																fontWeight: "600",
+																textAlign: "left",
+																fontSize: {
+																	md: "18px",
+																	xs: "14px",
+																},
+																fontFamily: "Poppins",
+																overflow: "hidden",
+																textOverflow: "ellipsis",
+																overflowWrap: "break-word",
+																display: "-webkit-box",
+																WebkitLineClamp: 1,
+																WebkitBoxOrient: "vertical",
+															}}>
+															{item.courseTitle}
+														</Typography>
+													</CardContent>
+													<CardContent>
+														<Typography
+															sx={{
+																fontWeight: "600",
+																textAlign: "left",
+																fontSize: {
+																	md: "18px",
+																	xs: "14px",
+																},
+																fontFamily: "Poppins",
+																color: "#5D5FEF",
+															}}>
+															IDR {numberFormat(item.price)}
+														</Typography>
+													</CardContent>
+												</CardActionArea>
+											</Card>
+										</Grid>
+									))}
 								</Grid>
-							))}
-						</Grid>
-						<IconButton
-							size="medium"
-							color="primary"
-							onClick={() => {
-								expandMore();
-							}}>
-							{expMore ? (
-								<Box>
-									<Typography
-										mb="-7px"
-										sx={{
-											fontSize: "12px",
-											fontWeight: "600",
-											fontFamily: "Poppins",
-										}}>
-										Lainnya
-									</Typography>
+								<IconButton
+									size="medium"
+									color="primary"
+									onClick={() => {
+										expandMore();
+									}}>
+									{expMore ? (
+										<Box>
+											<Typography
+												mb="-7px"
+												sx={{
+													fontSize: "12px",
+													fontWeight: "600",
+													fontFamily: "Poppins",
+												}}>
+												Lainnya
+											</Typography>
 
-									<ExpandMore />
-								</Box>
-							) : (
-								<Box>
-									<ExpandLess />
-									<Typography
-										mt="-13px"
-										sx={{
-											fontSize: "12px",
-											fontWeight: "600",
-											fontFamily: "Poppins",
-										}}>
-										Sembunyikan
-									</Typography>
-								</Box>
-							)}
-						</IconButton>
-					</Box>
+											<ExpandMore />
+										</Box>
+									) : (
+										<Box>
+											<ExpandLess />
+											<Typography
+												mt="-13px"
+												sx={{
+													fontSize: "12px",
+													fontWeight: "600",
+													fontFamily: "Poppins",
+												}}>
+												Sembunyikan
+											</Typography>
+										</Box>
+									)}
+								</IconButton>
+							</Box>
+						</Box>
+					</center>
 				</Box>
-			</center>
+			) : (
+				<></>
+			)}
 			<CheckoutDialogs checkoutDialogState={checkoutDialogState} onClose={handleCheckoutClose} selectedOp={selectedOp} />
 			<Stack spacing={2} sx={{ width: "100%" }}>
 				<Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
